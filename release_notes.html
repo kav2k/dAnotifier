@@ -1,0 +1,85 @@
+<!DOCTYPE HTML>
+<html>
+<!-- (c) Alexander Kashev, 2010 -->
+<!-- CSS by clairejones (dA) -->
+
+<head>
+<title>dA Message Notifier options</title>
+<link rel="stylesheet" type="text/css" href="css/prefs_html.css">
+<link rel="stylesheet" type="text/css" href="css/options.css">
+<link rel="icon" href="img/favicon.ico">
+<script src="js/utils.js" type="text/javascript"></script>
+<script src="js/prefs_lib.js" type="text/javascript"></script>
+<script src="js/prefs_html.js" type="text/javascript"></script>
+<script src="js/prefs.js" type="text/javascript"></script>
+<script type="text/javascript">
+	function save(){
+		Prefs.hideRelnotes.saveHTML();
+	}
+</script>
+</head>
+<body onload="initPrefs(); initPrefsHTML_relnotes();">
+<table align="center" class="table1" cellpadding="0" cellspacing="0">
+<tr>
+	<td>
+
+		<!--main content table-->
+		<table align="center" class="table2" cellpadding="0" cellspacing="0">
+		<tr>
+			<td>
+				<p class="heading1">dA Message Notifier release notes</p>
+				<br>
+				<table id="prefs-relnotes" class="field" style="margin-left: 30px; margin-right: 30px;"></table>
+				<br>
+				<p class="heading2">
+					<b>0.6.3.2</b>
+				</p>
+				<p class="maintext">
+					Refined popup interface. <b>NEEDS TESTING AND FEEDBACK!</b>
+				</p>
+				<p class="heading2">
+					<b>0.6.3.0</b>
+				</p>
+				<p class="maintext">
+					[ADDED] First prototype of the popup interface. <b>On by default, NEEDS TESTING AND FEEDBACK!</b>
+				</p>
+				<p class="maintext">
+					[FIXED] Incorrect group message preferences
+				</p>
+				<p class="heading2">
+					<b>0.6.2.1</b>
+				</p>
+				<p class="maintext">
+					[FIXED] A bug with Desktop Notifications and group messages which prevented notifications from being updated correctly.
+				</p>				
+				<p class="heading2">
+					<b>0.6.2.0</b>
+				</p>
+				<p class="maintext">
+					First release of the v6 series!
+				</p>
+				<p class="maintext">
+					<b>Key new features (see the updated <a href="https://docs.google.com/present/view?id=dg9ks93m_12dcphzbhr">manual</a>):</b>
+				</p>
+				<p class="maintext">
+					<b>Selective watch:</b> set what messages, and how, to track and alert about!
+				</p>
+				<p class="maintext">
+					<b>Desktop notifications:</b> Stay informed even if your Chrome is minimized or obscured.
+				</p>
+				<p class="maintext">
+					<b>Better groups support:</b> Tracks group feeds for administrators.
+				</p>
+				<p class="maintext">
+					<b>New tooltip format:</b> "Aggregated" tooltip is less cluttered (the old one is still available).
+				</p>
+				<p class="maintext">
+					Proceed to the <a href="options.html">Options page</a> to configure new features!
+				</p>				
+			</td>
+		</tr>
+		</table>
+	</td>
+</tr>
+</table>
+</body>

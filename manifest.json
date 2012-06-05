@@ -1,0 +1,35 @@
+{
+	"background_page": "background.html",
+	"browser_action": {
+		"default_icon": "img/dan_logo2_19_crisp.png",
+		"default_popup": "popup.html"
+	},
+	"description": "A notifier for deviantART messages [BETA]. Keep track of your dA inbox!",
+	"update_url": "http://dl.dropbox.com/u/5844031/update_danb.xml",
+	"icons": {
+		"128": "img/dan_logo2_128_padded.png",
+		"48": "img/dan_logo2_48.png",
+		"16": "img/dan_logo2_16_crisp.png"
+	},
+	"name": "dA Message Notifier",
+	"minimum_chrome_version": "16",
+	"options_page": "options.html",
+	"permissions": [ "notifications", "tabs", "http://*.deviantart.com/", "https://*.deviantart.com/" ],
+	"optional_permissions": [ "background" ],
+	"content_scripts": [ 
+		{ 
+			"matches": [
+				"http://my.deviantart.com/messages/", 
+				"https://my.deviantart.com/messages/", 
+				"http://my.deviantart.com/messages/?random=*", 
+				"https://my.deviantart.com/messages/?random=*"
+			], "js": ["js/inject.js"], "run_at": "document_start" 
+		},
+		{ 
+			"matches": [
+				"https://*.deviantart.com/*"
+			], "js": ["js/https-ify.js"], "run_at": "document_start" 
+		}		
+	],
+	"version": "0.6.3.2"
+}
