@@ -131,4 +131,16 @@ table.entry_container tr td:last-child {border-right-width: 1.8px;}
 	/*background-color:#afc2af;*/
 }
 
+.spinner {
+	position: relative;
+	top: 2px;
+	padding: 0;
+	margin: 0;
+	visibility: hidden;	
+}
+.spinner.left {left: -4px;}
+.spinner.right {left: 4px;}
+
+
+
 /*table.entry tr.header{}*/

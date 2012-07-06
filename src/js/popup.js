@@ -101,11 +101,9 @@ function P_createMCLink(type){
 }
 
 function P_createMarkReadLink(type){
-	return $('<a href="#" />', {
-		text: "Mark all as read"
-	}).click(
-		function(e) { chrome.extension.sendRequest({'action' : 'seenInbox'}); P_forceUpdate(); }
-	);
+	return $('<a href="#" />')
+		.text("Mark all as read")
+		.click( function(e) { chrome.extension.sendRequest({'action' : 'seenInbox'}); P_forceUpdate(); } );
 }
 
 /* Main container */
@@ -153,61 +151,29 @@ function P_createContainer(data) {
 			}
 		}
 		
-//		else if (aggregateClasses[cl].special && aggregateClasses[cl].special == "singleton") {
-//			
-//		}
-		
 		else if (aggregateClasses[cl].count + aggregateClasses[cl].newCount > 0) {
 		
 			var singleton = (aggregateClasses[cl].special && aggregateClasses[cl].special == "singleton");
 			
 			var ac_container = $('<div class="class_container">');
-			
-			
-
-				var ac_table = document.createElement('table');
-					ac_table.className = 'entry_container';
-					var ac_tbody = document.createElement('tbody');
-					ac_table.appendChild(ac_tbody);
-
 				
-				/*var ac_table = document.createElement('entry');
-					ac_table.className = 'entry';
-				ac_container.appendChild(ac_table);*/
+				var entries = $();
 				
-				if (!singleton){	
-					ac_tbody.appendChild(
+				if (!singleton){
+					entries = entries.add(
 						P_createClassHeader(aggregateClasses[cl], cl)
 					);
 				}
 								
 				for(var t in aggregateClasses[cl].types) if (data.folders[data.inboxID].counts[aggregateClasses[cl].types[t]] > 0){
-					ac_tbody.appendChild(
+					entries = entries.add(
 						P_createEntry(aggregateClasses[cl].types[t], data.folders[data.inboxID])
 					);
 				}
-				ac_container.append(ac_table);
+				
+				$('<table class="entry_container" />').append(entries).appendTo(ac_container);
 				
 			container.append(ac_container);
-				/*
-				if (aggregateClasses[cl].special && aggregateClasses[cl].special == "singleton") {
-					message_text += "\n\n";
-					message_text += aggregateClasses[cl].count + " " + ( (aggregateClasses[cl].count == 1) ? aggregateClasses[cl].S : aggregateClasses[cl].P );
-					if(aggregateClasses[cl].newCount){
-						message_text += " (" + aggregateClasses[cl].newCount + ( (aggregateClasses[cl].newCountApprox)?"+":"" ) + " new)";
-					}
-				}
-				else {
-					message_text += "\n\n";
-					message_text += aggregateClasses[cl].count + " " + ( (aggregateClasses[cl].count == 1) ? aggregateClasses[cl].S : aggregateClasses[cl].P );
-					if(aggregateClasses[cl].newCount){
-						message_text += " (" + aggregateClasses[cl].newCount + ( (aggregateClasses[cl].newCountApprox)?"+":"" ) + " new)";
-						for(var t in aggregateClasses[cl].types) if (data.folders[DiFi_inboxID].newCounts[aggregateClasses[cl].types[t]]){
-							message_text += "\n> " + 
-								DiFi_tooltipAggregateLine(aggregateClasses[cl].types[t], data.folders[DiFi_inboxID].newCounts[aggregateClasses[cl].types[t]], false);
-						}
-					}		
-				}*/
 		}
 	}
 	
@@ -215,160 +181,106 @@ function P_createContainer(data) {
 }
 
 function P_createClassHeader(ac_data, ac) {
-	var row = document.createElement("tr");
-			
-		var element = document.createElement("td");
-			element.className = 'entry class_header';
-			//element.id = 'entry-' +  type;
-			element.onclick = function(e) {P_onEntryClick(ac, e);};
+	var element = $('<td class="entry class_header">');
+	element.click( function(e) { P_onEntryClick(ac, e); } );
 	
-		var text = ac_data.count + ' ' + ((ac_data.count == 1) ? ac_data.S : ac_data.P);
-		element.appendChild(document.createTextNode(text));
-		
-		if(ac_data.newCount) {
-			var new_span = document.createElement("span");
-				new_span.className = 'new_text';
-				new_span.innerText = ' (' +  ac_data.newCount + (ac_data.newCountApprox ? "+" : "")+ ' new)';
-				/*((data.newCounts[type] == Prefs.maxItems.get())?'+':'')*/ 
-			//element.className += ' has_new';
-			element.appendChild(new_span);
-		}
-			
-	row.appendChild(element);
-	return row;
+	element.text( 
+		ac_data.count + ' ' 
+		+ ((ac_data.count == 1) ? ac_data.S : ac_data.P) 
+	);
+	
+	if(ac_data.newCount) {
+		var new_span = $('<span class="new_text">');
+		new_span.text( ' (' +  ac_data.newCount + (ac_data.newCountApprox ? "+" : "")+ ' new)' );
+		element.append(new_span);
+	}
+	
+	return $('<tr>').append(element);
 }
 
 function P_createEntry(type, data) {
-	var row = document.createElement("tr");
-			
-		var element = document.createElement("td");
-			element.className = 'entry';
-			element.id = 'entry-' +  type;
-			element.onclick = function(e) {P_onEntryClick(type, e);};
-			
-		//var content = document.createElement("div");
-		
-		var text = data.counts[type] + ' ' + ((data.counts[type] == 1) ? messagesInfo[type].S : messagesInfo[type].P);
+	var element = $('<td class="entry">', {id : 'entry-' +  type});
+	element.click( function(e) { P_onEntryClick(type, e); } );
 	
-		//content.appendChild(document.createTextNode());
-		
-		element.appendChild(document.createTextNode(text));
-		
-		if(data.newCounts[type]) {
-			var new_span = document.createElement("span");
-				new_span.className = 'new_text';
-				new_span.innerText = ' (' +  data.newCounts[type] + ((data.newCounts[type] == Prefs.maxItems.get())?'+':'') + ' new)'
-				
-			element.appendChild(new_span);
-			element.className += ' has_new';
-		}
-			
-	row.appendChild(element);
-	return row;
+	element.text( 
+		data.counts[type] + ' ' 
+		+ ((data.counts[type] == 1) ? messagesInfo[type].S : messagesInfo[type].P)
+	);
+	
+	if(data.newCounts[type]) {
+		var new_span = $('<span class="new_text">');
+		new_span.text( ' (' +  data.newCounts[type] + ((data.newCounts[type] == Prefs.maxItems.get())?'+':'') + ' new)' );
+		element.append(new_span);
+		element.addClass("has_new");
+	}
+
+	return $('<tr>').append(element);
 }
 
 function P_createGroupEntry(type, data, id) {
 	id = id || 0;
-
-	var row = document.createElement("tr");
-			
-		var element = document.createElement("td");
-			element.className = 'entry';
-			element.id = 'entry-' + id + '-' +  type;
-			element.onclick = function(e) {P_onEntryClick(id, e);};
 	
-		var text;
-		
-		var new_span = document.createElement("span");
-			new_span.className = 'new_text';
-		
-		if(groupMessagesInfo[type].feed) {
-			text = data.newCounts[type] + ((data.newCounts[type] == Prefs.maxItems.get())?'+':'') + ' ' + ((data.newCounts[type] == 1) ? messagesInfo[type].S : messagesInfo[type].P) 
-			new_span.innerText = ' (Feed)';
-			element.className += ' has_new';
-		} else {
-			text = data.counts[type] + ' ' + ((data.counts[type] == 1) ? messagesInfo[type].S : messagesInfo[type].P);
-			if(data.newCounts[type]) {
-				new_span.innerText = ' (' +  data.newCounts[type] + ((data.newCounts[type] == Prefs.maxItems.get())?'+':'') + ' new)';
-				element.className += ' has_new';
-			}
+	var element = $('<td class="entry">', {id : 'entry-' + id + '-' +  type});
+	element.click( function(e) { P_onEntryClick(id, e); } );
+	
+	element.text( 
+		data.counts[type] + ' ' 
+		+ ((data.counts[type] == 1) ? messagesInfo[type].S : messagesInfo[type].P)
+	);
+	
+	var new_span = $('<span class="new_text">');
+	
+	if(groupMessagesInfo[type].feed) {
+		element.text(
+			data.newCounts[type] + ((data.newCounts[type] == Prefs.maxItems.get())?'+':'') + ' ' 
+			+ ((data.newCounts[type] == 1) ? messagesInfo[type].S : messagesInfo[type].P)
+		);
+		$('<span class="new_text">').text(" (Feed)").appendTo(element);
+		element.addClass("has_new");
+	} else {
+		element.text(
+			data.counts[type] + ' ' + ((data.counts[type] == 1) ? messagesInfo[type].S : messagesInfo[type].P)
+		);
+		if(data.newCounts[type]) {
+			$('<span class="new_text">').text(
+				' (' +  data.newCounts[type] + ((data.newCounts[type] == Prefs.maxItems.get())?'+':'') + ' new)'
+			).appendTo(element);
 		}
-	
-		element.appendChild(document.createTextNode(text));
-		element.appendChild(new_span);
-	
-	row.appendChild(element);
-	return row;
+		element.addClass("has_new");
+	}
+
+	return $('<tr>').append(element);
 }
 
 function P_createFooter(data) {
-	var footer = document.createElement('div');
-		footer.className = 'footer';
-		footer.id = 'P_footer';
+	var footer = $('<div class="footer" id="P_footer">');
 	
-	img = document.createElement('img'); // padding
-		img.src = 'img/loading.gif';
-		//img.style.display = 'inline';
-		//img.style.height = '10px';
-		img.style.position = 'relative';
-		img.style.top = '2px';
-		img.style.left = '-4px';
-		img.style.padding = 0;
-		img.style.margin = 0;
-		img.style.visibility = 'hidden';
-	footer.appendChild(img);
+	$('<img src="img/loading.gif" class="spinner left">').appendTo(footer); // padding for symmetry, invisible
 	
 	if(!data.lastUpdateAt) { 	// Rare: not a single update finished yet
-		footer.appendChild(document.createTextNode("First update…"));
-	}	
-	else {						// Normal: we have last update time
-		footer.appendChild(document.createTextNode("Last updated: " + data.lastUpdateAt));
+		footer.append("First update…");
+	} else {					// Normal: we have last update time
+		footer.append("Last updated: " + data.lastUpdateAt);
 	}
 	
-	img = document.createElement('img');
-		img.src = 'img/loading.gif';
-		//img.style.display = 'inline';
-		//img.style.height = '10px';
-		img.style.position = 'relative';
-		img.style.top = '2px';
-		img.style.left = '4px';
-		img.style.padding = 0;
-		img.style.margin = 0;
-		img.style.visibility = (data.refreshing) ? 'visible' : 'hidden';
-	footer.appendChild(img);
-	//}
+	$('<img src="img/loading.gif" class="spinner right">')
+		.css("visibility", (data.refreshing) ? 'visible' : 'hidden')
+		.appendTo(footer);
 	
-	var footer_commands = document.createElement('div');
-		footer_commands.className = 'footer';
-		
-		var options_link = 	document.createElement("a");
-			options_link.href = "#";
-			options_link.onclick = function(e) { P_openOptions(); };
-			options_link.innerText = "Options";
-		
-		footer_commands.appendChild(options_link);
-		
-		footer_commands.appendChild(document.createTextNode(" | "));
-		
-		var forceUpdate_link = 	document.createElement("a");
-			forceUpdate_link.href = "#";
-			forceUpdate_link.onclick = function(e) { P_forceUpdate(); };
-			forceUpdate_link.innerText = "Update now";
-		
-		footer_commands.appendChild(forceUpdate_link);
-		
-		footer_commands.appendChild(document.createTextNode(" | "));
-		
-		var debugTimestamp_link = 	document.createElement("a");
-			debugTimestamp_link.href = "#";
-			debugTimestamp_link.onclick = function(e) { P_debugTimestamp(); };
-			debugTimestamp_link.innerText = "Time machine!";
-		
-		footer_commands.appendChild(debugTimestamp_link);
+	var footer_commands = $('<div class="footer">');
 	
-	footer.appendChild(footer_commands);
-	
-	return footer;
+	footer_commands
+		.append(
+			$('<a href="#">').text("Options").click( function(e) { P_openOptions(); } )
+		).append(" | ")
+		.append(
+			$('<a href="#">').text("Update now").click( function(e) { P_forceUpdate(); } )
+		).append(" | ")
+		.append(
+			$('<a href="#">').text("Time machine!").click( function(e) { P_debugTimestamp(); } )
+		);
+		
+	return footer.append(footer_commands);
 }
 
 /** UTILITY FUNCTIONS **/
