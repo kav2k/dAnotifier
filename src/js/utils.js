@@ -67,7 +67,7 @@ function prepText(text) {
 	}
 	else {return text;}*/
 	
-	text = newlineMagic(text);
+	if(Prefs.newlineMagic.get()) text = newlineMagic(text);
 	
 	return text;
 }

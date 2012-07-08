@@ -5,6 +5,7 @@ function save(fake) {
   if (!fake) if(chrome.extension) {
 	//chrome.extension.getBackgroundPage().location.reload(); 
 	chrome.extension.getBackgroundPage().init();
+	document.getElementById("debug-section").style.display = (Prefs.debug.get()) ? "block" : "none";
   }
   //init();
 }
