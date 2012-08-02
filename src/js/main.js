@@ -69,7 +69,7 @@ chrome.extension.onRequest.addListener(onRequest);
 // Force update immediately after login (0.4)
 chrome.tabs.onUpdated.addListener(OnLoginHandler);
 
-var relNotesVersion = 12;
+var relNotesVersion = 13;
 
 // *** Init function
 function init(){
