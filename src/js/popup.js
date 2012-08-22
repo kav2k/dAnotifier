@@ -2,7 +2,7 @@
 
 $(document).ready( function() {
 	
-	chrome.extension.onRequest.addListener( function (request) {
+	chrome.extension.onMessage.addListener( function (request) {
 		if(request.action == "updatePopup") P_fill(request.data);
 	});
 	
@@ -103,7 +103,7 @@ function P_createMCLink(type){
 function P_createMarkReadLink(type){
 	return $('<a href="#" />')
 		.text("Mark all as read")
-		.click( function(e) { chrome.extension.sendRequest({'action' : 'seenInbox'}); P_forceUpdate(); } );
+		.click( function(e) { chrome.extension.sendMessage({'action' : 'seenInbox'}); P_forceUpdate(); } );
 }
 
 /* Main container */
@@ -245,8 +245,8 @@ function P_createGroupEntry(type, data, id) {
 			$('<span class="new_text">').text(
 				' (' +  data.newCounts[type] + ((data.newCounts[type] == Prefs.maxItems.get())?'+':'') + ' new)'
 			).appendTo(element);
+			element.addClass("has_new");
 		}
-		element.addClass("has_new");
 	}
 
 	return $('<tr>').append(element);
@@ -302,16 +302,16 @@ function P_onEntryClick(type, e){
 }
 
 function P_openMC(type, alt) {
-	chrome.extension.sendRequest({ action : 'showMC', type : type, alt : (alt || false) });
+	chrome.extension.sendMessage({ action : 'showMC', type : type, alt : (alt || false) });
 }
 
 function P_openURL(url) {
 	url = (Prefs.useHTTPS.get() ? "https://" : "http://") + url.toLowerCase();
-	chrome.extension.sendRequest({ action : 'openURL', url : url });
+	chrome.extension.sendMessage({ action : 'openURL', url : url });
 }
 
 function P_openOptions() {
-	chrome.extension.sendRequest({ action : 'openURL', url : chrome.extension.getURL('options.html') });
+	chrome.extension.sendMessage({ action : 'openURL', url : chrome.extension.getURL('options.html') });
 }
 
 function P_debugTimestamp() {
@@ -322,5 +322,5 @@ function P_debugTimestamp() {
 }
 
 function P_forceUpdate() {
-	chrome.extension.sendRequest({ action : 'updateNow'});
+	chrome.extension.sendMessage({ action : 'updateNow'});
 }

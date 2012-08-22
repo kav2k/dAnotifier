@@ -44,7 +44,7 @@ function OnLoginHandler(tabId, changeInfo, tab) { // Forces update on login
 		}
 }
 
-function onRequest(request, sender, callback) {
+function onMessage(request, sender, callback) {
 	switch(request.action){
 		case 'seenInbox':
 			DiFi_seenInbox();
@@ -63,7 +63,7 @@ function onRequest(request, sender, callback) {
 
 // Enabling event handlers
 
-chrome.extension.onRequest.addListener(onRequest);
+chrome.extension.onMessage.addListener(onMessage);
 // Handler for button click
 //chrome.browserAction.onClicked.addListener(OnClickHandler);
 // Force update immediately after login (0.4)
@@ -152,6 +152,6 @@ function handleError(error, badge, critical) {
 	
 	DiFi_skipUpdate = false;
 	popupData.refreshing = false;
-	chrome.extension.sendRequest({action : 'updatePopup', data : popupData});
+	chrome.extension.sendMessage({action : 'updatePopup', data : popupData});
 }
 

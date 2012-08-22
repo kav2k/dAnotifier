@@ -619,7 +619,7 @@ function DiFi_updatePopup() {
 	
 	popupData.inboxID = DiFi_inboxID;
 
-	chrome.extension.sendRequest({action : 'updatePopup', data : popupData});
+	chrome.extension.sendMessage({action : 'updatePopup', data : popupData});
 	DiFi_updateBadge();
 }
 
@@ -736,7 +736,7 @@ function DiFi_doEverything() {
 	DiFi_capturing = DiFi_mustCapture;
 	if(DiFi_capturing) DiFi_capture.folderData = new Object();
 	
-	chrome.extension.sendRequest({action : 'updatePopup', data : popupData});
+	chrome.extension.sendMessage({action : 'updatePopup', data : popupData});
 	
 	DiFi_JSONrequest("?c[]=MessageCenter;get_folders&t=json", 0, DiFi_getInboxID);
 }

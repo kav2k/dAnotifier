@@ -1,1 +1,1 @@
-chrome.extension.sendRequest({'action' : 'seenInbox'});
+chrome.extension.sendMessage({'action' : 'seenInbox'});
