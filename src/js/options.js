@@ -1,13 +1,21 @@
+document.addEventListener('DOMContentLoaded', function () {
+	handleOnClick('save-button', save);
+	handleOnClick('revert-button', revert);
+	handleOnClick('reset-button', reset);
+	handleOnClick('DiFi_ts-button', debug_setDiFi_ts);
+	handleOnClick('DiFi_ts-month-button', debug_setDiFi_ts_month);
+	handleOnClick('DiFi_capture-button', debug_capture);
+	init();
+});
+
 function save(fake) {
-  Prefs.foreach('saveHTML');
-  markClean();
-  
-  if (!fake) if(chrome.extension) {
-	//chrome.extension.getBackgroundPage().location.reload(); 
-	chrome.extension.getBackgroundPage().init();
-	document.getElementById("debug-section").style.display = (Prefs.debug.get()) ? "block" : "none";
-  }
-  //init();
+	Prefs.foreach('saveHTML');
+	markClean();
+
+	if (!fake) if(chrome.extension) {
+		chrome.extension.getBackgroundPage().init();
+		document.getElementById("debug-section").style.display = (Prefs.debug.get()) ? "block" : "none";
+	}
 }
 
 function init(){

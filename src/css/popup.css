@@ -55,6 +55,10 @@ html {
 	background-color:#CCD9C8;
 }
 
+body {
+	min-width:300px;
+}
+
 .header {
 	font-family: Verdana;
 	text-align: center;

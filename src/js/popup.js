@@ -1,5 +1,9 @@
 /** TOP LEVEL CODE **/
 
+document.addEventListener('DOMContentLoaded', function () {
+	P_init();
+});
+
 function P_init() {
 	//document.getElementById('P_old').innerText = chrome.extension.getBackgroundPage().currentTooltip;
 	//chrome.extension.sendRequest({'action' : 'showMC'});
@@ -358,7 +362,7 @@ function P_createFooter(data) {
 	footer.appendChild(img);
 	
 	if(!data.lastUpdateAt) { 	// Rare: not a single update finished yet
-		footer.appendChild(document.createTextNode("First update…"));
+		footer.appendChild(document.createTextNode("First update...")); // FIXME: Find a way to make it a true friggin' ellipsis
 	}	
 	else {						// Normal: we have last update time
 		footer.appendChild(document.createTextNode("Last updated: " + data.lastUpdateAt));

@@ -183,3 +183,7 @@ function messageClassURL(type) {
 function goToMTUrl(type, distinct, background) {
 	goToUrl(messageClassURL(type), distinct, background);
 }
+
+function handleOnClick(id, func){
+	document.getElementById(id).addEventListener('click', function(e){ func(); });
+}

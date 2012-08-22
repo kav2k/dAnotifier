@@ -46,7 +46,6 @@ function HTMLControl_checkmarkArrayUpdate(indirect){
 function HTMLControl_addInputFieldRow(args) {
 	var HTML = '<tr><td>';
 	HTML += '<input type="text" ' + 
-		((args.size) ? ('style="width:' + args.size+ ';text-align:center" ') : '') + 
 		'id="pref-' + args.pref.key + '">';
 	HTML += '</td><td>';
 	HTML += '<b>' + args.pref.name + '</b>';
@@ -57,6 +56,10 @@ function HTMLControl_addInputFieldRow(args) {
 	args.multiplier = args.multiplier || 1;
 	
 	args.parent.innerHTML += HTML;
+	if(args.size){
+		document.getElementById('pref-' + args.pref.key).style.width = args.size;
+		document.getElementById('pref-' + args.pref.key).style.textAlign = "center";
+	}
 	
 	args.pref.initHTMLControl = function() {
 		this.HTMLControl = document.getElementById('pref-' + this.key);
