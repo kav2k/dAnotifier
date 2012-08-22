@@ -7,7 +7,7 @@ use File::Copy;
 
 # Beta file name
 $beta_file = 'dA_notifier_6_DEV.crx';
-$deploy_dir = '/Users/Xan/Dropbox/Public/';
+$deploy_dir = '/home/kashev/Dropbox/Public/';
 
 # Current source version
 $version = read_manifest();
