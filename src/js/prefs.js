@@ -125,7 +125,7 @@
 		key: "debug", 
 		name: "Show debug controls",
 		def: false, 
-		validators: [BoolValidator]
+		validators: [BoolValidator, DebugValidator]
 	});
 	
 	Prefs.add({
@@ -149,6 +149,13 @@
 		validators: [IntValidator]
 	});
 	
+	Prefs.add({
+		key: "newlineMagic", 
+		name: "Use dirty XP tooltip trick", 
+		def: true,
+		validators: [BoolValidator]
+	});
+	
 	Prefs.ready = true;
 }
 
@@ -168,6 +175,11 @@ var DepressedValidator = function(input) {
 var DisableTooltipValidator = function(input) { 
 	if(input == false) return wrapPassMessage();
 	else return wrapWarnMessage("Warning: tooltip-only display may be broken!");
+};
+
+var DebugValidator = function(input) { 
+	if(input == false) return wrapWarnMessage("Warning: very advanced options for testing only!");
+	else return wrapWarnMessage("You've been warned! The debug section is all the way down.");
 }; 
 
 var PrefMessageEnabler = function(hc) {
@@ -313,7 +325,19 @@ function initPrefsHTML(){
 	});
 	
 	HTMLControl_addCheckmarkRow({
+		pref: Prefs.debug,
+		images: HTMLControl_checkmarkImages,
+		parent: document.getElementById('prefs-advanced')
+	});
+	
+	HTMLControl_addCheckmarkRow({
 		pref: Prefs.useCapture,
+		images: HTMLControl_checkmarkImages,
+		parent: document.getElementById('prefs-debug')
+	});
+	
+	HTMLControl_addCheckmarkRow({
+		pref: Prefs.newlineMagic,
 		images: HTMLControl_checkmarkImages,
 		parent: document.getElementById('prefs-debug')
 	});

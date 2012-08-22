@@ -1,5 +1,14 @@
 {
-	"background_page": "background.html",
+	"background": {
+		"scripts" : [
+			"js/main.js",
+			"js/difi.js",
+			"js/utils.js",
+			"js/prefs_lib.js",
+			"js/prefs.js",
+			"js/dn.js"
+		]
+	},
 	"browser_action": {
 		"default_icon": "img/dan_logo2_19_crisp.png",
 		"default_popup": "popup.html"
@@ -31,5 +40,6 @@
 			], "js": ["js/https-ify.js"], "run_at": "document_start" 
 		}		
 	],
-	"version": "0.6.4.0"
+	"version": "0.6.3.5",
+	"manifest_version": 2
 }

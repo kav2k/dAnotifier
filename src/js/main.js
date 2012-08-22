@@ -69,13 +69,22 @@ chrome.extension.onRequest.addListener(onRequest);
 // Force update immediately after login (0.4)
 chrome.tabs.onUpdated.addListener(OnLoginHandler);
 
-var relNotesVersion = 12;
+var relNotesVersion = 13; // FIXME: HAAAAAAAX!
+
+document.addEventListener('DOMContentLoaded', function () {
+	
+	init();
+});
 
 // *** Init function
 function init(){
-	document.getElementById('audio_placeholder').innerHTML = 
-		'<audio src="'+chrome.extension.getURL('audio/notify.ogg')+'" id="notify_sound"></audio>';
-	
+	//document.getElementById('audio_placeholder').innerHTML = 
+	//	'<audio src="'+chrome.extension.getURL('audio/notify.ogg')+'" id="notify_sound"></audio>';
+		
+	var audio_element = document.createElement("audio");
+		audio_element.id = "notify_sound";
+		audio_element.src = chrome.extension.getURL('audio/notify.ogg');
+	document.body.appendChild(audio_element);
 	
 	initPrefs();
 	

@@ -15,7 +15,7 @@
 <script src="js/prefs.js" type="text/javascript"></script>
 </head>
 
-<body onload="init();">
+<body>
 
 <br>
 
@@ -37,30 +37,29 @@
 				<p class="maintext"><a href="release_notes.html">[Release notes]</a></p>
 				
 				<p class="heading">Options:</p>
-				<!--<p class="maintext"><b style="color:firebrick;">Developer note: Page layout needs to be greatly revamped still; sorry for pathos.</b></p>-->
 				
 				<p class="maintext">
-					<button id="save-button" class="b_styled" onclick="save()">Save</button>
-					<button class="b_styled" onclick="revert()">Revert</button>
-					<button class="b_styled" onclick="reset()">Reset to defaults</button>
+					<button id="save-button" class="b_styled">Save</button>
+					<button id="revert-button" class="b_styled">Revert</button>
+					<button id="reset-button" class="b_styled">Reset to defaults</button>
 				</p>
 				
 				<p class="maintext"><b>Intervals:</b></p>
-				<table class="field" style="margin-left: 30px; margin-right: 30px;"><tbody id="prefs-interval"></tbody></table>
+				<table class="field"><tbody id="prefs-interval"></tbody></table>
 				
 				<p class="maintext"><a name="alertoptions"></a><b>Alerts:</b></p>
-				<table class="field" style="margin-left: 30px; margin-right: 30px;"><tbody id="prefs-alert"></tbody></table>
+				<table class="field"><tbody id="prefs-alert"></tbody></table>
 				
 				<p class="maintext"><b>Tooltip options:</b></p>
-				<table class="field" style="margin-left: 30px; margin-right: 30px;"><tbody id="prefs-tooltip"></tbody></table>				
+				<table class="field"><tbody id="prefs-tooltip"></tbody></table>				
 				
-				<p class="maintext"><b>Watch options <a class="maintext" href="#watchhelp" style="margin:0px">(?)</a>:</b></p>
-				<table id="prefs-array" class="array" style="margin-left: 30px; margin-right: 30px;"></table>
+				<p class="maintext"><b>Watch options <a class="maintext margin0" href="#watchhelp">(?)</a>:</b></p>
+				<table id="prefs-array" class="array"></table>
 				
-				<p class="maintext"><b>Group message options <a class="maintext" href="#watchhelp" style="margin:0px">(?)</a>:</b></p>
-				<table id="prefs-group-array" class="array" style="margin-left: 30px; margin-right: 30px;"></table>
+				<p class="maintext"><b>Group message options <a class="maintext margin0" href="#watchhelp">(?)</a>:</b></p>
+				<table id="prefs-group-array" class="array"></table>
 				
-				<p class="maintext"><a name="watchhelp"></a><b style="color:Navy;">Quick help:</b></p>
+				<p class="maintext"><a name="watchhelp"></a><b class="help">Quick help:</b></p>
 				<p class="densetext"><b>Watch:</b> enables watching that message class. If unchecked, the class won't be tracked altogether and won't count towards total count.</p>
 				<p class="densetext"><b>Track new:</b> counts new messages since you last opened your message center, and optionally alerts you about them.</p>
 				<p class="densetext"><b>Badge alert:</b> makes badge on the extension icon change to green when there are new messages of that type.</p>
@@ -70,10 +69,8 @@
 					<a href="#alertoptions">Global setting</a> overrides this.</p>
 				
 				<p class="maintext"><b>Advanced options:</b></p>
-				<table class="field" style="margin-left: 30px; margin-right: 30px;"><tbody id="prefs-advanced"></tbody></table>
+				<table class="field"><tbody id="prefs-advanced"></tbody></table>
 				<br>
-				<!--<p class="maintext"><b style="color:firebrick;">Developer note: Pref system testing area; options have no impact whatsoever.</b></p>
-				<table id="prefs-test" class="field" style="margin-left: 30px; margin-right: 30px;"></table>-->
 
 				<p class="heading">Credits:</p>
 				<hr color="#4e615f" size="1" width="300" align="left" />
@@ -100,43 +97,29 @@
 
 				<br />
 				
-				<div id="debug-section" style="display:none">
+				<div id="debug-section" class="debug">
 				<br /><br />
 				<p class="heading">DEBUG options:</p>
 				<hr color="#4e615f" size="1" width="300" align="left" />
 				
-				<!--<p class="maintext">
-					<button id="save-button" class="b_styled" onclick="testNotify()">
-						Re-request notification permissions
-					</button>
-					<button id="save-button" class="b_styled" onclick="testSound()">
-						Test sound
-					</button>
-					<button id="save-button" class="b_styled" onclick="testNotify2()">
-						Test notification
-					</button>
-					<button id="save-button" class="b_styled" onclick="chrome.extension.getBackgroundPage().oldNumMessages=0">
-						Zero oldNumMessages
-					</button>
-				</p>-->
 				<p class="maintext">
 					<input type="text" id="DiFi_ts" size="10" />
-					<button id="DiFi_ts-button" class="b_styled" onclick="debug_setDiFi_ts()">
+					<button id="DiFi_ts-button" class="b_styled">
 						Set DiFi_timestamp
 					</button>
-					<button id="DiFi_ts-month-button" class="b_styled" onclick="debug_setDiFi_ts_month()">
+					<button id="DiFi_ts-month-button" class="b_styled">
 						A month back
 					</button>
 				</p>
 				
 				<p class="maintext">
-					<button id="DiFi_capture-button" class="b_styled" onclick="debug_capture()" style="display:inline";>
+					<button id="DiFi_capture-button" class="b_styled" class="inline">
 						Capture
 					</button>
 					<div id="capture-label"></div>
 				</p>
 				
-				<table class="field" style="margin-left: 30px; margin-right: 30px;"><tbody id="prefs-debug"></tbody></table>
+				<table class="field"><tbody id="prefs-debug"></tbody></table>
 				
 				</div>
 			</td>

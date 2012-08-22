@@ -31,6 +31,7 @@ var messagesInfo = {
 	"NW":{"S":"News Article", "P":"News Articles", "pref":"followNews", "UP":"news"},
 	"F":{"S":"Forum", "P":"Forums", "pref":"followForums", "UP":"forums"},
 	"P":{"S":"Poll", "P":"Polls", "pref":"followPolls", "UP":"polls"},
+	"WA":{"S":"Activity", "P":"Activies", "pref":"followActivities", "UP":"activities"},
 	// Feedback
 	"CN":{"S":"Critique Notice", "P":"Critique Notices", "pref":"followCritNotices", "UP":"critiquesreceived"},
 	"C":{"S":"Comment", "P":"Comments", "pref":"followComments", "UP":"comments", "feed":true},
@@ -52,7 +53,7 @@ var groupMessagesInfo = {
 
 var aggregateClasses = {
 	"NTC" : {"S" : "Notice", "P": "Notices", "types": ["N", "CA", "B"], "count" : 0, "newCount" : 0, "UP" : "notices"},
-	"DWA" : {"S" : "deviantWATCH Message", "P" : "deviantWATCH Messages", "types": ["D", "WC", "J", "NW", "F", "P"], "count" : 0, "newCount": 0, "UP" : "deviantwatch"},
+	"DWA" : {"S" : "deviantWATCH Message", "P" : "deviantWATCH Messages", "types": ["D", "WC", "J", "NW", "F", "P", "WA"], "count" : 0, "newCount": 0, "UP" : "deviantwatch"},
 	"FEE" : {"S" : "Feedback Message", "P" : "Feedback Messages", "types": ["CN", "C", "R", "A", "S"], "count" : 0, "newCount" : 0, "UP" : "feedback"},
 	"COR" : {"S" : "Correspondence Item", "P" : "Correspondence Items", "special" : "singleton", "types": ["CO"], "count" : 0, "newCount" : 0, "UP" : "correspondence"},
 	"NOT" : {"S" : "Note", "P" : "Notes", "special" : "singleton", "types": ["UN"], "count" : 0, "newCount" : 0, "UP" : "notes"},
@@ -67,7 +68,7 @@ function prepText(text) {
 	}
 	else {return text;}*/
 	
-	text = newlineMagic(text);
+	if(Prefs.newlineMagic.get()) text = newlineMagic(text);
 	
 	return text;
 }
@@ -181,4 +182,8 @@ function messageClassURL(type) {
 
 function goToMTUrl(type, distinct, background) {
 	goToUrl(messageClassURL(type), distinct, background);
+}
+
+function handleOnClick(id, func){
+	document.getElementById(id).addEventListener('click', function(e){ func(); });
 }
