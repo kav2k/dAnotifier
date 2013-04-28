@@ -600,6 +600,7 @@ function DiFi_updatePopup() {
 	popupData.state = "done";
 	popupData.refreshing = false;
 	delete(popupData.error);
+	popupData.skipNew = false;
 	
 	popupData.lastUpdateAt = getTimestamp();
 	
@@ -623,6 +624,12 @@ function DiFi_updatePopup() {
 
 	chrome.extension.sendMessage({action : 'updatePopup', data : popupData});
 	DiFi_updateBadge();
+}
+
+function DiFi_clearPopupNew(){
+	popupData.totalNewCount = 0;
+	var totalApprox = false;
+	popupData.skipNew = true;
 }
 
 // ----------------------------------------------------

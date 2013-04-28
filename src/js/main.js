@@ -58,6 +58,11 @@ function onMessage(request, sender, callback) {
 		case 'updateNow':
 			scheduleRequest();
 			break;
+		case 'clearPopupNew':
+			DiFi_clearPopupNew();
+			DN_clear();
+			scheduleRequest();
+			break;
 	}
 }
 

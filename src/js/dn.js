@@ -1,14 +1,30 @@
 function DN_notify(data){
 	DN_notificationData = data;
-	if(DN_notificationStatus == "UNINIT") DN_createNewNotification();
-	if(DN_notificationStatus == "QUEUED") DN_currentNotification.show();
-	if(DN_notificationStatus == "SHOWN") {
+	
+	if(chrome.extension.getViews({type:"notification"}).length){
 		chrome.extension.getViews({type:"notification"}).forEach(function(win) {
 			win.DN_updateEntries();
 		});
 		console.log("Notification updated");
 	}
+	else if(DN_notificationStatus == "QUEUED" || DN_notificationStatus == "SHOWN") {
+		DN_currentNotification.cancel();
+		DN_notificationStatus = "UNINIT";
+		console.log("Notification reset");
+	}
+	else {
+		DN_createNewNotification();
+	}
+	
 	return;
+}
+
+function DN_clear(){
+	if(DN_currentNotification){
+		DN_currentNotification.cancel();
+		DN_notificationStatus = "UNINIT";
+		console.log("Notification reset");
+	}
 }
 
 var DN_currentNotification;
@@ -17,7 +33,7 @@ var DN_notificationData;
 
 function DN_createNewNotification(){
 	DN_currentNotification = webkitNotifications.createHTMLNotification( chrome.extension.getURL('dn.html')	);
-	DN_notificationStatus - "INIT"; console.log("Notification created");
+	DN_notificationStatus = "INIT"; console.log("Notification created");
 	DN_currentNotification.ondisplay = function() { 
 		DN_notificationStatus = "SHOWN"; 
 		console.log("Notification shown"); 
@@ -25,6 +41,7 @@ function DN_createNewNotification(){
     DN_currentNotification.onclose = function() { DN_notificationStatus = "UNINIT"; console.log("Notification closed"); };
 	
 	DN_notificationStatus = "QUEUED"; console.log("Notification queued");
+	DN_currentNotification.show();
 }
 
 function DN_onEntryClick(type, e){

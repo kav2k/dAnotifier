@@ -105,7 +105,10 @@ function P_createMCLink(type){
 function P_createMarkReadLink(type){
 	return $('<a href="#" />')
 		.text("Mark all as read")
-		.click( function(e) { chrome.extension.sendMessage({'action' : 'seenInbox'}); P_forceUpdate(); } );
+		.click( function(e) { 
+			chrome.extension.sendMessage({'action' : 'seenInbox'});
+			chrome.extension.sendMessage({'action' : 'clearPopupNew'});
+		} );
 }
 
 /* Main container */
@@ -151,9 +154,11 @@ function P_createContainer(data) {
 				
 				var entries = $();
 				
-				for(var t in aggregateClasses[cl].types) if (data.folders[id].counts[aggregateClasses[cl].types[t]] + data.folders[id].newCounts[aggregateClasses[cl].types[t]] > 0){
+				for(var t in aggregateClasses[cl].types) if (
+						data.folders[id].counts[aggregateClasses[cl].types[t]] + data.folders[id].newCounts[aggregateClasses[cl].types[t]] > 0
+						&& !(data.skipNew && data.folders[id].counts[aggregateClasses[cl].types[t]] == 0)){
 					entries = entries.add(
-						P_createGroupEntry(aggregateClasses[cl].types[t], data.folders[id], id)
+						P_createGroupEntry(aggregateClasses[cl].types[t], data.folders[id], id, data.skipNew)
 					);
 				}
 				
@@ -173,13 +178,13 @@ function P_createContainer(data) {
 				
 				if (!singleton){
 					entries = entries.add(
-						P_createClassHeader(aggregateClasses[cl], cl)
+						P_createClassHeader(aggregateClasses[cl], cl, data.skipNew)
 					);
 				}
 								
 				for(var t in aggregateClasses[cl].types) if (data.folders[data.inboxID].counts[aggregateClasses[cl].types[t]] > 0){
 					entries = entries.add(
-						P_createEntry(aggregateClasses[cl].types[t], data.folders[data.inboxID])
+						P_createEntry(aggregateClasses[cl].types[t], data.folders[data.inboxID], data.skipNew)
 					);
 				}
 				
@@ -192,7 +197,7 @@ function P_createContainer(data) {
 	return container;
 }
 
-function P_createClassHeader(ac_data, ac) {
+function P_createClassHeader(ac_data, ac, skip_new) {
 	var element = $('<td class="entry class_header">');
 	element.click( function(e) { P_onEntryClick(ac, e); } );
 	
@@ -201,7 +206,7 @@ function P_createClassHeader(ac_data, ac) {
 		+ ((ac_data.count == 1) ? ac_data.S : ac_data.P) 
 	);
 	
-	if(ac_data.newCount) {
+	if(ac_data.newCount && !skip_new) {
 		var new_span = $('<span class="new_text">');
 		new_span.text( ' (' +  ac_data.newCount + (ac_data.newCountApprox ? "+" : "")+ ' new)' );
 		element.append(new_span);
@@ -210,7 +215,7 @@ function P_createClassHeader(ac_data, ac) {
 	return $('<tr>').append(element);
 }
 
-function P_createEntry(type, data) {
+function P_createEntry(type, data, skip_new) {
 	var element = $('<td class="entry">', {id : 'entry-' +  type});
 	element.click( function(e) { P_onEntryClick(type, e); } );
 	
@@ -219,7 +224,7 @@ function P_createEntry(type, data) {
 		+ ((data.counts[type] == 1) ? messagesInfo[type].S : messagesInfo[type].P)
 	);
 	
-	if(data.newCounts[type]) {
+	if(data.newCounts[type] && !skip_new) {
 		var new_span = $('<span class="new_text">');
 		new_span.text( ' (' +  data.newCounts[type] + ((data.newCounts[type] == Prefs.maxItems.get())?'+':'') + ' new)' );
 		element.append(new_span);
@@ -229,7 +234,7 @@ function P_createEntry(type, data) {
 	return $('<tr>').append(element);
 }
 
-function P_createGroupEntry(type, data, id) {
+function P_createGroupEntry(type, data, id, skip_new) {
 	id = id || 0;
 	
 	var element = $('<td class="entry">', {id : 'entry-' + id + '-' +  type});
@@ -242,7 +247,7 @@ function P_createGroupEntry(type, data, id) {
 	
 	var new_span = $('<span class="new_text">');
 	
-	if(groupMessagesInfo[type].feed) {
+	if(groupMessagesInfo[type].feed && !skip_new) {
 		element.text(
 			data.newCounts[type] + ((data.newCounts[type] == Prefs.maxItems.get())?'+':'') + ' ' 
 			+ ((data.newCounts[type] == 1) ? messagesInfo[type].S : messagesInfo[type].P)
@@ -253,7 +258,7 @@ function P_createGroupEntry(type, data, id) {
 		element.text(
 			data.counts[type] + ' ' + ((data.counts[type] == 1) ? messagesInfo[type].S : messagesInfo[type].P)
 		);
-		if(data.newCounts[type]) {
+		if(data.newCounts[type] && !skip_new) {
 			$('<span class="new_text">').text(
 				' (' +  data.newCounts[type] + ((data.newCounts[type] == Prefs.maxItems.get())?'+':'') + ' new)'
 			).appendTo(element);
