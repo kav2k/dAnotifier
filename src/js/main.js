@@ -69,7 +69,7 @@ chrome.extension.onMessage.addListener(onMessage);
 // Force update immediately after login (0.4)
 chrome.tabs.onUpdated.addListener(OnLoginHandler);
 
-var relNotesVersion = 13; // FIXME: HAAAAAAAX!
+var relNotesVersion = 14; // FIXME: HAAAAAAAX!
 
 document.addEventListener('DOMContentLoaded', function () {
 	
