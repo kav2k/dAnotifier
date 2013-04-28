@@ -14,6 +14,19 @@ function HTMLControl_checkmarkToggle(){
 	markDirty();
 }
 
+function HTMLControl_EnumToggle(){
+	if (!this.enabled) return;
+
+	if (this.value) return;
+	else {
+		for(var field in this.parentControl.fields) this.parentControl[field].value=false;
+		this.value=true;
+	}
+	
+	this.update();
+	markDirty();
+}
+
 function HTMLControl_checkmarkImmediateToggle(){
 	if (!this.enabled) return;
 
@@ -25,6 +38,18 @@ function HTMLControl_checkmarkImmediateToggle(){
 }
 
 function HTMLControl_checkmarkUpdate(){
+	this.enabled = this.enabler(this);
+	if (!this.enabled) { this.src = this.images.disabled; this.alt="disabled"; this.style.cursor="default";}
+	else if (this.value) { this.src = this.images.on; this.alt="checked"; this.style.cursor="pointer";}
+	else { this.src = this.images.off; this.alt="unchecked"; this.style.cursor="pointer";}
+}
+
+function HTMLControl_EnumUpdate(indirect){
+	if(!indirect){ // Broadcast update
+		for(var field in this.parentControl.fields) this.parentControl[field].update(true);
+		return;
+	}
+	
 	this.enabled = this.enabler(this);
 	if (!this.enabled) { this.src = this.images.disabled; this.alt="disabled"; this.style.cursor="default";}
 	else if (this.value) { this.src = this.images.on; this.alt="checked"; this.style.cursor="pointer";}
@@ -103,6 +128,50 @@ function HTMLControl_addCheckmarkRow(args) {
 		this.HTMLControl.set(this.get());
 		
 		this.HTMLControl.onclick = HTMLControl_checkmarkToggle;
+	};
+}
+
+function HTMLControl_addEnum(args) {
+	var HTML = '';
+	for(var field in args.pref.fields) {
+		HTML += '<tr>';
+		HTML += '<td><img ' + 'id="pref-' + args.pref.key + '-' + field + '" class="checkmark"></td>';
+		HTML += '<td><b>' + args.pref.fields[field] + '</b></td>';
+		HTML += '</tr>';
+	}
+	//HTML += '<span id="pref-' + args.pref.key +'-err"></span>';
+	
+	args.parent.innerHTML += HTML;
+
+	args.pref.initHTMLControl = function() {
+		this.HTMLControl = new Object();
+		this.HTMLControl.fields = this.fields;
+		
+		for(var field in this.fields) {
+			this.HTMLControl[field] = document.getElementById('pref-' + this.key + '-' + field);
+			this.HTMLControl[field].enabler = (args.enabler) ? args.enabler(this.HTMLControl) : (function() {return true;});
+			this.HTMLControl[field].images = args.images;
+			this.HTMLControl[field].update = HTMLControl_EnumUpdate;
+			this.HTMLControl[field].onclick = HTMLControl_EnumToggle;
+			this.HTMLControl[field].field = field;
+			this.HTMLControl[field].parentControl = this.HTMLControl;
+		}
+		
+		this.HTMLControl.get = function () { 
+			for(var field in this.fields) { if (this[field].value == true) { return field; } }
+			return null;
+		}
+		this.HTMLControl.set = function (value) { 
+			for(var field in this.fields) this[field].value = (value == field);
+			for(var field in this.fields) this[field].update(true);
+		}
+		
+		this.saveHTML = function () { 
+			var result=this.set(this.HTMLControl.get());
+			//document.getElementById('pref-' + this.key + '-err').innerHTML = result.message;
+		}
+		
+		this.HTMLControl.set(this.get());
 	};
 }
 

@@ -178,6 +178,13 @@ var BetweenValidator = function(min, max) { return function(input) {
 	else return wrapPassMessage();
 };};
 
+function EnumValidator(values) {
+	return function(input) {
+		if(values.indexOf(input) > -1) { return wrapPassMessage(); }
+		return wrapFailMessage("Value not in possible values");
+	}
+}
+
 // Special time comparisons (incomplete)
 // Differ only in error messages
 

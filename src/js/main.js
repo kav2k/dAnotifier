@@ -94,7 +94,7 @@ function init(){
 	initPrefs();
 	
 	if(chrome.browserAction.onClicked.hasListeners()) chrome.browserAction.onClicked.removeListener(OnClickHandler);
-	if(Prefs.disablePopup.get()) {
+	if(Prefs.UIMode.get() == "tooltipOnly") {
 		chrome.browserAction.onClicked.addListener(OnClickHandler);
 		chrome.browserAction.setPopup({popup: ''});
 	}

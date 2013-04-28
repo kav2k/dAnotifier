@@ -68,8 +68,8 @@ function errorText(error){
 		case "SERVER_ERROR": return "Error on dA side.<br>This should resolve itself shortly.";
 		case "PARSE_ERROR": return "Unexpected reply from dA server.<br>If this persists, notify the developer!";
 		case "TIMEOUT": return "Request timed out.<br>Check your internet connection if this persists.";
-		case "TEST_ERROR": "This is a test error.<br>You should NOT see this in release version!";
-		case "TEST_WARNING": "This is a test warning.<br>You should NOT see this in release version!";
+		case "TEST_ERROR": return "This is a test error.<br>You should NOT see this in release version!";
+		case "TEST_WARNING": return "This is a test warning.<br>You should NOT see this in release version!";
 		case "INTERNAL_ERROR": return "Error condition in the code.<br>Please inform the developer!";
 		default:
 			console.error("Unrecognized error type '" + error.type + "' in the handler!");

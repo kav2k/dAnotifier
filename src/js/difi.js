@@ -382,11 +382,16 @@ function DiFi_updateTooltip() {
 	
 	DiFi_fillAggregation();
 	
-	if (Prefs.aggregateTooltip.get()) {
-		title = DiFi_tooltipAggregate();
-	}
-	else {
-		title = DiFi_tooltipFull();
+	switch(Prefs.tooltipMode.get()) {
+		case "full":
+			title = DiFi_tooltipFull();
+			break;
+		case "aggregated":
+			title = DiFi_tooltipAggregate();
+			break;
+		case "brief":
+			title = DiFi_tooltipBrief();
+			break;
 	}
 	
 //	console.log(title);
@@ -407,6 +412,45 @@ function DiFi_tooltipLine(type, count, newCount, feed) {
 		if(newCount) line += " (" + newCount + ( (newCount == DiFi_maxItems) ? "+" : "" ) + " new)";
 	}
 	return line;
+}
+
+function DiFi_tooltipBrief() {
+	var title;
+	var message_text = "";
+	var newline = true;
+	
+	var title = "Last updated: " + getTimestamp() + " for " + DiFi_folders[DiFi_inboxID].name;
+	
+	for (var type in messagesInfo) if (DiFi_folders[DiFi_inboxID].newCounts[type] > 0) {
+		message_text += 
+			((newline)?"\n":" ") 
+			+ DiFi_folders[DiFi_inboxID].newCounts[type] 
+			+ ((DiFi_folders[DiFi_inboxID].newCounts[type] == DiFi_maxItems) ? "+" : "")
+			+ messagesInfo[type].A;
+		newline=false;
+	}
+	
+	for(var id in DiFi_folders) if (DiFi_folders[id].type == "group"){
+		var has_messages = false;
+		for (var type in groupMessagesInfo)	if(DiFi_folders[id].newCounts[type]) has_messages = true;
+		if(!has_messages) continue;
+		
+		message_text += "\n#"+DiFi_folders[id].name+":";
+		
+		for (var type in groupMessagesInfo) if (DiFi_folders[id].newCounts[type] > 0) {
+			message_text += 
+				" " 
+				+ DiFi_folders[id].newCounts[type]
+				+ ((DiFi_folders[id].newCounts[type] == DiFi_maxItems) ? "+" : "")
+				+ messagesInfo[type].A;
+		}
+	}
+	
+	if (!message_text) message_text = "\nNo new messages";
+	
+	title += message_text;
+	
+	return prepText(title);
 }
 
 function DiFi_tooltipFull() {
@@ -432,38 +476,6 @@ function DiFi_tooltipFull() {
 			message_text += "\n> " + DiFi_tooltipLine(type, DiFi_folders[id].counts[type], DiFi_folders[id].newCounts[type], true);
 		}
 	}
-	
-/*	for (var type in messagesInfo)	if(DiFi_folders[DiFi_inboxID].counts[type] > 0){
-		message_text += "\n" ;
-		message_text += "> " + DiFi_folders[DiFi_inboxID].counts[type] + " ";
-		message_text += (DiFi_folders[DiFi_inboxID].counts[type] == 1) ? messagesInfo[type].S : messagesInfo[type].P;
-		if(DiFi_folders[DiFi_inboxID].newCounts[type]){
-			message_text += " (" + DiFi_folders[DiFi_inboxID].newCounts[type] + ((DiFi_folders[DiFi_inboxID].newCounts[type] == DiFi_maxItems)?"+":"") + " new)";
-		}
-	}
-	
-	for(var id in DiFi_folders) if (DiFi_folders[id].type == "group"){
-		var has_messages = false;
-		for (var type in messagesInfo)	if(DiFi_folders[id].counts[type] > 0 || DiFi_folders[id].newCounts[type]) has_messages = true;
-		if(!has_messages) continue;
-		
-		message_text += "\n" ;
-		message_text += "#"+DiFi_folders[id].name+":";
-		
-		for (var type in messagesInfo)	if(DiFi_folders[id].counts[type] > 0){
-			message_text += "\n";
-			message_text += "> " + DiFi_folders[id].counts[type] + " ";
-			message_text += (DiFi_folders[id].counts[type] == 1) ? messagesInfo[type].S : messagesInfo[type].P;
-			if(DiFi_folders[id].newCounts[type]){
-				message_text += " (" + DiFi_folders[id].newCounts[type] + ((DiFi_folders[id].newCounts[type] == DiFi_maxItems)?"+":"") + " new)";
-			}
-		} else if (DiFi_folders[id].counts[type] == 0 && DiFi_folders[id].newCounts[type] > 0) { // Feed
-			message_text += "\n";
-			message_text += "> " + DiFi_folders[id].newCounts[type] + " new ";
-			message_text += (DiFi_folders[id].counts[type] == 1) ? messagesInfo[type].S : messagesInfo[type].P;
-			message_text += " (Feed)";
-		}
-	}*/
 	
 	if (!message_text) message_text = "\n No Messages";
 	
@@ -515,7 +527,7 @@ function DiFi_tooltipAggregate() {
 	for (var cl in aggregateClasses) {
 		if(aggregateClasses[cl].special && aggregateClasses[cl].special == "group") { 
 			for(var id in DiFi_folders) if (DiFi_folders[id].type == "group" && aggregateClasses[cl].groups[id].count + aggregateClasses[cl].groups[id].newCount > 0) {
-				message_text += "\n\n" + "#" + DiFi_folders[id].name + ": ";
+				message_text += "\n" + "#" + DiFi_folders[id].name + ": ";
 				message_text += aggregateClasses[cl].groups[id].count + " " + 
 					( (aggregateClasses[cl].groups[id].count == 1) ? aggregateClasses[cl].S : aggregateClasses[cl].P );
 				if(aggregateClasses[cl].groups[id].newCount){
@@ -533,14 +545,14 @@ function DiFi_tooltipAggregate() {
 		}
 		else if (aggregateClasses[cl].count + aggregateClasses[cl].newCount > 0) {
 			if (aggregateClasses[cl].special && aggregateClasses[cl].special == "singleton") {
-				message_text += "\n\n";
+				message_text += "\n";
 				message_text += aggregateClasses[cl].count + " " + ( (aggregateClasses[cl].count == 1) ? aggregateClasses[cl].S : aggregateClasses[cl].P );
 				if(aggregateClasses[cl].newCount){
 					message_text += " (" + aggregateClasses[cl].newCount + ( (aggregateClasses[cl].newCountApprox)?"+":"" ) + " new)";
 				}
 			}
 			else {
-				message_text += "\n\n";
+				message_text += "\n";
 				message_text += aggregateClasses[cl].count + " " + ( (aggregateClasses[cl].count == 1) ? aggregateClasses[cl].S : aggregateClasses[cl].P );
 				if(aggregateClasses[cl].newCount){
 					message_text += " (" + aggregateClasses[cl].newCount + ( (aggregateClasses[cl].newCountApprox)?"+":"" ) + " new)";

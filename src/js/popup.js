@@ -54,37 +54,63 @@ function P_createHeader(data) {
 	var header = $('<div class="header" id="P_header">');
 	
 	if(data.error && data.error.type == "LOGGED_OUT"){
-		return header.append("Logged out");
+		header.append("Logged out");
 	}
-	
-	if(data.state == "init") {
-		return header.append("Waiting for data…");
+	else if(data.state == "init") {
+		header.append("Waiting for data…");
 	}
-	
-	P_createMCLink()
-		.text( 
-			(data.totalCount || "No") + " message" + ((data.totalCount == 1) ? "" : "s")
-		)
-		.appendTo(header);
-	
-	var username = data.folders[data.inboxID].name;
-	header.append(" for " + username.substring(0,1)); // User symbol
-	header.append( P_createProfileLink( username.substring(1) ) ); // User profile
-	
-	if(data.totalNewCount > 0) {
-	
-		var new_header = $('<div class="subheader" id="P_new_header">');
-		
-		$('<span class="new_text" />')
-			.text(
-				data.totalNewCount + ((data.totalNewCountApprox) ? "+" : "") + 
-				" new message" + ((data.totalNewCount == 1) ? "" : "s")
+	else {
+		P_createMCLink()
+			.text( 
+				(data.totalCount || "No") + " message" + ((data.totalCount == 1) ? "" : "s")
 			)
-			.appendTo(new_header);
-		new_header.append(" | ");
-		new_header.append(P_createMarkReadLink());		
+			.appendTo(header);
 		
-		header.append(new_header);
+		var username = data.folders[data.inboxID].name;
+		header.append(" for " + username.substring(0,1)); // User symbol
+		header.append( P_createProfileLink( username.substring(1) ) ); // User profile
+		
+		if(data.totalNewCount > 0) {
+		
+			var new_header = $('<div class="subheader" id="P_new_header">');
+			
+			$('<span class="new_text" />')
+				.text(
+					data.totalNewCount + ((data.totalNewCountApprox) ? "+" : "") + 
+					" new message" + ((data.totalNewCount == 1) ? "" : "s")
+				)
+				.appendTo(new_header);
+			new_header.append(" | ");
+			new_header.append(P_createMarkReadLink());		
+			
+			header.append(new_header);
+		}
+	}
+	
+	if(data.error && data.error.type != "LOGGED_OUT"){
+		var error_display = $("<div>");	
+		
+		error_display.addClass(
+			(errorCritical(data.error)) ? "error" : "warning"
+		);
+		
+		error_display.append(errorText(data.error));
+		
+		if(data.error.raw){
+			var raw_display = $('<div class="raw">')
+				.append($('<div class="raw_hint">Click to copy:</div>'))
+				.append($("<div id='raw_data'>"+data.error.raw.replace(/\n\s*/g, "<br>")+"</div>"));
+				
+			raw_display.click(
+				function(e){
+					copyTextToClipboard(data.error.raw);
+				}
+			);
+			
+			error_display.append(raw_display);
+		}
+		
+		header.append(error_display);
 	}
 	
 	return header;
@@ -302,32 +328,6 @@ function P_createFooter(data) {
 	}
 	
 	footer.append(footer_commands);
-	
-	if(data.error && data.error != "LOGGED_OUT"){
-		var error_display = $("<div>");	
-		
-		error_display.addClass(
-			(errorCritical(data.error)) ? "error" : "warning"
-		);
-		
-		error_display.append(errorText(data.error));
-		
-		if(data.error.raw){
-			var raw_display = $('<div class="raw">')
-				.append($('<div class="raw_hint">Click to copy:</div>'))
-				.append($("<div id='raw_data'>"+data.error.raw.replace(/\n\s*/g, "<br>")+"</div>"));
-				
-			raw_display.click(
-				function(e){
-					copyTextToClipboard(data.error.raw);
-				}
-			);
-			
-			error_display.append(raw_display);
-		}
-		
-		footer.append(error_display);
-	}
 		
 	return footer;
 }

@@ -21,27 +21,27 @@ function playSound(){
 
 var messagesInfo = {
 	// Notices
-	"N":{"S":"Hot Topic", "P":"Hot Topics", "pref":"followNotices", "UP":"hottopics"},
-	"CA":{"S":"Contest Announcement", "P":"Contest Announcements", "pref":"followContest", "UP":"contests"},
-	"B":{"S":"Bulletin", "P":"Bulletins", "pref":"followBulletins", "UP":"bulletins"},
+	"N":{"S":"Hot Topic", "P":"Hot Topics", "pref":"followNotices", "UP":"hottopics", "A": "HT"},
+	"CA":{"S":"Contest Announcement", "P":"Contest Announcements", "pref":"followContest", "UP":"contests", "A": "CA"},
+	"B":{"S":"Bulletin", "P":"Bulletins", "pref":"followBulletins", "UP":"bulletins", "A": "B"},
 	// deviantWATCH
-	"D":{"S":"Deviation", "P":"Deviations", "pref":"followDeviations", "UP":"deviations"},
-	"WC":{"S":"Watched Critique", "P":"Watched Critiques", "pref":"followCritiques", "UP":"critiques"},
-	"J":{"S":"Journal", "P":"Journals", "pref":"followJournals", "UP":"journals"},
-	"NW":{"S":"News Article", "P":"News Articles", "pref":"followNews", "UP":"news"},
-	"F":{"S":"Forum", "P":"Forums", "pref":"followForums", "UP":"forums"},
-	"P":{"S":"Poll", "P":"Polls", "pref":"followPolls", "UP":"polls"},
-	"WA":{"S":"Activity", "P":"Activies", "pref":"followActivities", "UP":"activities"},
+	"D":{"S":"Deviation", "P":"Deviations", "pref":"followDeviations", "UP":"deviations", "A": "D"},
+	"WC":{"S":"Watched Critique", "P":"Watched Critiques", "pref":"followCritiques", "UP":"critiques", "A" : "WC"},
+	"J":{"S":"Journal", "P":"Journals", "pref":"followJournals", "UP":"journals", "A" : "J"},
+	"NW":{"S":"News Article", "P":"News Articles", "pref":"followNews", "UP":"news", "A" : "NA"},
+	"F":{"S":"Forum", "P":"Forums", "pref":"followForums", "UP":"forums", "A" : "F"},
+	"P":{"S":"Poll", "P":"Polls", "pref":"followPolls", "UP":"polls", "A" : "P"},
+	"WA":{"S":"Activity", "P":"Activies", "pref":"followActivities", "UP":"activities", "A" : "WA"},
 	// Feedback
-	"CN":{"S":"Critique Notice", "P":"Critique Notices", "pref":"followCritNotices", "UP":"critiquesreceived"},
-	"C":{"S":"Comment", "P":"Comments", "pref":"followComments", "UP":"comments", "feed":true},
-	"R":{"S":"Reply", "P":"Replies", "pref":"followReplies", "UP":"replies"},
-	"A":{"S":"Activity Message", "P":"Activity Messages", "pref":"followActivity", "UP":"activity", "feed":true},
-	"S":{"S":"Support Ticket", "P":"Support Tickets", "pref":"followTickets", "UP":"support"},
+	"CN":{"S":"Critique Notice", "P":"Critique Notices", "pref":"followCritNotices", "UP":"critiquesreceived", "A" : "CN"},
+	"C":{"S":"Comment", "P":"Comments", "pref":"followComments", "UP":"comments", "feed":true, "A" : "C"},
+	"R":{"S":"Reply", "P":"Replies", "pref":"followReplies", "UP":"replies", "A" : "R"},
+	"A":{"S":"Activity Message", "P":"Activity Messages", "pref":"followActivity", "UP":"activity", "feed":true, "A": "A"},
+	"S":{"S":"Support Ticket", "P":"Support Tickets", "pref":"followTickets", "UP":"support", "A": "S"},
 	// Correspondence
-	"CO":{"S":"Correspondence Item", "P":"Correspondence Items", "pref":"followCorrespondence", "UP":"correspondence"},
+	"CO":{"S":"Correspondence Item", "P":"Correspondence Items", "pref":"followCorrespondence", "UP":"correspondence", "A": "CO"},
 	// Notes
-	"UN":{"S":"Note", "P":"Notes", "pref":"followNotes", "UP":"notes"},
+	"UN":{"S":"Note", "P":"Notes", "pref":"followNotes", "UP":"notes", "A": "N"}
 };
 
 var groupMessagesInfo = {

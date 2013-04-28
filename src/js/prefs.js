@@ -108,13 +108,6 @@
 	});
 	
 	Prefs.add({
-		key: "aggregateTooltip", 
-		name: "Use aggregated tooltip",
-		def: false, 
-		validators: [BoolValidator]
-	});
-	
-	Prefs.add({
 		key: "useHTTPS", 
 		name: "Use HTTPS (use ONLY if dA is URL-blocked)",
 		def: false, 
@@ -136,13 +129,6 @@
 	});
 	
 	Prefs.add({
-		key: "disablePopup", 
-		name: "Disable popup interface (click opens Message Center directly)",
-		def: false, 
-		validators: [BoolValidator, DisableTooltipValidator]
-	});
-	
-	Prefs.add({
 		key: "maxItems", 
 		name: "Maximum polled items per message class", 
 		def: 20,
@@ -155,6 +141,30 @@
 		def: true,
 		validators: [BoolValidator]
 	});
+	
+	Prefs.add({
+		key: "UIMode", 
+		name: "UI mode",
+		def: "popup",
+		fields: {
+			popup: "New mode: Click on the button opens popup interface",
+			tooltipOnly: "Old mode: Click on the button opens inbox, information only in the tooltip"
+		},
+		validators: [EnumValidator(["popup", "tooltipOnly"])]
+	});
+	
+	Prefs.add({
+		key: "tooltipMode", 
+		name: "Tooltip mode",
+		def: "brief", 
+		fields: {
+			full: "Full: list all message classes",
+			aggregated: "Aggregated: show new messages, grouped by type",
+			brief: "Brief: show only new messages, abbreviated (like deviantAnywhere)"
+		},
+		validators: [EnumValidator(["full", "aggregated", "brief"])]
+	});
+	
 	
 	Prefs.ready = true;
 }
@@ -306,22 +316,22 @@ function initPrefsHTML(){
 		parent: document.getElementById('prefs-advanced')
 	});
 	
-	HTMLControl_addCheckmarkRow({
-		pref: Prefs.aggregateTooltip,
+	HTMLControl_addEnum({
+		pref: Prefs.UIMode,
 		images: HTMLControl_checkmarkImages,
-		parent: document.getElementById('prefs-tooltip')
+		parent: document.getElementById('prefs-ui-mode')
+	});
+	
+	HTMLControl_addEnum({
+		pref: Prefs.tooltipMode,
+		images: HTMLControl_checkmarkImages,
+		parent: document.getElementById('prefs-tooltip-mode')
 	});
 	
 	HTMLControl_addCheckmarkRow({
 		pref: Prefs.useHTTPS,
 		images: HTMLControl_checkmarkImages,
 		parent: document.getElementById('prefs-advanced')
-	});
-	
-	HTMLControl_addCheckmarkRow({
-		pref: Prefs.disablePopup,
-		images: HTMLControl_checkmarkImages,
-		parent: document.getElementById('prefs-tooltip')
 	});
 	
 	HTMLControl_addCheckmarkRow({
