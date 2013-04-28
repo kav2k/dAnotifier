@@ -35,10 +35,10 @@
 	"content_scripts": [ 
 		{ 
 			"matches": [
-				"http://www.deviantart.com/messages/", 
-				"https://www.deviantart.com/messages/", 
-				"http://www.deviantart.com/messages/?random=*", 
-				"https://www.deviantart.com/messages/?random=*"
+				"http://*.deviantart.com/messages/", 
+				"https://*.deviantart.com/messages/", 
+				"http://*.deviantart.com/messages/?random=*", 
+				"https://*.deviantart.com/messages/?random=*"
 			], "js": ["js/inject.js"], "run_at": "document_start" 
 		},
 		{ 

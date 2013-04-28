@@ -1,1 +1,1 @@
-chrome.extension.sendMessage({'action' : 'seenInbox'});
+if(window.location.host == "www.deviantart.com") { chrome.extension.sendMessage({'action' : 'seenInbox'}); }
