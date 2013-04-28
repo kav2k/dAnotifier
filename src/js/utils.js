@@ -68,6 +68,8 @@ function prepText(text) {
 	}
 	else {return text;}*/
 	
+	text = text.replace("<br>","\n");
+	
 	if(Prefs.newlineMagic.get()) text = newlineMagic(text);
 	
 	return text;
@@ -120,8 +122,8 @@ function romanNumeral(decimal) {
 
 // *** URL helper functions
 function getMessagesUrl() {
-	if(Prefs.useHTTPS.get()) return "https://my.deviantart.com/messages/";
-	else return "http://my.deviantart.com/messages/";
+	if(Prefs.useHTTPS.get()) return "https://www.deviantart.com/messages/";
+	else return "http://www.deviantart.com/messages/";
 }
 
 function getLoginUrl() {

@@ -134,7 +134,7 @@ function runRequest() { // (wrap-around for now)
   DiFi_doEverything();
 }
 
-function handleError(error, badge, critical) {
+/*function handleError(error, badge, critical) {
     chrome.browserAction.setIcon(
 		critical ? {path: "img/dan_logo2_19_red.png"} : {path: "img/dan_logo2_19_crisp.png"}
 	);
@@ -153,5 +153,5 @@ function handleError(error, badge, critical) {
 	DiFi_skipUpdate = false;
 	popupData.refreshing = false;
 	chrome.extension.sendMessage({action : 'updatePopup', data : popupData});
-}
+}*/
 

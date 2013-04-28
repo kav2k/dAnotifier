@@ -19,7 +19,7 @@ function DiFi_JSONrequest(request, id, callback){
 	var xhr = new XMLHttpRequest();
 	var abortTimerId = window.setTimeout(function() {
 		xhr.abort();
-		handleError("DiFi request timed out", "?", 0);
+		handleError({type: "TIMEOUT"});
 	}, Prefs.timeoutInterval.get());
 
 	xhr.onreadystatechange = function(){
@@ -27,7 +27,7 @@ function DiFi_JSONrequest(request, id, callback){
 			return;
 
 		if (xhr.status == 403){ // doesn't really work anymore
-			handleError("You are logged out. Click this button to go to login page.", "!", 1);
+			handleError({type: "LOGGED_OUT"});
 			window.clearTimeout(abortTimerId);
 			loggedOut = true;
 			return;
@@ -44,7 +44,7 @@ function DiFi_JSONrequest(request, id, callback){
 				
 				if(result.DiFi.status == "FAIL" && result.DiFi.response.error == "500 Server Error"){
 					console.log("DEBUG: Outer hiccup");
-					handleError("deviantART server hiccup\nThis should disappear with next update", "?", 0);
+					handleError({type: "SERVER_ERROR"});
 					window.clearTimeout(abortTimerId);
 					return;
 				}
@@ -53,7 +53,7 @@ function DiFi_JSONrequest(request, id, callback){
 					result.DiFi.response.details.calls[0].response.content.error &&
 					result.DiFi.response.details.calls[0].response.content.error == "DiFi Security Access Error")
 				{ 
-					handleError("You are logged out. Click this button to go to login page.", "!", 1);
+					handleError({type: "LOGGED_OUT"});
 					window.clearTimeout(abortTimerId);
 					loggedOut = true;
 					return;
@@ -63,14 +63,14 @@ function DiFi_JSONrequest(request, id, callback){
 					if(result.DiFi.response.calls[call].response.status == "FAIL" &&
 							result.DiFi.response.calls[call].response.content.error == "500 Server Error"){
 						console.log("DEBUG: Inner hiccup");
-						handleError("deviantART server hiccup\nThis should disappear with next update", "?", 0);
+						handleError({type: "SERVER_ERROR"});
 						window.clearTimeout(abortTimerId);
 						return;
 					}
 				}
 			}
 			catch(e){
-				handleError("Error: DiFi response parsing failed\n" + e.stack.replace(traceRegexp, ''), "ERR", 1);
+				handleError({type: "PARSE_ERROR", raw: e.stack.replace(traceRegexp, '')});
 				console.log(e.stack);
 				window.clearTimeout(abortTimerId);
 				return;
@@ -122,7 +122,7 @@ function DiFi_getInboxID(id, result) {
 		//DiFi_JSONrequest(DiFi_allMessagesRequest(DiFi_inboxID), DiFi_countMessages);
 	}
 	catch(e){
-		handleError(e.stack.replace(traceRegexp, ''), "ERR", 1);
+		handleError({type: "INTERNAL_ERROR", raw: e.stack.replace(traceRegexp, '')});
 		console.log(e.stack);
 		return false;
 	}
@@ -166,7 +166,7 @@ function getFolderInfo(giveUp){
 		//DiFi_JSONrequest(DiFi_allMessagesRequest(DiFi_inboxID), DiFi_countMessages);
 	}
 	catch(e){
-		handleError(e.stack.replace(traceRegexp, ''), "ERR", 1);
+		handleError({type: "INTERNAL_ERROR", raw: e.stack.replace(traceRegexp, '')});
 		console.log(e.stack);
 		return false;
 	}
@@ -310,7 +310,7 @@ function DiFi_countMessages(id, result) {
 		DiFi_countNext();
 	}
 	catch(e){
-		handleError(e.stack.replace(traceRegexp, ''), "ERR", 1);
+		handleError({type: "INTERNAL_ERROR", raw: e.stack.replace(traceRegexp, '')});
 		console.log(e.stack);
 		return false;
 	}
@@ -369,7 +369,7 @@ function DiFi_countGroupMessages(id, result) {
 		DiFi_countNext();
 	}
 	catch(e){
-		handleError(e.stack.replace(traceRegexp, ''), "ERR", 1);
+		handleError({type: "INTERNAL_ERROR", raw: e.stack.replace(traceRegexp, '')});
 		console.log(e.stack);
 		return false;
 	}
@@ -751,7 +751,7 @@ function dAMC_folderInfoRequest(){
 	var xhr = new XMLHttpRequest();
 	var abortTimerId = window.setTimeout(function() {
 		xhr.abort();
-		handleError("dAMC request timed out", "?", 0);
+		handleError({type: "TIMEOUT"});
 	}, Prefs.timeoutInterval.get());
 
 	xhr.onreadystatechange = function(){
@@ -759,7 +759,7 @@ function dAMC_folderInfoRequest(){
 			return;
 
 		if (xhr.status == 403){ // doesn't really work anymore
-			handleError("You are logged out. Click this button to go to login page.", "!", 1);
+			handleError({type: "LOGGED_OUT"});
 			window.clearTimeout(abortTimerId);
 			loggedOut = true;
 			return;
@@ -814,7 +814,7 @@ function dAMC_folderInfoRequest(){
 				getFolderInfo(true);
 			}
 			catch(e){
-				handleError("Error: dAMC response parsing failed\n" + e.stack.replace(traceRegexp, ''), "ERR", 1);
+				handleError({type: "PARSE_ERROR", raw: e.stack.replace(traceRegexp, '')});
 				console.log(e.stack);
 			}
 			

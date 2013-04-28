@@ -6,7 +6,8 @@
 			"js/utils.js",
 			"js/prefs_lib.js",
 			"js/prefs.js",
-			"js/dn.js"
+			"js/dn.js",
+			"js/errors.js"
 		]
 	},
 	"browser_action": {
@@ -23,15 +24,21 @@
 	"name": "dA Message Notifier",
 	"minimum_chrome_version": "16",
 	"options_page": "options.html",
-	"permissions": [ "notifications", "tabs", "http://*.deviantart.com/", "https://*.deviantart.com/" ],
+	"permissions": [ 
+		"notifications",
+		"tabs",
+		"http://*.deviantart.com/",
+		"https://*.deviantart.com/",
+		"clipboardWrite"
+	],
 	"optional_permissions": [ "background" ],
 	"content_scripts": [ 
 		{ 
 			"matches": [
-				"http://my.deviantart.com/messages/", 
-				"https://my.deviantart.com/messages/", 
-				"http://my.deviantart.com/messages/?random=*", 
-				"https://my.deviantart.com/messages/?random=*"
+				"http://www.deviantart.com/messages/", 
+				"https://www.deviantart.com/messages/", 
+				"http://www.deviantart.com/messages/?random=*", 
+				"https://www.deviantart.com/messages/?random=*"
 			], "js": ["js/inject.js"], "run_at": "document_start" 
 		},
 		{ 
