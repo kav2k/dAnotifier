@@ -145,6 +145,72 @@ table.entry_container tr td:last-child {border-right-width: 1.8px;}
 .spinner.left {left: -4px;}
 .spinner.right {left: 4px;}
 
+.error {
+	border-style: solid;
+	border-width: 1.8px;
+	border-radius: 4px;
+	
+	margin-top:3px;
+	
+	padding:3px;
+	
+	background-color:#E75;
+	
+	font-size: 12px;
+}
 
+.warning {
+	border-style: solid;
+	border-width: 1.8px;
+	border-radius: 4px;
+	
+	margin-top:3px;
+	
+	padding:3px;
+	
+	background-color:#F8F4B8;
+	
+	font-size: 12px;
+}
 
-/*table.entry tr.header{}*/
+.raw {
+	border-style: solid;
+	border-width: 1.8px;
+	border-radius: 4px;
+	
+	margin-top:3px;
+	
+	padding:3px;
+	
+	background-color:#D6D6D6;
+	
+	font-size: 9px;
+}
+
+.raw:hover {
+	background-color:#E4E4E4;
+}
+
+.raw_hint {
+	text-align: center;
+	
+	font-size: 12px;
+}
+
+.login_button {
+	border-style: solid;
+	border-width: 1.8px;
+	border-radius: 4px;
+	
+	margin: 8px;
+	padding: 8px;
+	
+	color: white;
+	font-size: 18px;
+	
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#0088B5), to(#005D7C) );
+}
+
+.login_button:hover {
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#00A4C6), to(#00739A) );
+}

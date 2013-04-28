@@ -55,6 +55,7 @@ function handleError(error){
     chrome.browserAction.setBadgeBackgroundColor(COLOR_INACTIVE);
 	
 	popupData.error = error;
+	if(error.type == "LOGGED_OUT") { delete(popupData.aggregateClasses); } // prevent old data from showing after log in
 	
 	DiFi_skipUpdate = false;
 	popupData.refreshing = false;

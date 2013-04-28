@@ -599,6 +599,8 @@ var popupData = {state: "init"};
 function DiFi_updatePopup() {
 	popupData.state = "done";
 	popupData.refreshing = false;
+	delete(popupData.error);
+	
 	popupData.lastUpdateAt = getTimestamp();
 	
 	popupData.folderInfo = new Object();

@@ -15,9 +15,7 @@ function P_fill(data) {
 	
 	$("#P_header").replaceWith(P_createHeader(data));
 	
-	if (data.aggregateClasses) { // We should have it after at least one successful update
-		$("#P_container").replaceWith(P_createContainer(data));
-	}
+	$("#P_container").replaceWith(P_createContainer(data));
 	
 	$("#P_footer").replaceWith(P_createFooter(data));
 	
@@ -54,6 +52,10 @@ Footer container [P_createFooter]
 function P_createHeader(data) {
 	
 	var header = $('<div class="header" id="P_header">');
+	
+	if(data.error && data.error.type == "LOGGED_OUT"){
+		return header.append("Logged out");
+	}
 	
 	if(data.state == "init") {
 		return header.append("Waiting for data…");
@@ -114,6 +116,16 @@ function P_createContainer(data) {
 		"class" : 'container',
 		id : 'P_container'
 	});
+	
+	if(data.error && data.error.type == "LOGGED_OUT"){
+		var login_button = $('<div class="login_button">')
+			.text("Click here to log in")
+			.click( function(e) {goToUrl(getLoginUrl());} );
+		
+		return container.append(login_button);
+	}
+	
+	if(!data.aggregateClasses) return container;
 	
 	var aggregateClasses = data.aggregateClasses;
 	
@@ -275,12 +287,44 @@ function P_createFooter(data) {
 		).append(" | ")
 		.append(
 			$('<a href="#">').text("Update now").click( function(e) { P_forceUpdate(); } )
-		).append(" | ")
-		.append(
-			$('<a href="#">').text("Time machine!").click( function(e) { P_debugTimestamp(); } )
+		)
+	
+	if(Prefs.debug.get()){
+		footer_commands.append(" | ")
+			.append(
+				$('<a href="#">').text("Time machine!").click( function(e) { P_debugTimestamp(); } )
+			);
+	}
+	
+	footer.append(footer_commands);
+	
+	if(data.error && data.error != "LOGGED_OUT"){
+		var error_display = $("<div>");	
+		
+		error_display.addClass(
+			(errorCritical(data.error)) ? "error" : "warning"
 		);
 		
-	return footer.append(footer_commands);
+		error_display.append(errorText(data.error));
+		
+		if(data.error.raw){
+			var raw_display = $('<div class="raw">')
+				.append($('<div class="raw_hint">Click to copy:</div>'))
+				.append($("<div id='raw_data'>"+data.error.raw.replace(/\n\s*/g, "<br>")+"</div>"));
+				
+			raw_display.click(
+				function(e){
+					copyTextToClipboard(data.error.raw);
+				}
+			);
+			
+			error_display.append(raw_display);
+		}
+		
+		footer.append(error_display);
+	}
+		
+	return footer;
 }
 
 /** UTILITY FUNCTIONS **/

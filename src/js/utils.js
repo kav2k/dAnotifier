@@ -189,3 +189,12 @@ function goToMTUrl(type, distinct, background) {
 function handleOnClick(id, func){
 	document.getElementById(id).addEventListener('click', function(e){ func(); });
 }
+
+function copyTextToClipboard(text) {
+    var copyFrom = $('<textarea/>');
+    copyFrom.text(text);
+    $('body').append(copyFrom);
+    copyFrom.select();
+    document.execCommand('copy');
+    copyFrom.remove();
+}
