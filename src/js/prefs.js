@@ -42,8 +42,8 @@
 	Prefs.add({
 		key: "showToast", 
 		name: "Enable desktop notifications", 
-		def: true, 
-		validators: [BoolValidator]
+		def: (webkitNotifications.createHTMLNotification) ? true : false, 
+		validators: [BoolValidator, HTMLNotificationsAvailableValidator]
 	});
 	
 	Prefs.add({
@@ -190,7 +190,13 @@ var DisableTooltipValidator = function(input) {
 var DebugValidator = function(input) { 
 	if(input == false) return wrapWarnMessage("Warning: very advanced options for testing only!");
 	else return wrapWarnMessage("You've been warned! The debug section is all the way down.");
-}; 
+};
+
+var HTMLNotificationsAvailableValidator = function(input){
+	if(webkitNotifications.createHTMLNotification) return wrapPassMessage();
+	else if(input) return wrapFailMessage("HTML notifications are not available in your browser version and are disabled.");
+	else return wrapWarnMessage("HTML notifications are not available in your browser version and are disabled.");
+}
 
 var PrefMessageEnabler = function(hc) {
 	return function(checkmark) {
@@ -237,6 +243,7 @@ function initPrefsHTML(){
 	HTMLControl_addCheckmarkRow({
 		pref: Prefs.showToast,
 		images: HTMLControl_checkmarkImages,
+		enabler: function() {return (!!webkitNotifications.createHTMLNotification);},
 		parent: document.getElementById('prefs-alert')
 	});
 	

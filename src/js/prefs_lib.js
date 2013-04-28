@@ -54,7 +54,7 @@ function Preference (args)
 			if (result.status == "FAIL") {  // Validation faliure on saved value
 				console.warn(result.message);
 				console.warn("[Prefs] Saved value for " + this.name + " in localStorage[" + this.key +"] failed validation! Using default '" + this.def + "'");
-				this.value = this.def;
+				this.reset();
 			}
 			else { // All is well
 				this.value = this.unpack(localStorage[this.key]);

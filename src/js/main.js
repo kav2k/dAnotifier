@@ -25,13 +25,8 @@ function OnClickHandler(tab) {
     }
 }
 
-// Force update immediately after login (0.4)
-function OnLoginHandler(tabId, changeInfo, tab) { // Forces update on login
-		if (changeInfo.url && /deviantart\.com\/.*\?loggedin=1/.test(changeInfo.url)) {
-			scheduleRequest();
-			console.log("Timer override on login at " + getTimestamp());
-		}
-		else if (
+function OnTabUpdateHandler(tabId, changeInfo, tab) {
+		if (
 			changeInfo.url && 
 			(
 				/http:.*deviantart.com\/journal\//.test(changeInfo.url) || 
@@ -69,12 +64,9 @@ function onMessage(request, sender, callback) {
 // Enabling event handlers
 
 chrome.extension.onMessage.addListener(onMessage);
-// Handler for button click
-//chrome.browserAction.onClicked.addListener(OnClickHandler);
-// Force update immediately after login (0.4)
-chrome.tabs.onUpdated.addListener(OnLoginHandler);
+chrome.tabs.onUpdated.addListener(OnTabUpdateHandler);
 
-var relNotesVersion = 14; // FIXME: HAAAAAAAX!
+var relNotesVersion = 15; // FIXME: HAAAAAAAX!
 
 document.addEventListener('DOMContentLoaded', function () {
 	
@@ -138,25 +130,4 @@ function runRequest() { // (wrap-around for now)
   //getMessages();
   DiFi_doEverything();
 }
-
-/*function handleError(error, badge, critical) {
-    chrome.browserAction.setIcon(
-		critical ? {path: "img/dan_logo2_19_red.png"} : {path: "img/dan_logo2_19_crisp.png"}
-	);
-
-    var title = "Last updated: " + getTimestamp() + "\n" + error;
-    
-	if(critical) console.warn(title);
-	
-    chrome.browserAction.setTitle({title: prepText(title)});
-	if(badge == "?" && DiFi_lastTotalCount) // 0.5: Last seen count
-		chrome.browserAction.setBadgeText({text: prepText(DiFi_lastTotalCount+badge)});
-	else
-		chrome.browserAction.setBadgeText({text: prepText(badge)});
-    chrome.browserAction.setBadgeBackgroundColor(COLOR_INACTIVE);
-	
-	DiFi_skipUpdate = false;
-	popupData.refreshing = false;
-	chrome.extension.sendMessage({action : 'updatePopup', data : popupData});
-}*/
 
