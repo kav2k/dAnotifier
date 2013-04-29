@@ -102,7 +102,7 @@
 	
 	Prefs.add({
 		key: "hideRelnotes", 
-		name: "Do not show release notes on update",
+		name: "Hide release notes on update",
 		def: false, 
 		validators: [BoolValidator]
 	});

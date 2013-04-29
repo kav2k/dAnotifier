@@ -14,7 +14,8 @@
 		"default_icon": "img/dan_logo2_19_crisp.png",
 		"default_popup": "popup.html"
 	},
-	"description": "A notifier for deviantART messages [BETA]. Keep track of your dA inbox!",
+	"description": "A notifier for deviantART messages. Keep track of your dA inbox!",
+	"homepage_url": "http://danotifier.deviantart.com/",
 	"update_url": "http://dl.dropbox.com/u/5844031/update_danb.xml",
 	"icons": {
 		"128": "img/dan_logo2_128_padded.png",
@@ -47,6 +48,6 @@
 			], "js": ["js/https-ify.js"], "run_at": "document_start" 
 		}		
 	],
-	"version": "0.6.3.8",
+	"version": "0.7.0.0",
 	"manifest_version": 2
 }
