@@ -165,6 +165,12 @@
 		validators: [EnumValidator(["full", "aggregated", "brief"])]
 	});
 	
+	Prefs.add({
+		key: "notifyPromoted", 
+		name: "Consider Promoted content new", 
+		def: true,
+		validators: [BoolValidator]
+	});
 	
 	Prefs.ready = true;
 }
@@ -333,6 +339,12 @@ function initPrefsHTML(){
 		pref: Prefs.tooltipMode,
 		images: HTMLControl_checkmarkImages,
 		parent: document.getElementById('prefs-tooltip-mode')
+	});
+	
+	HTMLControl_addCheckmarkRow({
+		pref: Prefs.notifyPromoted,
+		images: HTMLControl_checkmarkImages,
+		parent: document.getElementById('prefs-advanced')
 	});
 	
 	HTMLControl_addCheckmarkRow({

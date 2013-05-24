@@ -11,6 +11,7 @@ function DN_notify(data){
 		DN_currentNotification.cancel();
 		DN_notificationStatus = "UNINIT";
 		console.log("Notification reset");
+		DN_createNewNotification();
 	}
 	else {
 		DN_createNewNotification();

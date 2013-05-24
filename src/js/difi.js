@@ -335,6 +335,7 @@ function DiFi_parseNew(id, type, result) { // Assumes (DiFi_alertTimestamp >= Di
 		if(result.hits[i].ts <= DiFi_timestamp) break;
 		
 		if(result.hits[i].who && DiFi_compareWho(result.hits[i].who, DiFi_folders[DiFi_inboxID].name.substring(1))) continue;
+		if(result.hits[i].app && result.hits[i].app == "Promoted" && !Prefs.notifyPromoted.get()) continue;
 		
 		DiFi_folders[id].newCounts[type]++;
 		DiFi_totalNewCount++;
