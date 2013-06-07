@@ -48,6 +48,6 @@
 			], "js": ["js/https-ify.js"], "run_at": "document_start" 
 		}		
 	],
-	"version": "0.7.0.1",
+	"version": "0.7.0.2",
 	"manifest_version": 2
 }

@@ -66,7 +66,7 @@ function onMessage(request, sender, callback) {
 chrome.extension.onMessage.addListener(onMessage);
 chrome.tabs.onUpdated.addListener(OnTabUpdateHandler);
 
-var relNotesVersion = 16; // FIXME: HAAAAAAAX!
+var relNotesVersion = 17; // FIXME: HAAAAAAAX!
 
 document.addEventListener('DOMContentLoaded', function () {
 	
