@@ -28,26 +28,23 @@
 	"permissions": [ 
 		"notifications",
 		"tabs",
-		"http://*.deviantart.com/",
-		"https://*.deviantart.com/",
+		"*://*.deviantart.com/",
 		"clipboardWrite"
 	],
 	"optional_permissions": [ "background" ],
 	"content_scripts": [ 
 		{ 
 			"matches": [
-				"http://*.deviantart.com/messages/", 
-				"https://*.deviantart.com/messages/", 
-				"http://*.deviantart.com/messages/?random=*", 
-				"https://*.deviantart.com/messages/?random=*"
+				"*://*.deviantart.com/messages/", 
+				"*://*.deviantart.com/messages/?random=*"
 			], "js": ["js/inject.js"], "run_at": "document_start" 
 		},
 		{ 
 			"matches": [
 				"https://*.deviantart.com/*"
 			], "js": ["js/https-ify.js"], "run_at": "document_start" 
-		}		
+		}
 	],
-	"version": "0.7.0.2",
+	"version": "0.7.0.3",
 	"manifest_version": 2
 }
