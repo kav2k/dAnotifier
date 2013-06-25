@@ -325,8 +325,11 @@ function DiFi_compareWho(who, username) {
 	else return false;
 }
 
-function DiFi_parseNew(id, type, result) { // Assumes (DiFi_alertTimestamp >= DiFi_timestamp)
+function DiFi_parseNew(id, type, result, group) { // Assumes (DiFi_alertTimestamp >= DiFi_timestamp)
 	DiFi_folders[id].newCounts[type] = 0;
+	
+	var pref = (group) ? Prefs.GMT : Prefs.MT;
+	
 	for(var i = 0; i < result.count; i++){
 		DiFi_highestTimestamp = (result.hits[i].ts > DiFi_highestTimestamp) ? result.hits[i].ts : DiFi_highestTimestamp;
 		DiFi_folders[id].highestTimestamps[type] = 
@@ -338,9 +341,9 @@ function DiFi_parseNew(id, type, result) { // Assumes (DiFi_alertTimestamp >= Di
 		
 		DiFi_folders[id].newCounts[type]++;
 		DiFi_totalNewCount++;
-		if(Prefs.MT(type).badge) DiFi_hasNew = true; 
-		if(result.hits[i].ts > DiFi_alertTimestamp && Prefs.MT(type).audio) DiFi_mustAlert = true;
-		if(result.hits[i].ts > DiFi_alertTimestamp && Prefs.MT(type).popup) DiFi_mustPopup = true;
+		if(pref(type).badge) DiFi_hasNew = true; 
+		if(result.hits[i].ts > DiFi_alertTimestamp && pref(type).audio) DiFi_mustAlert = true;
+		if(result.hits[i].ts > DiFi_alertTimestamp && pref(type).popup) DiFi_mustPopup = true;
 	}
 }
 
@@ -357,12 +360,12 @@ function DiFi_countGroupMessages(id, result) {
 			for(var type in DiFi_groupTypes) if(Prefs.GMT(DiFi_groupTypes[type]).count && Prefs.GMT(DiFi_groupTypes[type]).watch) 
 			{ 
 				DiFi_parseNew(id, DiFi_groupTypes[type], 
-					result.DiFi.response.calls[type].response.content[0].result); 
+					result.DiFi.response.calls[type].response.content[0].result, true); 
 			}
 			for(var type in DiFi_groupFeedTypes) if(Prefs.GMT(DiFi_groupTypes[type]).count && Prefs.GMT(DiFi_groupTypes[type]).watch) 
 			{ 
 				DiFi_parseNew(id, DiFi_groupFeedTypes[type], 
-					result.DiFi.response.calls[parseInt(type)+DiFi_groupTypes.length].response.content[0].result); 
+					result.DiFi.response.calls[parseInt(type)+DiFi_groupTypes.length].response.content[0].result, true); 
 			}
 		}
 		
