@@ -1,20 +1,15 @@
-.DN_entry, .DN_entry_seen {
-	border-style: solid;
-	border-width: 1.8px;
-	border-radius: 4px;
+.DN_entry {
+	/*margin-left:3px;
+	margin-right:-2px;*/
 	
-	margin-left:3px;
-	margin-right:-2px;
-	
-	padding-left:3px;
-	padding-right:3px;
+	padding-left:4px;
+	padding-right:4px;
 	padding-top:2px;
 	padding-bottom:2px;
 	
-	background-color:#E7F1E5;
+	background-color:#fffec6;
 	
 	font-size: 12px;
-	font-weight: bold;
 	cursor: pointer;
 	
 	-webkit-transition: background-color 0.3s ease;
@@ -34,12 +29,15 @@ html {
 
 .header {
 	text-align:center;
+	font-family: Verdana;
 	font-size: 14px;
 	font-weight: bold;
+	margin-top: 2px;
+	margin-bottom: 2px;
 }
 
 table.entry_container {border-spacing: 0px; font-family: Verdana; width: 100%; font-size: 12px;}
-table.entry_container td {border-style: solid; border-right-width: 1px; border-bottom-width: 1px; /*font-size: 12px;*/}
+table.entry_container td {border-style: solid; border-width: 0px; border-right-width: 1px; border-bottom-width: 1px; /*font-size: 12px;*/}
 
 table.entry_container tr:first-child  td:first-child {border-top-left-radius: 4px;}
 table.entry_container tr:first-child  td:last-child {border-top-right-radius: 4px;}

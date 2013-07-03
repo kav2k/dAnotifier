@@ -669,7 +669,7 @@ function DiFi_showDesktopNotification() {
 	}
 	
 	data.groups = new Object();
-	for(var id in DiFi_folderInfo){
+	for(var id in DiFi_folders){
 		if(DiFi_folderInfo[id].type != "group") continue;
 		
 		var name = DiFi_folderInfo[id].name;

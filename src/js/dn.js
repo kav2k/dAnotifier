@@ -31,12 +31,9 @@ function DN_onEntryClick(type, e){
 	chrome.extension.getBackgroundPage().goToMTUrl(type, alt);
 	
 	if(type.match(/^\d+$/)) {
-		var elements = document.getElementById('DN_group-'+type).childNodes;
-		for (var i in elements) {
-			if (elements[i].className == "DN_entry") elements[i].className="DN_entry_seen";
-		}
+		$('#DN_group-'+type+' .DN_entry').addClass("DN_entry_seen");
 	}
-	else document.getElementById('entry-'+type).className="DN_entry_seen";
+	else $('#entry-'+type).addClass("DN_entry_seen");
 	
 	return false;
 }
@@ -44,23 +41,28 @@ function DN_onEntryClick(type, e){
 function DN_fillEntries(){
 	DN_notificationData = chrome.extension.getBackgroundPage().DN_notificationData;
 	
+	var entries = $();
 	for(var type in messagesInfo) if(DN_notificationData[type]){
-		document.getElementById('DN_inbox').appendChild(DN_createDNEntry(DN_fillEntry(type, DN_notificationData)));
+		entries = entries.add(DN_createDNEntry(DN_fillEntry(type, DN_notificationData)));
 	}
+	$('<table class="entry_container" />').append(entries).appendTo('#DN_inbox');
 	
 	for (var name in DN_notificationData.groups) {
 		var id = DN_notificationData.groups[name].id;
-		var container = document.getElementById('DN_container').appendChild(DN_createDNGroupContainer(id));
+		var container = DN_createDNGroupContainer(id).appendTo("#DN_container");
 		
 		var header_created = false;
+		entries = $();
 		
 		for(var type in groupMessagesInfo) if(DN_notificationData.groups[name][type]) {
 			if(!header_created){
-				container.appendChild(DN_createDNGroupHeader({id: id, name: name}));
+				container.append(DN_createDNGroupHeader({id: id, name: name}));
 				header_created = true;
 			}
-			
-			container.appendChild(DN_createDNGroupEntry(DN_fillEntry(type, DN_notificationData.groups[name], id)));
+			entries = entries.add(DN_createDNGroupEntry(DN_fillEntry(type, DN_notificationData.groups[name], id)));
+		}
+		if(header_created) {
+			$('<table class="entry_container" />').append(entries).appendTo(container);
 		}
 	}
 }
@@ -74,37 +76,37 @@ function DN_fillEntry(type, data, id){
 }
 
 function DN_createDNEntry(args) {
-	var element = document.createElement("div");
-	element.className = 'DN_entry';
-	element.id = 'entry-' + args.type;
-	element.onclick = function(e) {DN_onEntryClick(args.type, e);};
-	element.innerHTML += args.text;
-	
-	return element;
+	var element = $('<td>', {
+		'class' : 'DN_entry',
+		id 		: 'entry-' +  args.type,
+		text 	: args.text,
+		on 		: { click : function(e) { DN_onEntryClick(args.type, e); } }
+	});
+
+	return $('<tr>').append(element);
 }
 
 function DN_createDNGroupContainer(id) {
-	var element = document.createElement("div");
-	element.id = 'DN_group-' + id;
-	
-	return element;
+	return $("<div>", {
+		id : 'DN_group-' + id
+	});
 }
 
 function DN_createDNGroupHeader(args) {
-	var element = document.createElement("div");
-	element.className = 'header';
-	element.id = 'header-' + args.id;
-	element.innerHTML = '#' + args.name;
-	
-	return element;
+	return $('<div>', {
+		'class'	: 'header',
+		id		: 'header-' + args.id,
+		text	: '#' + args.name
+	});
 }
 
 function DN_createDNGroupEntry(args) {
-	var element = document.createElement("div");
-	element.className = 'DN_entry';
-	element.id = 'entry-' + args.id + '-' +  args.type;
-	element.onclick = function(e) {DN_onEntryClick(args.id, e);};
-	element.innerHTML += args.text;
-	
-	return element;
+	var element = $('<td>', {
+		'class' : 'DN_entry',
+		id 		: 'entry-' + args.id + '-' +  args.type,
+		text 	: args.text,
+		on 		: { click : function(e) { DN_onEntryClick(args.id, e); } }
+	});
+
+	return $('<tr>').append(element);
 }
