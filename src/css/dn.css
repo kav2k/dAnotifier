@@ -7,7 +7,7 @@
 	padding-top:2px;
 	padding-bottom:2px;
 	
-	background-color:#fffec6;
+	background-color:#E7F1E5;
 	
 	font-size: 12px;
 	cursor: pointer;
@@ -20,7 +20,24 @@
 }
 
 .DN_entry_seen {
-	background-color:#D7D7D7;
+	color:#222222;
+	background-color:#B7B7B7;
+}
+
+a {
+	color: #063d98;
+	text-decoration: none;
+	font-family: Verdana;
+}
+
+a:hover {
+	color: #063d98;
+	text-decoration: underline;
+}
+
+a:visted {
+	color: #063d98;
+	text-decoration: none;
 }
 
 html {
@@ -34,6 +51,14 @@ html {
 	font-weight: bold;
 	margin-top: 2px;
 	margin-bottom: 2px;
+}
+
+.subheader {
+	font-family: Verdana;
+	text-align: center;
+	font-size: 12px;
+	font-weight: bold;
+	margin-bottom: 4px;
 }
 
 table.entry_container {border-spacing: 0px; font-family: Verdana; width: 100%; font-size: 12px;}

@@ -38,8 +38,49 @@ function DN_onEntryClick(type, e){
 	return false;
 }
 
+function DN_createMarkReadLink(){
+	return $('<a>', {
+		href : "#",
+		text : "Dismiss as read",
+		on	 : {
+			click : function(e) { 
+				chrome.extension.sendMessage({'action' : 'seenInbox'});
+				chrome.extension.sendMessage({'action' : 'clearPopupNew'});
+			}
+		}
+	});
+}
+
+function DN_createOpenAllLink(){
+	return $('<a>', {
+		href : "#",
+		text : "Open all",
+		on	 : {
+			click : function(e) { 
+				for(var type in messagesInfo) if(DN_notificationData[type]){
+					chrome.extension.getBackgroundPage().goToMTUrl(type, true);
+				}
+
+				for (var name in DN_notificationData.groups) {
+					for(var type in groupMessagesInfo) if(DN_notificationData.groups[name][type]) {
+						chrome.extension.getBackgroundPage().goToMTUrl(DN_notificationData.groups[name].id, true);
+						break;	
+					}
+				}
+				window.close();
+				//$('.DN_entry').addClass("DN_entry_seen");
+			}
+		}
+	});	
+
+}
+
+
+
 function DN_fillEntries(){
 	DN_notificationData = chrome.extension.getBackgroundPage().DN_notificationData;
+	
+	$("#DN_header").append(DN_createOpenAllLink()).append(" | ").append(DN_createMarkReadLink());
 	
 	var entries = $();
 	for(var type in messagesInfo) if(DN_notificationData[type]){
@@ -65,6 +106,11 @@ function DN_fillEntries(){
 			$('<table class="entry_container" />').append(entries).appendTo(container);
 		}
 	}
+	
+	// Accomodate for the scrollbar, if any
+    if ($("body").height() > $(window).height()) {
+        $(".entry").css("width", "90%");
+    }
 }
 
 function DN_fillEntry(type, data, id){
