@@ -8,6 +8,15 @@ function getTimestamp(){
 	return ( pad(d.getHours()) + ":" + pad(d.getMinutes()) + ":" + pad(d.getSeconds()) ); 
 }
 
+function getExtTimestamp(ts){
+	var d = new Date(ts * 1000);
+	
+	var pad = function(n) {return (n < 10) ? "0"+n : n;}
+	var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+	
+	return ( pad(d.getHours()) + ":" + pad(d.getMinutes()) + ":" + pad(d.getSeconds()) + ", " + d.getDate() + " " + months[d.getMonth()]); 
+}
+
 function playSound(){
 	try {
 		if(!Prefs.playSound.get()) return;

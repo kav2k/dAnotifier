@@ -35,9 +35,9 @@
 	"content_scripts": [ 
 		{ 
 			"matches": [
-				"*://*.deviantart.com/messages/", 
-				"*://*.deviantart.com/messages/?random=*"
-			], "js": ["js/inject.js"], "run_at": "document_start" 
+				"*://www.deviantart.com/messages/", 
+				"*://www.deviantart.com/messages/?random=*"
+			], "js": ["js/utils.js", "js/jquery.js", "js/inject.js"], "run_at": "document_start" 
 		},
 		{ 
 			"matches": [

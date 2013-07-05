@@ -247,11 +247,25 @@ function DiFi_countNext(){
 	else DiFi_countEnd();
 }
 
+var DiFi_lastNewCounts = new Object();
+
 function DiFi_countEnd(){
 	DiFi_timestamp = DiFi_timestamp || epochTS(); // 1st time it's skipped, next time works normally
 	DiFi_alertTimestamp = DiFi_highestTimestamp || epochTS(); // Only alert once
 	
 	DiFi_lastTotalCount = DiFi_totalCount;
+	
+	if(DiFi_totalNewCount) {
+		DiFi_lastNewCounts = new Object();
+		DiFi_lastNewCounts.ts = getExtTimestamp(DiFi_timestamp);
+		DiFi_lastNewCounts.folders = new Object();
+		for(var i in DiFi_folders) { 
+			DiFi_lastNewCounts.folders[i] = new Object();
+			for(var j in DiFi_folders[i].newCounts) {
+				DiFi_lastNewCounts.folders[i][j] = DiFi_folders[i].newCounts[j];
+			}
+		}
+	}
 	
 	if(Prefs.rememberState.get()){
 		localStorage.lastState_lastTotalCount = DiFi_lastTotalCount;
@@ -260,6 +274,19 @@ function DiFi_countEnd(){
 	}
 
 	DiFi_updateTooltip();
+}
+
+function DiFi_getLastNewCount(request){
+	var folder = request.folder || DiFi_inboxID || undefined;
+	if(folder) {
+		if(DiFi_lastNewCounts.folders[folder][request.type]) {
+			return { 
+				count : (DiFi_lastNewCounts.folders[folder][request.type] == DiFi_maxItems) ? 
+					DiFi_maxItems + "+" : DiFi_lastNewCounts.folders[folder][request.type],
+				ts : DiFi_lastNewCounts.ts
+			}
+		} else { return {error : true}; }
+	} else { return {error : true}; }
 }
 
 function DiFi_allMessagesRequest(folderID)
