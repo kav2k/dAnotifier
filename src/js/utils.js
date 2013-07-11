@@ -14,7 +14,7 @@ function getExtTimestamp(ts){
 	var pad = function(n) {return (n < 10) ? "0"+n : n;}
 	var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 	
-	return ( pad(d.getHours()) + ":" + pad(d.getMinutes()) + ":" + pad(d.getSeconds()) + ", " + d.getDate() + " " + months[d.getMonth()]); 
+	return ( d.getDate() + " " + months[d.getMonth()] + ", " + d.getFullYear() + ", " + pad(d.getHours()) + ":" + pad(d.getMinutes()) ); 
 }
 
 function playSound(){

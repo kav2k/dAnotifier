@@ -73,7 +73,7 @@ chrome.runtime.onUpdateAvailable.addListener(function(details) {
 	chrome.runtime.reload(); // Update immediately if an update is available
 });
 
-var relNotesVersion = 18; // FIXME: HAAAAAAAX!
+var relNotesVersion = 19; // FIXME: HAAAAAAAX!
 
 document.addEventListener('DOMContentLoaded', function () {
 	

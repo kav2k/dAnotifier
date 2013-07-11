@@ -1,8 +1,6 @@
 chrome.extension.sendMessage({'action' : 'seenInbox'});
 
 $(document).ready( function() {
-	appendCounts();
-	
 	var target = document.querySelector('.messages-right');
 	
 	var observer = new window.WebKitMutationObserver(
@@ -17,6 +15,8 @@ $(document).ready( function() {
 	);
 	
 	observer.observe(target, {childList : true});
+	
+	appendCounts();
 });
 
 var re = /#view=(\d+)/;
@@ -35,10 +35,11 @@ function appendCounts(){
 					}, function(response){
 					if(response && response.count){
 						var span = $("<span>", {
-							style	: 'color: #aa0000;',
-							text	: " (" + response.count + " new items since " + response.ts + ")"
+							style	: 'color: #89A08E;',
+							title	: "since " + response.ts,
+							text	: " (" + response.count + ((response.count == 1) ? " item was" : " items were") + " new)"
 						});
-						$(hd).append(span);
+						$(hd).children("i:first-of-type").after(span);
 						$(hd).addClass("notifier-appended");						
 					}					
 				});
