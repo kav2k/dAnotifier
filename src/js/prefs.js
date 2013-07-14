@@ -42,7 +42,7 @@
 	Prefs.add({
 		key: "showToast", 
 		name: "Enable desktop notifications", 
-		def: (webkitNotifications.createHTMLNotification) ? true : false, 
+		def: true, 
 		validators: [BoolValidator]
 	});
 	
@@ -254,6 +254,7 @@ var NotificationsEnabler = function(hc) {
 	return function(checkmark) {
 		for (var cm in hc.fields){
 			switch(checkmark.field){
+				case "basic": return false;
 				case "html": return isHTMLNotificationAvailable();
 				case "rich": return isRichNotificationAvailable();
 				default: return true;
