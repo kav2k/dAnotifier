@@ -58,6 +58,9 @@ function onMessage(request, sender, callback) {
 			DN_clear();
 			scheduleRequest();
 			break;
+		case 'getMCReminder':
+			callback(Prefs.MCReminder.get());
+			break;
 		case 'getLastNewCount':
 			callback(DiFi_getLastNewCount(request));
 			break;

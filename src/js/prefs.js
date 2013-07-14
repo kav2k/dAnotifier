@@ -43,7 +43,7 @@
 		key: "showToast", 
 		name: "Enable desktop notifications", 
 		def: (webkitNotifications.createHTMLNotification) ? true : false, 
-		validators: [BoolValidator, HTMLNotificationsAvailableValidator]
+		validators: [BoolValidator]
 	});
 	
 	Prefs.add({
@@ -172,6 +172,25 @@
 		validators: [BoolValidator]
 	});
 	
+	Prefs.add({
+		key: "toastMode", 
+		name: "Tooltip mode",
+		def: (isHTMLNotificationAvailable())?"html":((isRichNotificationAvailable())?"rich":"basic"), 
+		fields: {
+			basic: "Basic: text-only notifications (integrate with OS X Notifiaction Center)",
+			html: "HTML: interactive \"old-style\" notifications (doesn't work on all platforms)",
+			rich: "Brief: \"new-style\" rich notifications (integrate with Chrome Notifications)"
+		},
+		validators: [EnumValidator(["basic", "html", "rich"]), NotificationsAvailableValidator]
+	});
+	
+	Prefs.add({
+		key: "MCReminder", 
+		name: "Remind about new items in the Message Center",
+		def: true, 
+		validators: [BoolValidator]
+	});	
+	
 	Prefs.ready = true;
 }
 
@@ -198,10 +217,22 @@ var DebugValidator = function(input) {
 	else return wrapWarnMessage("You've been warned! The debug section is all the way down.");
 };
 
-var HTMLNotificationsAvailableValidator = function(input){
-	if(webkitNotifications.createHTMLNotification) return wrapPassMessage();
-	else if(input) return wrapFailMessage("HTML notifications are not available in your browser version and are disabled.");
-	else return wrapWarnMessage("HTML notifications are not available in your browser version and are disabled.");
+function isHTMLNotificationAvailable() {
+	return (!!webkitNotifications.createHTMLNotification);
+}
+
+function isRichNotificationAvailable() {
+	return (!!!webkitNotifications.createHTMLNotification && !!chrome.notifications);
+}
+
+var NotificationsAvailableValidator = function(input){
+	if(input == 'html' && !isHTMLNotificationAvailable()) {
+		return wrapFailMessage("HTML notifications are not available in your browser version and are disabled.");
+	}
+	else if(input == 'rich' && !isRichNotificationAvailable()) {
+		return wrapFailMessage("Rich notifications are not available in your browser version and are disabled.");
+	}
+	else return wrapPassMessage();
 }
 
 var PrefMessageEnabler = function(hc) {
@@ -213,6 +244,18 @@ var PrefMessageEnabler = function(hc) {
 				case "badge": return hc["watch"].value && hc["count"].value;
 				case "audio": return hc["watch"].value && hc["count"].value;
 				case "popup": return hc["watch"].value && hc["count"].value;
+				default: return true;
+			}
+		}
+	}
+}
+
+var NotificationsEnabler = function(hc) {
+	return function(checkmark) {
+		for (var cm in hc.fields){
+			switch(checkmark.field){
+				case "html": return isHTMLNotificationAvailable();
+				case "rich": return isRichNotificationAvailable();
 				default: return true;
 			}
 		}
@@ -249,7 +292,6 @@ function initPrefsHTML(){
 	HTMLControl_addCheckmarkRow({
 		pref: Prefs.showToast,
 		images: HTMLControl_checkmarkImages,
-		enabler: function() {return (!!webkitNotifications.createHTMLNotification);},
 		parent: document.getElementById('prefs-alert')
 	});
 	
@@ -339,6 +381,19 @@ function initPrefsHTML(){
 		pref: Prefs.tooltipMode,
 		images: HTMLControl_checkmarkImages,
 		parent: document.getElementById('prefs-tooltip-mode')
+	});
+	
+	HTMLControl_addEnum({
+		pref: Prefs.toastMode,
+		enabler: NotificationsEnabler,
+		images: HTMLControl_checkmarkImages,
+		parent: document.getElementById('prefs-toast-mode')
+	});
+	
+	HTMLControl_addCheckmarkRow({
+		pref: Prefs.MCReminder,
+		images: HTMLControl_checkmarkImages,
+		parent: document.getElementById('prefs-advanced')
 	});
 	
 	HTMLControl_addCheckmarkRow({

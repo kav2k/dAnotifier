@@ -1,22 +1,26 @@
 chrome.extension.sendMessage({'action' : 'seenInbox'});
 
 $(document).ready( function() {
-	var target = document.querySelector('.messages-right');
+	chrome.runtime.sendMessage({'action': 'getMCReminder'}, function(response){
+		if (!response) return;
 	
-	var observer = new window.WebKitMutationObserver(
-	  function(mutations) {
-	    for(var i in mutations){
-	    	for(var j=0; j<mutations[i].addedNodes.length; j++){
-	    		// Fired when a new '.mczone' is added
-	    		appendCounts(); return;
-	    	}	
-	    }
-	  }
-	);
-	
-	observer.observe(target, {childList : true});
-	
-	appendCounts();
+		var target = document.querySelector('.messages-right');
+		
+		var observer = new window.WebKitMutationObserver(
+		  function(mutations) {
+		    for(var i in mutations){
+		    	for(var j=0; j<mutations[i].addedNodes.length; j++){
+		    		// Fired when a new '.mczone' is added
+		    		appendCounts(); return;
+		    	}	
+		    }
+		  }
+		);
+		
+		observer.observe(target, {childList : true});
+		
+		appendCounts();
+	});
 });
 
 var re = /#view=(\d+)/;
