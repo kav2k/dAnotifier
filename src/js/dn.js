@@ -93,7 +93,7 @@ function DN_RichNotify(){
 
 function DN_RichOnClick(id){
 	chrome.extension.sendMessage({ action : 'showMC', type : 'all', alt : true });
-	chrome.notification.clear(id, function(){});
+	chrome.notifications.clear(id, function(){});
 }
 
 function DN_RichOnButtonClick(id, button){
