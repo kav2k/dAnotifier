@@ -92,7 +92,12 @@ function DN_RichNotify(){
 }
 
 function DN_RichOnClick(id){
-	chrome.extension.sendMessage({ action : 'showMC', type : 'all', alt : true });
+	var group;
+	if(/dANotifier-(\d+)/.exec(id)){
+		group = /dANotifier-(\d+)/.exec(id)[1];
+	}	
+
+	goToMTUrl((group || 'all'), true, false);
 	chrome.notifications.clear(id, function(){});
 }
 

@@ -155,7 +155,7 @@ function stripUrl(url, keepAnchor){
 	var result = url.split("#")[0];
 	result = result.split("?")[0];
 	
-	if(keepAnchor) result += '#' + url.split("#").pop();
+	if(keepAnchor && (url.indexOf('#') > -1)) result += '#' + url.split("#").pop();
 	
 	return result;
 }

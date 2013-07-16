@@ -14,7 +14,7 @@
  }
  
  function initPrefs(){
-	if(localStorage.showZero != undefined) convertPrefs();
+	if(localStorage.prefsVersion != '"7.0"') convertPrefs();
 	
 	if(Prefs.ready) { Prefs.foreach('init'); return;}
 	
@@ -263,15 +263,11 @@ var NotificationsEnabler = function(hc) {
 	}
 }
  
- function convertPrefs(){
-  localStorage.refreshInterval = (parseInt(localStorage.refreshInterval)) ? JSON.stringify(parseInt(localStorage.refreshInterval)) : JSON.stringify(300000);
-  localStorage.timeoutInterval = (parseInt(localStorage.timeoutInterval)) ? JSON.stringify(parseInt(localStorage.timeoutInterval)) : JSON.stringify(10000);
-	localStorage.hideZero = (localStorage.showZero) ? JSON.stringify((localStorage.showZero == 'yes')) : JSON.stringify(true);
-	localStorage.removeItem('showZero');
-	localStorage.playSound = (localStorage.playSound) ? JSON.stringify((localStorage.playSound == 'yes')) : JSON.stringify(true);
-	localStorage.rememberState = (localStorage.rememberState) ? JSON.stringify((localStorage.rememberState == 'yes')) : JSON.stringify(true);
-	localStorage.prefsVersion = '"6.0"';
- }
+function convertPrefs(){
+	if(!isHTMLNotificationAvailable()) localStorage.showToast = "true";
+	localStorage.prefsVersion = '"7.0"';
+	console.log("Converted prefs to version 7.0");
+}
  
 function initPrefsHTML(){
 	if(Prefs.HTMLready) { return;}
