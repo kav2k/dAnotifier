@@ -46,6 +46,7 @@ var messagesInfo = {
 	"C":{"S":"Comment", "P":"Comments", "pref":"followComments", "UP":"comments", "feed":true, "A" : "C"},
 	"R":{"S":"Reply", "P":"Replies", "pref":"followReplies", "UP":"replies", "A" : "R"},
 	"A":{"S":"Activity Message", "P":"Activity Messages", "pref":"followActivity", "UP":"activity", "feed":true, "A": "A"},
+	"M":{"S":"Mention", "P":"Mentions", "pref":"followMentions", "UP":"mentions", "A": "M"},
 	"S":{"S":"Support Ticket", "P":"Support Tickets", "pref":"followTickets", "UP":"support", "A": "S"},
 	// Correspondence
 	"CO":{"S":"Correspondence Item", "P":"Correspondence Items", "pref":"followCorrespondence", "UP":"correspondence", "A": "CO"},
@@ -63,7 +64,7 @@ var groupMessagesInfo = {
 var aggregateClasses = {
 	"NTC" : {"S" : "Notice", "P": "Notices", "types": ["N", "CA", "B"], "count" : 0, "newCount" : 0, "UP" : "notices"},
 	"DWA" : {"S" : "deviantWATCH Message", "P" : "deviantWATCH Messages", "types": ["D", "WC", "J", "F", "P", "WA"], "count" : 0, "newCount": 0, "UP" : "deviantwatch"},
-	"FEE" : {"S" : "Feedback Message", "P" : "Feedback Messages", "types": ["CN", "C", "R", "A", "S"], "count" : 0, "newCount" : 0, "UP" : "feedback"},
+	"FEE" : {"S" : "Feedback Message", "P" : "Feedback Messages", "types": ["CN", "C", "R", "A", "M", "S"], "count" : 0, "newCount" : 0, "UP" : "feedback"},
 	"COR" : {"S" : "Correspondence Item", "P" : "Correspondence Items", "special" : "singleton", "types": ["CO"], "count" : 0, "newCount" : 0, "UP" : "correspondence"},
 	"NOT" : {"S" : "Note", "P" : "Notes", "special" : "singleton", "types": ["UN"], "count" : 0, "newCount" : 0, "UP" : "notes"},
 	"GRP" : {"S" : "Message", "P" : "Messages", "special" : "group", "types": ["CO", "N", "C", "A"], "groups": new Object(), "UP" : ""}
