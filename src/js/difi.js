@@ -49,9 +49,9 @@ function DiFi_JSONrequest(request, id, callback){
 					return;
 				}
 				
-				if (result.DiFi.response.details && 
-					result.DiFi.response.details.calls[0].response.content.error &&
-					result.DiFi.response.details.calls[0].response.content.error == "DiFi Security Access Error")
+				if (result.DiFi.response && 
+					result.DiFi.response.calls[0].response.content.error &&
+					result.DiFi.response.calls[0].response.content.error.code == "ERR_DIFI_ACCESS_DENIED")
 				{ 
 					handleError({type: "LOGGED_OUT"});
 					window.clearTimeout(abortTimerId);
@@ -80,7 +80,7 @@ function DiFi_JSONrequest(request, id, callback){
 			callback(id, result);
 		}
 		else{return;} // Catches abort()
-	}
+	};
 	
 	xhr.open("GET", DiFi_baseURL()+request, true);
 	
@@ -285,7 +285,7 @@ function DiFi_getLastNewCount(request){
 				count : (DiFi_lastNewCounts.folders[folder][request.type] == DiFi_maxItems) ? 
 					DiFi_maxItems + "+" : DiFi_lastNewCounts.folders[folder][request.type],
 				ts : DiFi_lastNewCounts.ts
-			}
+			};
 		} else { return {error : true}; }
 	} else { return {error : true}; }
 }
@@ -841,7 +841,7 @@ function dAMC_folderInfoRequest(){
 			//callback(result);
 		}
 		else{return;} // Catches abort()
-	}
+	};
 	
 	xhr.open("GET", getMessagesUrl(), true);
 	
