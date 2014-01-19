@@ -10,7 +10,7 @@ var loggedOut = false;
 
 // Badge colors
 var COLOR_ACTIVE = {color: [208, 0, 24, 128]}; // TODO: make adjustable
-var COLOR_DEBUG = {color: [0, 200, 0, 128]};
+var COLOR_DEBUG = {color: [0, 150, 0, 128]};
 var COLOR_INACTIVE = {color: [24, 24, 24, 128]};
 
 // *** Event handlers
@@ -108,13 +108,21 @@ function init(){
 	if(!(Prefs.hideRelnotes.get()) && (localStorage['relnotesver'] < relNotesVersion)) goToUrl(chrome.extension.getURL("release_notes.html"));
 	localStorage['relnotesver'] = relNotesVersion;
 	
+	chrome.browserAction.setIcon( {path: "img/dan_logo2_19_grey.png"} );
+	
 	if(Prefs.rememberState.get()){
 		DiFi_lastTotalCount = localStorage.lastState_lastTotalCount || 0;
 		DiFi_timestamp = localStorage.lastState_timestamp || 0;
 		DiFi_alertTimestamp = localStorage.lastState_alertTimestamp || 0;
-		if(DiFi_lastTotalCount){
+		DiFi_lastTotalNewCount = localStorage.lastState_lastTotalNewCount || 0;
+		DiFi_lastTotalNewCountApprox = localStorage.lastState_lastTotalNewCountApprox || false;
+		
+		if(DiFi_lastTotalCount && Prefs.badgeMode.get() == "all"){
 			chrome.browserAction.setBadgeBackgroundColor(COLOR_INACTIVE);
 			chrome.browserAction.setBadgeText({text: prepText(''+DiFi_lastTotalCount)});
+		} else if (DiFi_lastTotalNewCount && Prefs.badgeMode.get() == "newOnly") {
+			chrome.browserAction.setBadgeBackgroundColor(COLOR_INACTIVE);
+			chrome.browserAction.setBadgeText({text: prepText(DiFi_lastTotalNewCount + ((DiFi_lastTotalNewCountApprox)?'+':''))});		
 		}
 	}
 	

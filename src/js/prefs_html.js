@@ -88,17 +88,17 @@ function HTMLControl_addInputFieldRow(args) {
 	
 	args.pref.initHTMLControl = function() {
 		this.HTMLControl = document.getElementById('pref-' + this.key);
-		this.HTMLControl.get = function () { return (this.value * args.multiplier); }
-		this.HTMLControl.set = function (value) { this.value = (value / args.multiplier); }
+		this.HTMLControl.get = function () { return (this.value * args.multiplier); };
+		this.HTMLControl.set = function (value) { this.value = (value / args.multiplier); };
 		this.saveHTML = function () { 
 			var result=this.set(this.HTMLControl.get());
 			document.getElementById('pref-' + this.key + '-err').innerHTML = result.message;
-		}
+		};
 		
 		this.HTMLControl.set(this.get());
 		
 		this.HTMLControl.oninput=markDirty;
-	}
+	};
 }
 
 function HTMLControl_addCheckmarkRow(args) {
@@ -115,15 +115,15 @@ function HTMLControl_addCheckmarkRow(args) {
 
 	args.pref.initHTMLControl = function() {
 		this.HTMLControl = document.getElementById('pref-' + this.key);
-		this.HTMLControl.get = function () { return this.value; }
-		this.HTMLControl.set = function (value) { this.value = value; this.update(); }
+		this.HTMLControl.get = function () { return this.value; };
+		this.HTMLControl.set = function (value) { this.value = value; this.update(); };
 		this.HTMLControl.enabler = args.enabler || (function() {return true;});
 		this.HTMLControl.update = HTMLControl_checkmarkUpdate;
 		this.HTMLControl.images = args.images;
 		this.saveHTML = function () { 
 			var result=this.set(this.HTMLControl.get());
 			document.getElementById('pref-' + this.key + '-err').innerHTML = result.message;
-		}
+		};
 		
 		this.HTMLControl.set(this.get());
 		
@@ -160,16 +160,16 @@ function HTMLControl_addEnum(args) {
 		this.HTMLControl.get = function () { 
 			for(var field in this.fields) { if (this[field].value == true) { return field; } }
 			return null;
-		}
+		};
 		this.HTMLControl.set = function (value) { 
 			for(var field in this.fields) this[field].value = (value == field);
 			for(var field in this.fields) this[field].update(true);
-		}
+		};
 		
 		this.saveHTML = function () { 
 			var result=this.set(this.HTMLControl.get());
 			//document.getElementById('pref-' + this.key + '-err').innerHTML = result.message;
-		}
+		};
 		
 		this.HTMLControl.set(this.get());
 	};
@@ -188,15 +188,15 @@ function HTMLControl_addCheckmarkImmediateRow(args){
 
 	args.pref.initHTMLControl = function() {
 		this.HTMLControl = document.getElementById('pref-' + this.key);
-		this.HTMLControl.get = function () { return this.value; }
-		this.HTMLControl.set = function (value) { this.value = value; this.update(); }
+		this.HTMLControl.get = function () { return this.value; };
+		this.HTMLControl.set = function (value) { this.value = value; this.update(); };
 		this.HTMLControl.enabler = args.enabler || (function() {return true;});
 		this.HTMLControl.update = HTMLControl_checkmarkUpdate;
 		this.HTMLControl.images = args.images;
 		this.saveHTML = function () { 
 			var result=this.set(this.HTMLControl.get());
 			document.getElementById('pref-' + this.key + '-err').innerHTML = result.message;
-		}
+		};
 		
 		this.HTMLControl.set(this.get());
 		
@@ -274,16 +274,16 @@ function HTMLControl_addCheckArrayRow(args) {
 			var result = new Object();
 			for(var field in this.fields) result[field] = this[field].value;
 			return result;
-		}
+		};
 		this.HTMLControl.set = function (value) { 
 			for(var field in this.fields) this[field].value = value[field];
 			for(var field in this.fields) this[field].update(); 
-		}
+		};
 		
 		this.saveHTML = function () { 
 			var result=this.set(this.HTMLControl.get());
 			document.getElementById('pref-' + this.key + '-err').innerHTML = result.message;
-		}
+		};
 		
 		this.HTMLControl.set(this.get());
 	};

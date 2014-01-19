@@ -1,6 +1,6 @@
 function oldHandleError(error, badge, critical) {
     chrome.browserAction.setIcon(
-		critical ? {path: "img/dan_logo2_19_red.png"} : {path: "img/dan_logo2_19_crisp.png"}
+		critical ? {path: "img/dan_logo2_19_red.png"} : {path: "img/dan_logo2_19_grey.png"}
 	);
 
     var title = "Last updated: " + getTimestamp() + "\n" + error;
@@ -45,13 +45,18 @@ function handleError(error){
 		chrome.browserAction.setIcon( {path: "img/dan_logo2_19_red.png"} );
 		console.warn(errorText(error));
 	} else {
-		chrome.browserAction.setIcon( {path: "img/dan_logo2_19_crisp.png"} );
+		chrome.browserAction.setIcon( {path: "img/dan_logo2_19_grey.png"} );
 	}
 	
-	if(badge == "?" && DiFi_lastTotalCount) // 0.5: Last seen count
-		chrome.browserAction.setBadgeText({text: prepText(DiFi_lastTotalCount+badge)});
-	else
+	if(badge == "?") { // 0.5: Last seen count
+		if(DiFi_lastTotalCount && Prefs.badgeMode == "all"){
+			chrome.browserAction.setBadgeText({text: prepText(DiFi_lastTotalCount+badge)});
+		} else if (DiFi_lastTotalNewCount && Prefs.badgeMode == "newOnly") {
+			chrome.browserAction.setBadgeText({text: prepText(DiFi_lastTotalNewCount + (DiFi_lastTotalNewCountApprox)?'+':'') + badge});		
+		}
+	} else {
 		chrome.browserAction.setBadgeText({text: prepText(badge)});
+	}
     chrome.browserAction.setBadgeBackgroundColor(COLOR_INACTIVE);
 	
 	popupData.error = error;

@@ -3,7 +3,7 @@ var traceRegexp = /chrome-extension:\/\/\w*\//g;
 function getTimestamp(){
 	var d = new Date();
 	
-	var pad = function(n) {return (n < 10) ? "0"+n : n;}
+	var pad = function(n) {return (n < 10) ? "0"+n : n;};
 	
 	return ( pad(d.getHours()) + ":" + pad(d.getMinutes()) + ":" + pad(d.getSeconds()) ); 
 }
@@ -11,7 +11,7 @@ function getTimestamp(){
 function getExtTimestamp(ts){
 	var d = new Date(ts * 1000);
 	
-	var pad = function(n) {return (n < 10) ? "0"+n : n;}
+	var pad = function(n) {return (n < 10) ? "0"+n : n;};
 	var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 	
 	return ( d.getDate() + " " + months[d.getMonth()] + ", " + d.getFullYear() + ", " + pad(d.getHours()) + ":" + pad(d.getMinutes()) ); 
@@ -40,7 +40,7 @@ var messagesInfo = {
 	// RETIRED: "NW":{"S":"News Article", "P":"News Articles", "pref":"followNews", "UP":"news", "A" : "NA"},
 	"F":{"S":"Forum", "P":"Forums", "pref":"followForums", "UP":"forums", "A" : "F"},
 	"P":{"S":"Poll", "P":"Polls", "pref":"followPolls", "UP":"polls", "A" : "P"},
-	"WA":{"S":"Activity", "P":"Activies", "pref":"followActivities", "UP":"activities", "A" : "WA"},
+	"WA":{"S":"Activity", "P":"Activities", "pref":"followActivities", "UP":"activities", "A" : "WA"},
 	// Feedback
 	"CN":{"S":"Critique Notice", "P":"Critique Notices", "pref":"followCritNotices", "UP":"critiquesreceived", "A" : "CN"},
 	"C":{"S":"Comment", "P":"Comments", "pref":"followComments", "UP":"comments", "feed":true, "A" : "C"},
@@ -59,7 +59,7 @@ var groupMessagesInfo = {
 	"N" 	: {"pref" : "followGroupNotices", "feed" : false}, 
 	"C" 	: {"pref" : "followGroupComments", "feed" : true}, 
 	"A" 	: {"pref" : "followGroupActivity", "feed" : true}
-}
+};
 
 var aggregateClasses = {
 	"NTC" : {"S" : "Notice", "P": "Notices", "types": ["N", "CA", "B"], "count" : 0, "newCount" : 0, "UP" : "notices"},
@@ -68,7 +68,7 @@ var aggregateClasses = {
 	"COR" : {"S" : "Correspondence Item", "P" : "Correspondence Items", "special" : "singleton", "types": ["CO"], "count" : 0, "newCount" : 0, "UP" : "correspondence"},
 	"NOT" : {"S" : "Note", "P" : "Notes", "special" : "singleton", "types": ["UN"], "count" : 0, "newCount" : 0, "UP" : "notes"},
 	"GRP" : {"S" : "Message", "P" : "Messages", "special" : "group", "types": ["CO", "N", "C", "A"], "groups": new Object(), "UP" : ""}
-}
+};
 
 // Combined text preparation for the tooltip
 function prepText(text) {

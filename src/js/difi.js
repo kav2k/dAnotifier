@@ -205,6 +205,7 @@ var DiFi_maxItems = 20;
 var DiFi_totalCount = 0;
 var DiFi_totalNewCount = 0;
 var DiFi_lastTotalCount = 0;
+var DiFi_totalNewCountApprox = false;
 var DiFi_hasNew = false;
 var DiFi_mustAlert = false;
 var DiFi_mustPopup = false;
@@ -268,10 +269,14 @@ function DiFi_countEnd(){
 		}
 	}
 	
+	DiFi_fillAggregation();
+	
 	if(Prefs.rememberState.get()){
 		localStorage.lastState_lastTotalCount = DiFi_lastTotalCount;
 		localStorage.lastState_timestamp = DiFi_timestamp;
 		localStorage.lastState_alertTimestamp = DiFi_alertTimestamp;
+		localStorage.lastState_lastTotalNewCount = DiFi_totalNewCount;
+		localStorage.lastState_lastTotalNewCountApprox = DiFi_totalNewCountApprox;
 	}
 
 	DiFi_updateTooltip();
@@ -411,8 +416,6 @@ var currentTooltip = "";
 function DiFi_updateTooltip() {
 	var title;
 	
-	DiFi_fillAggregation();
-	
 	switch(Prefs.tooltipMode.get()) {
 		case "full":
 			title = DiFi_tooltipFull();
@@ -538,6 +541,10 @@ function DiFi_fillAggregation(){
 			}
 		}
 	}
+	
+	var totalApprox = false;
+	for(var c in aggregateClasses) totalApprox = totalApprox || aggregateClasses[c].newCountApprox;
+	DiFi_totalNewCountApprox = totalApprox;
 }
 
 function DiFi_tooltipAggregateLine(type, newCount, feed) {
@@ -626,10 +633,7 @@ function DiFi_updatePopup() {
 	
 	popupData.totalCount = DiFi_totalCount;
 	popupData.totalNewCount = DiFi_totalNewCount;
-	
-	var totalApprox = false;
-	for(var c in aggregateClasses) totalApprox = totalApprox || aggregateClasses[c].newCountApprox;
-	popupData.totalNewCountApprox = totalApprox;
+	popupData.totalNewCountApprox = DiFi_totalNewCountApprox;
 	
 	popupData.inboxID = DiFi_inboxID;
 
@@ -646,24 +650,38 @@ function DiFi_clearPopupNew(){
 // ----------------------------------------------------
 
 function DiFi_updateBadge() {
-	var badgeText = DiFi_totalCount+'';
-	
 	chrome.browserAction.setIcon({path: "img/dan_logo2_19_crisp.png"});
+	var badgeText = '';
 	
-	if(!DiFi_totalCount) {
-		if (!DiFi_totalNewCount){
-			chrome.browserAction.setBadgeBackgroundColor(COLOR_INACTIVE);
-			if(Prefs.hideZero.get()) badgeText = '';
-		}
-		else { // THIS SHOULD ONLY HAPPEN IF ONLY FEED MESSAGES ARE PRESENT
-			badgeText = DiFi_totalNewCount+'f';
-		}
-	}
-	else if (DiFi_hasNew) {
-		chrome.browserAction.setBadgeBackgroundColor(COLOR_DEBUG);
-	}
-	else {
-		chrome.browserAction.setBadgeBackgroundColor(COLOR_ACTIVE);
+	switch (Prefs.badgeMode.get()){
+		case "all":
+			if(DiFi_totalCount) {
+				badgeText = DiFi_totalCount+'';
+			} else if (DiFi_totalNewCount) {
+				badgeText = DiFi_totalNewCount+'f'; // Feed messages ONLY
+			} else {
+				badgeText = '';
+			}
+			
+			if (DiFi_hasNew) {
+				chrome.browserAction.setBadgeBackgroundColor(COLOR_DEBUG);
+			} else {
+				chrome.browserAction.setBadgeBackgroundColor(COLOR_ACTIVE);
+			}
+
+			break;
+			
+		case "newOnly":
+		
+			if(DiFi_totalNewCount){
+				chrome.browserAction.setBadgeBackgroundColor(COLOR_DEBUG);
+				badgeText = DiFi_totalNewCount + ((DiFi_totalNewCountApprox)?'+':'');
+			} else {
+				chrome.browserAction.setBadgeBackgroundColor(COLOR_ACTIVE);
+				badgeText = '';
+			}
+			
+			break;	
 	}
 	
 	chrome.browserAction.setBadgeText({text: prepText(badgeText)});

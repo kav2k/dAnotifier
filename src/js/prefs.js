@@ -47,13 +47,6 @@
 	});
 	
 	Prefs.add({
-		key: "hideZero", 
-		name: "Hide badge when the count is 0", 
-		def: true, 
-		validators: [BoolValidator]
-	});
-	
-	Prefs.add({
 		key: "rememberState", 
 		name: "Remember state between browser sessions", 
 		def: true, 
@@ -189,18 +182,29 @@
 		name: "Remind about new items in the Message Center",
 		def: true, 
 		validators: [BoolValidator]
-	});	
+	});
+	
+	Prefs.add({
+		key: "badgeMode", 
+		name: "Counter mode",
+		def: "newOnly",
+		fields: {
+			newOnly: "Display new messages count only",
+			all: "Display total number of messages"
+		},
+		validators: [EnumValidator(["all", "newOnly"])]
+	});
 	
 	Prefs.ready = true;
 }
 
 Prefs.MT = function (type) {
 	return Prefs[messagesInfo[type].pref].get();
-}
+};
 
 Prefs.GMT = function (type) {
 	return Prefs[groupMessagesInfo[type].pref].get();
-}
+};
 
 var DepressedValidator = function(input) { 
 	if(input == true) return wrapPassMessage();
@@ -233,7 +237,7 @@ var NotificationsAvailableValidator = function(input){
 		return wrapFailMessage("Rich notifications are not available in your browser version and are disabled.");
 	}
 	else return wrapPassMessage();
-}
+};
 
 var PrefMessageEnabler = function(hc) {
 	return function(checkmark) {
@@ -247,8 +251,8 @@ var PrefMessageEnabler = function(hc) {
 				default: return true;
 			}
 		}
-	}
-}
+	};
+};
 
 var NotificationsEnabler = function(hc) {
 	return function(checkmark) {
@@ -260,8 +264,8 @@ var NotificationsEnabler = function(hc) {
 				default: return true;
 			}
 		}
-	}
-}
+	};
+};
  
 function convertPrefs(){
 	if(!isHTMLNotificationAvailable()) localStorage.showToast = "true";
@@ -304,12 +308,6 @@ function initPrefsHTML(){
 		multiplier: 1000,
 		comment: " (seconds, default: 20)",
 		parent: document.getElementById('prefs-interval')
-	});
-	
-	HTMLControl_addCheckmarkRow({
-		pref: Prefs.hideZero,
-		images: HTMLControl_checkmarkImages,
-		parent: document.getElementById('prefs-advanced')
 	});
 	
 	HTMLControl_addCheckArrayHeader({
@@ -379,6 +377,12 @@ function initPrefsHTML(){
 		images: HTMLControl_checkmarkImages,
 		parent: document.getElementById('prefs-tooltip-mode')
 	});
+	
+	HTMLControl_addEnum({
+		pref: Prefs.badgeMode,
+		images: HTMLControl_checkmarkImages,
+		parent: document.getElementById('prefs-counter-mode')
+	});	
 	
 	HTMLControl_addEnum({
 		pref: Prefs.toastMode,
