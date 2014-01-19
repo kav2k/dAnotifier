@@ -111,16 +111,16 @@ function init(){
 	chrome.browserAction.setIcon( {path: "img/dan_logo2_19_grey.png"} );
 	
 	if(Prefs.rememberState.get()){
-		DiFi_lastTotalCount = localStorage.lastState_lastTotalCount || 0;
-		DiFi_timestamp = localStorage.lastState_timestamp || 0;
-		DiFi_alertTimestamp = localStorage.lastState_alertTimestamp || 0;
-		DiFi_lastTotalNewCount = localStorage.lastState_lastTotalNewCount || 0;
-		DiFi_lastTotalNewCountApprox = localStorage.lastState_lastTotalNewCountApprox || false;
+		DiFi_lastTotalCount = parseInt(localStorage.lastState_lastTotalCount) || 0;
+		DiFi_timestamp = parseInt(localStorage.lastState_timestamp) || 0;
+		DiFi_alertTimestamp = parseInt(localStorage.lastState_alertTimestamp) || 0;
+		DiFi_lastTotalNewCount = parseInt(localStorage.lastState_lastTotalNewCount) || 0;
+		DiFi_lastTotalNewCountApprox = (localStorage.lastState_lastTotalNewCountApprox == "true");
 		
-		if(DiFi_lastTotalCount && Prefs.badgeMode.get() == "all"){
+		if(DiFi_lastTotalCount > 0 && Prefs.badgeMode.get() == "all"){
 			chrome.browserAction.setBadgeBackgroundColor(COLOR_INACTIVE);
 			chrome.browserAction.setBadgeText({text: prepText(''+DiFi_lastTotalCount)});
-		} else if (DiFi_lastTotalNewCount && Prefs.badgeMode.get() == "newOnly") {
+		} else if (DiFi_lastTotalNewCount > 0 && Prefs.badgeMode.get() == "newOnly") {
 			chrome.browserAction.setBadgeBackgroundColor(COLOR_INACTIVE);
 			chrome.browserAction.setBadgeText({text: prepText(DiFi_lastTotalNewCount + ((DiFi_lastTotalNewCountApprox)?'+':''))});		
 		}
