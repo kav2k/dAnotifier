@@ -23,6 +23,7 @@
 		"16": "img/dan_logo2_16_crisp.png"
 	},
 	"name": "dA Message Notifier",
+  "short_name": "dA Notifier",
 	"minimum_chrome_version": "16",
 	"options_page": "options.html",
 	"permissions": [ 
@@ -45,6 +46,6 @@
 			], "js": ["js/https-ify.js"], "run_at": "document_start" 
 		}
 	],
-	"version": "0.7.1.4",
+	"version": "0.7.2.0",
 	"manifest_version": 2
 }
