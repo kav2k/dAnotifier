@@ -118,16 +118,16 @@ function newlineMagic(text) {
 }
 
 function romanNumeral(decimal) {
-  var lookup = {M:1000,CM:900,D:500,CD:400,C:100,XC:90,L:50,XL:40,X:10,IX:9,V:5,IV:4,I:1},
-      roman = '',
-      i;
-  for ( i in lookup ) {
-    while ( decimal >= lookup[i] ) {
-      roman += i;
-      decimal -= lookup[i];
-    }
-  }
-  return roman;
+	var lookup = {M:1000,CM:900,D:500,CD:400,C:100,XC:90,L:50,XL:40,X:10,IX:9,V:5,IV:4,I:1},
+			roman = '',
+			i;
+	for ( i in lookup ) {
+		while ( decimal >= lookup[i] ) {
+			roman += i;
+			decimal -= lookup[i];
+		}
+	}
+	return roman;
 }*/
 
 // *** URL helper functions
@@ -172,15 +172,22 @@ function goToUrl(getUrl, distinct, background) {
 			var rtabs = tabs.reverse();
 			for (i in rtabs) {
 				if (rtabs[i].url && isUrl(rtabs[i].url, getUrl, distinct)) {
-					//chrome.tabs.executeScript(tab.id, {code: "window.location.reload();"});
-					//chrome.tabs.update(tab.id, {url: "about:blank", selected: true});
-					chrome.tabs.update(rtabs[i].id, {url: getUrl, selected: bringUp, active: bringUp});
-					if (bringUp) { chrome.windows.getCurrent( function (window){ chrome.windows.update( window.id, {focused  : true} ); } ); } // BUGGED IN CHROME 10
+					chrome.tabs.update(
+						rtabs[i].id,
+						{url: getUrl, active: bringUp},
+						function(tab){
+							if (bringUp) { chrome.windows.update( tab.windowId, {focused  : true} ); }
+						}
+					)
 					return;
 				}
 			}
-			chrome.tabs.create({url: getUrl, selected: bringUp, active: bringUp});
-			if (bringUp) { chrome.windows.getCurrent( function (window){ chrome.windows.update( window.id, {focused  : true} ); } ); } // BUGGED IN CHROME 10
+			chrome.tabs.create(
+				{url: getUrl, active: bringUp},
+				function(tab){
+					if (bringUp) { chrome.windows.update( tab.windowId, {focused  : true} ); }
+				}
+			);
 		}
 	);
 }
@@ -201,10 +208,10 @@ function handleOnClick(id, func){
 }
 
 function copyTextToClipboard(text) {
-    var copyFrom = $('<textarea/>');
-    copyFrom.text(text);
-    $('body').append(copyFrom);
-    copyFrom.select();
-    document.execCommand('copy');
-    copyFrom.remove();
+		var copyFrom = $('<textarea/>');
+		copyFrom.text(text);
+		$('body').append(copyFrom);
+		copyFrom.select();
+		document.execCommand('copy');
+		copyFrom.remove();
 }
