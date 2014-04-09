@@ -222,11 +222,14 @@ var DebugValidator = function(input) {
 };
 
 function isHTMLNotificationAvailable() {
-	return (!!webkitNotifications.createHTMLNotification);
+	return (webkitNotifications && webkitNotifications.createHTMLNotification);
 }
 
 function isRichNotificationAvailable() {
-	return (!!!webkitNotifications.createHTMLNotification && !!chrome.notifications);
+	return (
+		(!webkitNotifications || !webkitNotifications.createHTMLNotification)
+		  && chrome.notifications
+	);
 }
 
 var NotificationsAvailableValidator = function(input){
