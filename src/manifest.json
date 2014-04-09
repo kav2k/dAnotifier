@@ -16,14 +16,13 @@
 	},
 	"description": "A notifier for deviantART messages. Keep track of your dA inbox!",
 	"homepage_url": "http://danotifier.deviantart.com/",
-	"update_url": "http://dl.dropbox.com/u/5844031/update_danb.xml",
 	"icons": {
 		"128": "img/dan_logo2_128_padded.png",
 		"48": "img/dan_logo2_48.png",
 		"16": "img/dan_logo2_16_crisp.png"
 	},
-	"name": "dA Message Notifier",
-  "short_name": "dA Notifier",
+	"name": "dA Message Notifier BETA",
+	"short_name": "dA Notifier",
 	"minimum_chrome_version": "16",
 	"options_page": "options.html",
 	"permissions": [ 
@@ -46,6 +45,6 @@
 			], "js": ["js/https-ify.js"], "run_at": "document_start" 
 		}
 	],
-	"version": "0.7.2.0",
+	"version": "0.7.2.2",
 	"manifest_version": 2
 }
