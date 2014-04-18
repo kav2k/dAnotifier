@@ -222,14 +222,15 @@ var DebugValidator = function(input) {
 };
 
 function isHTMLNotificationAvailable() {
-	return (webkitNotifications && webkitNotifications.createHTMLNotification);
+	try{
+    return (webkitNotifications && webkitNotifications.createHTMLNotification);
+	} catch(e) {
+		return false;
+	}
 }
 
 function isRichNotificationAvailable() {
-	return (
-		(!webkitNotifications || !webkitNotifications.createHTMLNotification)
-		  && chrome.notifications
-	);
+	return (!isHTMLNotificationAvailable() && chrome.notifications);
 }
 
 var NotificationsAvailableValidator = function(input){
