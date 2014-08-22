@@ -637,7 +637,7 @@ function DiFi_updatePopup() {
 	
 	popupData.inboxID = DiFi_inboxID;
 
-	chrome.extension.sendMessage({action : 'updatePopup', data : popupData});
+	chrome.runtime.sendMessage({action : 'updatePopup', data : popupData});
 	DiFi_updateBadge();
 }
 
@@ -745,16 +745,6 @@ function DiFi_seenInbox(){ // Assume user have seen inbox
 	chrome.browserAction.setBadgeBackgroundColor(COLOR_INACTIVE);
 }
 
-//--------------------------------------------------------------------------------------------------
-
-// function DiFi_dispatcher() {
-	
-// }
-
-// chrome.extension.onRequest.addListener(DiFi_dispatcher);
-
-//--------------------------------------------------------------------------------------------------
-
 var DiFi_skipUpdate = false;
 var DiFi_skipGuard = 0;
 
@@ -774,7 +764,7 @@ function DiFi_doEverything() {
 	DiFi_capturing = DiFi_mustCapture;
 	if(DiFi_capturing) DiFi_capture.folderData = new Object();
 	
-	chrome.extension.sendMessage({action : 'updatePopup', data : popupData});
+	chrome.runtime.sendMessage({action : 'updatePopup', data : popupData});
 	
 	DiFi_JSONrequest("?c[]=MessageCenter;get_folders&t=json", 0, DiFi_getInboxID);
 }

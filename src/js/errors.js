@@ -16,7 +16,7 @@ function oldHandleError(error, badge, critical) {
 	
 	DiFi_skipUpdate = false;
 	popupData.refreshing = false;
-	chrome.extension.sendMessage({action : 'updatePopup', data : popupData});
+	chrome.runtime.sendMessage({action : 'updatePopup', data : popupData});
 }
 
 /**** Error object scructure ****
@@ -67,7 +67,7 @@ function handleError(error){
 	
 	DiFi_skipUpdate = false;
 	popupData.refreshing = false;
-	chrome.extension.sendMessage({action : 'updatePopup', data : popupData});
+	chrome.runtime.sendMessage({action : 'updatePopup', data : popupData});
 }
 
 function errorText(error){

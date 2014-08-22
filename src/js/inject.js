@@ -1,4 +1,4 @@
-chrome.extension.sendMessage({'action' : 'seenInbox'});
+chrome.runtime.sendMessage({'action' : 'seenInbox'});
 
 $(document).ready( function() {
 	chrome.runtime.sendMessage({'action': 'getMCReminder'}, function(response){
@@ -32,7 +32,7 @@ function appendCounts(){
 		for(var j in messagesInfo){
 			if(hd.textContent.indexOf(messagesInfo[j].P) >= 0 || hd.textContent.indexOf(messagesInfo[j].S) >= 0) {
 				if(j == "WA" && hd.textContent.indexOf("Message") >= 0) { continue; }
-				chrome.extension.sendMessage({
+				chrome.runtime.sendMessage({
 						'action' : 'getLastNewCount', 
 						'type' : j, 
 						'folder' : ( (re.test(window.location.hash)) ? re.exec(window.location.hash)[1] : undefined )

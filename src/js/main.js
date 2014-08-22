@@ -69,7 +69,7 @@ function onMessage(request, sender, callback) {
 
 // Enabling event handlers
 
-chrome.extension.onMessage.addListener(onMessage);
+chrome.runtime.onMessage.addListener(onMessage);
 chrome.tabs.onUpdated.addListener(OnTabUpdateHandler);
 
 chrome.runtime.onUpdateAvailable.addListener(function(details) { 
@@ -86,11 +86,11 @@ document.addEventListener('DOMContentLoaded', function () {
 // *** Init function
 function init(){
 	//document.getElementById('audio_placeholder').innerHTML = 
-	//	'<audio src="'+chrome.extension.getURL('audio/notify.ogg')+'" id="notify_sound"></audio>';
+	//	'<audio src="'+chrome.runtime.getURL('audio/notify.ogg')+'" id="notify_sound"></audio>';
 		
 	var audio_element = document.createElement("audio");
 		audio_element.id = "notify_sound";
-		audio_element.src = chrome.extension.getURL('audio/notify.ogg');
+		audio_element.src = chrome.runtime.getURL('audio/notify.ogg');
 	document.body.appendChild(audio_element);
 	
 	initPrefs();
@@ -105,7 +105,7 @@ function init(){
 	}
 	
 	if(!localStorage['relnotesver']) localStorage['relnotesver'] = 0;
-	if(!(Prefs.hideRelnotes.get()) && (localStorage['relnotesver'] < relNotesVersion)) goToUrl(chrome.extension.getURL("release_notes.html"));
+	if(!(Prefs.hideRelnotes.get()) && (localStorage['relnotesver'] < relNotesVersion)) goToUrl(chrome.runtime.getURL("release_notes.html"));
 	localStorage['relnotesver'] = relNotesVersion;
 	
 	chrome.browserAction.setIcon( {path: "img/dan_logo2_19_grey.png"} );

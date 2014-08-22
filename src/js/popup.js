@@ -2,7 +2,7 @@
 
 $(document).ready( function() {
 	
-	chrome.extension.onMessage.addListener( function (request) {
+	chrome.runtime.onMessage.addListener( function (request) {
 		if(request.action == "updatePopup") P_fill(request.data);
 	});
 	
@@ -132,8 +132,8 @@ function P_createMarkReadLink(type){
 	return $('<a href="#" />')
 		.text("Mark all as read")
 		.click( function(e) { 
-			chrome.extension.sendMessage({'action' : 'seenInbox'});
-			chrome.extension.sendMessage({'action' : 'clearPopupNew'});
+			chrome.runtime.sendMessage({'action' : 'seenInbox'});
+			chrome.runtime.sendMessage({'action' : 'clearPopupNew'});
 		} );
 }
 
@@ -351,16 +351,16 @@ function P_onEntryClick(type, e){
 }
 
 function P_openMC(type, alt) {
-	chrome.extension.sendMessage({ action : 'showMC', type : type, alt : (alt || false) });
+	chrome.runtime.sendMessage({ action : 'showMC', type : type, alt : (alt || false) });
 }
 
 function P_openURL(url) {
 	url = (Prefs.useHTTPS.get() ? "https://" : "http://") + url.toLowerCase();
-	chrome.extension.sendMessage({ action : 'openURL', url : url });
+	chrome.runtime.sendMessage({ action : 'openURL', url : url });
 }
 
 function P_openOptions() {
-	chrome.extension.sendMessage({ action : 'openURL', url : chrome.extension.getURL('options.html') });
+	chrome.runtime.sendMessage({ action : 'openURL', url : chrome.runtime.getURL('options.html') });
 }
 
 function P_debugTimestamp() {
@@ -371,5 +371,5 @@ function P_debugTimestamp() {
 }
 
 function P_forceUpdate() {
-	chrome.extension.sendMessage({ action : 'updateNow'});
+	chrome.runtime.sendMessage({ action : 'updateNow'});
 }

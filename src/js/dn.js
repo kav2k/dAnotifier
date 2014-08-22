@@ -45,7 +45,7 @@ function DN_createNewNotification(){
 }
 
 function DN_HTMLNotify(){
-	DN_currentNotification = webkitNotifications.createHTMLNotification( chrome.extension.getURL('dn.html')	);
+	DN_currentNotification = webkitNotifications.createHTMLNotification( chrome.runtime.getURL('dn.html')	);
 	DN_currentNotification.tag = "dANotifier";
 	DN_currentNotification.show();	
 }
@@ -118,13 +118,13 @@ function DN_RichOnButtonClick(id, button){
 				chrome.notifications.clear(id, function(){});
 				break;
 			case 1:
-				chrome.extension.sendMessage({'action' : 'seenInbox'});
-				chrome.extension.sendMessage({'action' : 'clearPopupNew'});
+				chrome.runtime.sendMessage({'action' : 'seenInbox'});
+				chrome.runtime.sendMessage({'action' : 'clearPopupNew'});
 				break;
 		}
 	} else {
-		chrome.extension.sendMessage({'action' : 'seenInbox'});
-		chrome.extension.sendMessage({'action' : 'clearPopupNew'});
+		chrome.runtime.sendMessage({'action' : 'seenInbox'});
+		chrome.runtime.sendMessage({'action' : 'clearPopupNew'});
 	}
 }
 
@@ -147,8 +147,8 @@ function DN_createMarkReadLink(){
 		text : "Dismiss as read",
 		on	 : {
 			click : function(e) { 
-				chrome.extension.sendMessage({'action' : 'seenInbox'});
-				chrome.extension.sendMessage({'action' : 'clearPopupNew'});
+				chrome.runtime.sendMessage({'action' : 'seenInbox'});
+				chrome.runtime.sendMessage({'action' : 'clearPopupNew'});
 			}
 		}
 	});
