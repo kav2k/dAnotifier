@@ -64,7 +64,8 @@ function DN_RichNotify(){
 			message: entries.join("\n"),
 			priority: 1,
 			iconUrl: chrome.runtime.getURL("img/dan_logo2_128_padded.png"),
-			buttons: [{title: "Open all"}, {title: "Dismiss as read"}]
+			buttons: [{title: "Open all"}, {title: "Dismiss as read"}],
+			isClickable: true
 		}, function(){console.log(chrome.runtime.lastError);});
 	}
 	
@@ -85,7 +86,8 @@ function DN_RichNotify(){
 				message: entries.join("\n"),
 				priority: 1,
 				iconUrl: chrome.runtime.getURL("img/dan_logo2_128_padded.png"),
-				buttons: [{title: "Dismiss as read"}]
+				buttons: [{title: "Dismiss as read"}],
+				isClickable: true
 			}, function(){console.log(chrome.runtime.lastError);});
 		}
 	}
