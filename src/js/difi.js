@@ -395,7 +395,7 @@ function DiFi_countGroupMessages(id, result) {
 				DiFi_parseNew(id, DiFi_groupTypes[type], 
 					result.DiFi.response.calls[type].response.content[0].result, true); 
 			}
-			for(var type in DiFi_groupFeedTypes) if(Prefs.GMT(DiFi_groupTypes[type]).count && Prefs.GMT(DiFi_groupTypes[type]).watch) 
+			for(var type in DiFi_groupFeedTypes) if(Prefs.GMT(DiFi_groupFeedTypes[type]).count && Prefs.GMT(DiFi_groupFeedTypes[type]).watch) 
 			{ 
 				DiFi_parseNew(id, DiFi_groupFeedTypes[type], 
 					result.DiFi.response.calls[parseInt(type)+DiFi_groupTypes.length].response.content[0].result, true); 
