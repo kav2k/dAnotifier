@@ -61,6 +61,9 @@ function onMessage(request, sender, callback) {
 		case 'getMCReminder':
 			callback(Prefs.MCReminder.get());
 			break;
+		case 'getMCHighlight':
+			callback(Prefs.MCHighlight.get());
+			break;
 		case 'getLastNewCount':
 			callback(DiFi_getLastNewCount(request));
 			break;

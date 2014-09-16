@@ -183,6 +183,13 @@
 		def: true, 
 		validators: [BoolValidator]
 	});
+
+	Prefs.add({
+		key: "MCHighlight", 
+		name: "Highlight recent messages in the Message Center",
+		def: true, 
+		validators: [BoolValidator]
+	});
 	
 	Prefs.add({
 		key: "badgeMode", 
@@ -397,6 +404,12 @@ function initPrefsHTML(){
 	
 	HTMLControl_addCheckmarkRow({
 		pref: Prefs.MCReminder,
+		images: HTMLControl_checkmarkImages,
+		parent: document.getElementById('prefs-advanced')
+	});
+
+	HTMLControl_addCheckmarkRow({
+		pref: Prefs.MCHighlight,
 		images: HTMLControl_checkmarkImages,
 		parent: document.getElementById('prefs-advanced')
 	});

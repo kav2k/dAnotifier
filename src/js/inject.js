@@ -21,6 +21,12 @@ $(document).ready( function() {
 		
 		appendCounts();
 	});
+
+	chrome.runtime.sendMessage({'action': 'getMCHighlight'}, function(response){
+		if (!response) return;
+	
+		injectColor();
+	});
 });
 
 var re = /#view=(\d+)/;
@@ -50,6 +56,22 @@ function appendCounts(){
 			}
 		}
 	});
+}
+
+function injectColor(){
+	injectScript("js/mutation-summary.js", function() {
+		injectScript("js/colorize.js");
+	});
+}
+
+function injectScript(src, callback){
+	var s = document.createElement('script');
+  s.src = chrome.runtime.getURL(src);
+  s.onload = function() {
+    this.parentNode.removeChild(this);
+  };
+  if(callback) s.addEventListener("load", callback);
+  (document.head||document.documentElement).appendChild(s);
 }
 
 /*$(document).ready( function() {

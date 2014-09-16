@@ -45,6 +45,10 @@
 			], "js": ["js/https-ify.js"], "run_at": "document_start" 
 		}
 	],
-	"version": "0.7.2.5",
+	"web_accessible_resources" : [
+    "js/colorize.js",
+    "js/mutation-summary.js"
+	],
+	"version": "0.7.3.0",
 	"manifest_version": 2
 }
