@@ -1,13 +1,13 @@
 {
 	"background": {
 		"scripts" : [
-			"js/main.js",
-			"js/difi.js",
 			"js/utils.js",
 			"js/prefs_lib.js",
 			"js/prefs.js",
 			"js/dn.js",
-			"js/errors.js"
+			"js/errors.js",
+			"js/difi.js",
+			"js/main.js"
 		]
 	},
 	"browser_action": {
@@ -49,6 +49,6 @@
     "js/colorize.js",
     "js/mutation-summary.js"
 	],
-	"version": "0.7.3.0",
+	"version": "0.7.3.1",
 	"manifest_version": 2
 }
