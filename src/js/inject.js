@@ -59,7 +59,7 @@ function appendCounts(){
 }
 
 function injectColor(){
-	injectScript("js/mutation-summary.js", function() {
+	injectScript("js/lib/mutation-summary.js", function() {
 		injectScript("js/colorize.js");
 	});
 }

@@ -37,17 +37,21 @@
 			"matches": [
 				"*://*.deviantart.com/messages/", 
 				"*://*.deviantart.com/messages/?random=*"
-			], "js": ["js/utils.js", "js/jquery.js", "js/inject.js"], "run_at": "document_start" 
+			],
+			"js": ["js/utils.js", "js/lib/jquery.js", "js/inject.js"],
+			"run_at": "document_start" 
 		},
 		{ 
 			"matches": [
 				"https://*.deviantart.com/*"
-			], "js": ["js/https-ify.js"], "run_at": "document_start" 
+			],
+			"js": ["js/https-ify.js"],
+			"run_at": "document_start" 
 		}
 	],
 	"web_accessible_resources" : [
     "js/colorize.js",
-    "js/mutation-summary.js"
+    "js/lib/mutation-summary.js"
 	],
 	"version": "0.7.3.1",
 	"manifest_version": 2

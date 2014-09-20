@@ -82,7 +82,6 @@ chrome.runtime.onUpdateAvailable.addListener(function(details) {
 var relNotesVersion = 25; // FIXME: HAAAAAAAX!
 
 document.addEventListener('DOMContentLoaded', function () {
-	
 	init();
 });
 
