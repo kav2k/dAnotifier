@@ -242,3 +242,26 @@ body.scroll
   font-size: 150%;
   cursor: pointer;
 }
+
+.scroll .glow {
+  -webkit-animation-duration: 1s;
+  -webkit-animation-name: glow;
+  -webkit-animation-direction: alternate;
+  -webkit-animation-iteration-count: infinite;
+  -webkit-animation-timing-function: ease;
+  animation-duration: 1s;
+  animation-name: glow;
+  animation-direction: alternate;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease;
+}
+
+@-webkit-keyframes glow {
+    from { text-shadow: 0 0 0px #FF851F; color: #ff6;}
+    to { text-shadow: 0 0 10px #FF851F; color: #FF851F; }
+}
+
+@-keyframes glow {
+    from { text-shadow: 0 0 0px #FF851F; color: #ff6; }
+    to { text-shadow: 0 0 10px #FF851F; color: #FF851F; }
+}
