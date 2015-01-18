@@ -40,7 +40,8 @@ var messagesInfo = {
 	// RETIRED: "NW":{"S":"News Article", "P":"News Articles", "pref":"followNews", "UP":"news", "A" : "NA"},
 	"F":{"S":"Forum", "P":"Forums", "pref":"followForums", "UP":"forums", "A" : "F"},
 	"P":{"S":"Poll", "P":"Polls", "pref":"followPolls", "UP":"polls", "A" : "P"},
-	"WA":{"S":"Activity", "P":"Activities", "pref":"followActivities", "UP":"activities", "A" : "WA"},
+	// Formerly "Activity"
+	"WA":{"S":"Miscellaneous", "P":"Miscellaneous", "pref":"followActivities", "UP":"activities", "A" : "WA"},
 	// Feedback
 	"CN":{"S":"Critique Notice", "P":"Critique Notices", "pref":"followCritNotices", "UP":"critiquesreceived", "A" : "CN"},
 	"C":{"S":"Comment", "P":"Comments", "pref":"followComments", "UP":"comments", "feed":true, "A" : "C"},
