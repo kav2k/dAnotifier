@@ -64,7 +64,7 @@ var groupMessagesInfo = {
 
 var aggregateClasses = {
 	"NTC" : {"S" : "Notice", "P": "Notices", "types": ["N", "CA", "B"], "count" : 0, "newCount" : 0, "UP" : "notices"},
-	"DWA" : {"S" : "deviantWATCH Message", "P" : "deviantWATCH Messages", "types": ["D", "WC", "J", "F", "P", "WA"], "count" : 0, "newCount": 0, "UP" : "deviantwatch"},
+	"DWA" : {"S" : "Watch Message", "P" : "Watch Messages", "types": ["D", "WC", "J", "F", "P", "WA"], "count" : 0, "newCount": 0, "UP" : "deviantwatch"},
 	"FEE" : {"S" : "Feedback Message", "P" : "Feedback Messages", "types": ["CN", "C", "R", "A", "M", "S"], "count" : 0, "newCount" : 0, "UP" : "feedback"},
 	"COR" : {"S" : "Correspondence Item", "P" : "Correspondence Items", "special" : "singleton", "types": ["CO"], "count" : 0, "newCount" : 0, "UP" : "correspondence"},
 	"NOT" : {"S" : "Note", "P" : "Notes", "special" : "singleton", "types": ["UN"], "count" : 0, "newCount" : 0, "UP" : "notes"},
