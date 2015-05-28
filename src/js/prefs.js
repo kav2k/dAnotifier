@@ -395,12 +395,12 @@ function initPrefsHTML(){
 		parent: document.getElementById('prefs-counter-mode')
 	});	
 	
-	HTMLControl_addEnum({
+	/*HTMLControl_addEnum({
 		pref: Prefs.toastMode,
 		enabler: NotificationsEnabler,
 		images: HTMLControl_checkmarkImages,
 		parent: document.getElementById('prefs-toast-mode')
-	});
+	});*/
 	
 	HTMLControl_addCheckmarkRow({
 		pref: Prefs.MCReminder,
