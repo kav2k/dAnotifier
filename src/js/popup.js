@@ -62,7 +62,7 @@ function P_createHeader(data) {
 	else {
 		P_createMCLink()
 			.text( 
-				(data.totalCount || "No") + " message" + ((data.totalCount == 1) ? "" : "s")
+				(data.totalCount || "No") + " notification" + ((data.totalCount == 1) ? "" : "s")
 			)
 			.appendTo(header);
 		
@@ -77,7 +77,7 @@ function P_createHeader(data) {
 			$('<span class="new_text" />')
 				.text(
 					data.totalNewCount + ((data.totalNewCountApprox) ? "+" : "") + 
-					" new message" + ((data.totalNewCount == 1) ? "" : "s")
+					" new notification" + ((data.totalNewCount == 1) ? "" : "s")
 				)
 				.appendTo(new_header);
 			new_header.append(" | ");

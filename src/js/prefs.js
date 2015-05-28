@@ -123,7 +123,7 @@
 	
 	Prefs.add({
 		key: "maxItems", 
-		name: "Maximum polled items per message class", 
+		name: "Maximum polled items per notification class", 
 		def: 20,
 		validators: [IntValidator]
 	});
@@ -151,9 +151,9 @@
 		name: "Tooltip mode",
 		def: "brief", 
 		fields: {
-			full: "Full: list all message classes",
-			aggregated: "Aggregated: show new messages, grouped by type",
-			brief: "Brief: show only new messages, abbreviated (like deviantAnywhere)"
+			full: "Full: list all notification classes",
+			aggregated: "Aggregated: show new notifications, grouped by type",
+			brief: "Brief: show only new notifications, abbreviated (like deviantAnywhere)"
 		},
 		validators: [EnumValidator(["full", "aggregated", "brief"])]
 	});
@@ -186,7 +186,7 @@
 
 	Prefs.add({
 		key: "MCHighlight", 
-		name: "Highlight recent messages in the Message Center",
+		name: "Highlight recent notifications in the Message Center",
 		def: true, 
 		validators: [BoolValidator]
 	});
@@ -196,8 +196,8 @@
 		name: "Counter mode",
 		def: "newOnly",
 		fields: {
-			newOnly: "Display new messages count only",
-			all: "Display total number of messages"
+			newOnly: "Display new notifications count only",
+			all: "Display total number of notifications"
 		},
 		validators: [EnumValidator(["all", "newOnly"])]
 	});

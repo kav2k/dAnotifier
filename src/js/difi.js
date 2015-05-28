@@ -480,7 +480,7 @@ function DiFi_tooltipBrief() {
 		}
 	}
 	
-	if (!message_text) message_text = "\nNo new messages";
+	if (!message_text) message_text = "\nNo new notifications";
 	
 	title += message_text;
 	
@@ -511,7 +511,7 @@ function DiFi_tooltipFull() {
 		}
 	}
 	
-	if (!message_text) message_text = "\n No Messages";
+	if (!message_text) message_text = "\n No Notifications";
 	
 	title += message_text;
 	
@@ -603,7 +603,7 @@ function DiFi_tooltipAggregate() {
 		}
 	}
 	
-	if (!message_text) message_text = "\n No Messages";
+	if (!message_text) message_text = "\n No Notifications";
 	
 	title += message_text;
 	

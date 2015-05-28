@@ -60,7 +60,7 @@ function DN_RichNotify(){
 		chrome.notifications.clear("dANotifier", function(){});
 		chrome.notifications.create("dANotifier", {
 			type: "basic",
-			title: "New messages for " + DiFi_folders[DiFi_inboxID].name,
+			title: "New notifications for " + DiFi_folders[DiFi_inboxID].name,
 			message: entries.join("\n"),
 			priority: 1,
 			iconUrl: chrome.runtime.getURL("img/dan_logo2_128_padded.png"),
@@ -82,7 +82,7 @@ function DN_RichNotify(){
 			chrome.notifications.clear("dANotifier-"+id, function(){});
 			chrome.notifications.create("dANotifier-"+id, {
 				type: "basic",
-				title: "New messages for #" + DiFi_folders[id].name,
+				title: "New notifications for #" + DiFi_folders[id].name,
 				message: entries.join("\n"),
 				priority: 1,
 				iconUrl: chrome.runtime.getURL("img/dan_logo2_128_padded.png"),
