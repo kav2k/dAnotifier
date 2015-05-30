@@ -21,7 +21,7 @@
 		"48": "img/dan_logo2_48.png",
 		"16": "img/dan_logo2_16_crisp.png"
 	},
-	"name": "dA Message Notifier",
+	"name": "dA Message Notifier BETA",
 	"short_name": "dA Notifier",
 	"minimum_chrome_version": "16",
 	"options_page": "options.html",
