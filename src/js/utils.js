@@ -35,6 +35,7 @@ var messagesInfo = {
 	"B":{"S":"Bulletin", "P":"Bulletins", "pref":"followBulletins", "UP":"bulletins", "A": "B"},
 	// deviantWATCH
 	"D":{"S":"Deviation", "P":"Deviations", "pref":"followDeviations", "UP":"deviations", "A": "D"},
+	"GD":{"S":"Group Deviation", "P":"Group Deviations", "pref":"followGroupDeviations", "UP":"groupdeviations", "A": "GD"},
 	"WC":{"S":"Watched Critique", "P":"Watched Critiques", "pref":"followCritiques", "UP":"critiques", "A" : "WC"},
 	"J":{"S":"Journal", "P":"Journals", "pref":"followJournals", "UP":"journals", "A" : "J"},
 	// RETIRED: "NW":{"S":"News Article", "P":"News Articles", "pref":"followNews", "UP":"news", "A" : "NA"},
@@ -64,7 +65,7 @@ var groupMessagesInfo = {
 
 var aggregateClasses = {
 	"NTC" : {"S" : "Notice", "P": "Notices", "types": ["N", "CA", "B"], "count" : 0, "newCount" : 0, "UP" : "notices"},
-	"DWA" : {"S" : "Watch Notification", "P" : "Watch Notifications", "types": ["D", "WC", "J", "F", "P", "WA"], "count" : 0, "newCount": 0, "UP" : "deviantwatch"},
+	"DWA" : {"S" : "Watch Notification", "P" : "Watch Notifications", "types": ["D", "GD", "WC", "J", "F", "P", "WA"], "count" : 0, "newCount": 0, "UP" : "deviantwatch"},
 	"FEE" : {"S" : "Feedback Notification", "P" : "Feedback Notifications", "types": ["CN", "C", "R", "A", "M", "S"], "count" : 0, "newCount" : 0, "UP" : "feedback"},
 	"COR" : {"S" : "Correspondence Item", "P" : "Correspondence Items", "special" : "singleton", "types": ["CO"], "count" : 0, "newCount" : 0, "UP" : "correspondence"},
 	"NOT" : {"S" : "Note", "P" : "Notes", "special" : "singleton", "types": ["UN"], "count" : 0, "newCount" : 0, "UP" : "notes"},

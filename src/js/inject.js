@@ -38,6 +38,7 @@ function appendCounts(){
 		for(var j in messagesInfo){
 			if(hd.textContent.indexOf(messagesInfo[j].P) >= 0 || hd.textContent.indexOf(messagesInfo[j].S) >= 0) {
 				if(j == "WA" && hd.textContent.indexOf("Message") >= 0) { continue; }
+				if(j == "D" && hd.textContent.indexOf("Group") >= 0) { continue; }
 				chrome.runtime.sendMessage({
 						'action' : 'getLastNewCount', 
 						'type' : j, 

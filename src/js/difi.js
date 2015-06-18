@@ -174,7 +174,7 @@ function getFolderInfo(giveUp){
 
 // --------------------------------------------------------------
 
-var DiFi_types = ["C", "R", "UN", "N", "CA", "A", "CO", "D", "J", "WC", "P", "F", "WA", "M", "B", "S", "CN"];
+var DiFi_types = ["C", "R", "UN", "N", "CA", "A", "CO", "D", "GD", "J", "WC", "P", "F", "WA", "M", "B", "S", "CN"];
 var DiFi_groupTypes = ["CO", "N"];
 var DiFi_groupFeedTypes = ["C", "A"];
 
@@ -189,13 +189,14 @@ function DiFi_requestSuffix (type, start, max) {
 		case "CN": return ",oq:fb_critiques:" + start + ":" + max + ":f&";
 		case "CO": return ",oq:correspondence:" + start + ":" + max + ":f&";
 		case "D" : return ",oq:devwatch:" + start + ":" + max + ":f:tg=deviations&";
+		case "GD": return ",oq:devwatch:" + start + ":" + max + ":f:tg=groupdeviations&";
 		case "J" : return ",oq:devwatch:" + start + ":" + max + ":f:tg=journals&";
 		case "WC": return ",oq:devwatch:" + start + ":" + max + ":f:tg=critiques&";	
 		case "P" : return ",oq:devwatch:" + start + ":" + max + ":f:tg=polls&";
 		case "B" : return ",oq:bulletins:" + start + ":" + max + ":f&";
 		case "S" : return ",oq:zendesk:" + start + ":" + max + ":f&";
 		case "F" : return ",oq:devwatch:" + start + ":" + max + ":f:tg=forums&";
-		case "WA" : return ",oq:devwatch:" + start + ":" + max + ":f:tg=activities&";
+		case "WA": return ",oq:devwatch:" + start + ":" + max + ":f:tg=activities&";
 		case "M" : return ",oq:fb_mentions:" + start + ":" + max + ":f&";
 	}
 }
