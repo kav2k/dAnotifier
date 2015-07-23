@@ -53,6 +53,6 @@
     "js/colorize.js",
     "js/lib/mutation-summary.js"
 	],
-	"version": "0.7.5.0",
+	"version": "0.7.5.1",
 	"manifest_version": 2
 }
