@@ -72,7 +72,6 @@
   observer.observe(target, {childList : true});*/
 
   function changeHandler(summaries){
-    console.dir(summaries);
     summaries[0].added.forEach(function(el){colorize.call(el)});
   }
 
