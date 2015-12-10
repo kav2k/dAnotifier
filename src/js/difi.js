@@ -174,7 +174,7 @@ function getFolderInfo(giveUp){
 
 // --------------------------------------------------------------
 
-var DiFi_types = ["C", "R", "UN", "N", "CA", "A", "CO", "D", "GD", "J", "WC", "P", "F", "WA", "M", "B", "S", "CN"];
+var DiFi_types = ["C", "R", "UN", "N", "CA", "A", "CO", "D", "GD", "J", "WC", "P", "F", "WA", "M", "B", "CN"];
 var DiFi_groupTypes = ["CO", "N"];
 var DiFi_groupFeedTypes = ["C", "A"];
 
@@ -194,7 +194,6 @@ function DiFi_requestSuffix (type, start, max) {
 		case "WC": return ",oq:devwatch:" + start + ":" + max + ":f:tg=critiques&";	
 		case "P" : return ",oq:devwatch:" + start + ":" + max + ":f:tg=polls&";
 		case "B" : return ",oq:bulletins:" + start + ":" + max + ":f&";
-		case "S" : return ",oq:zendesk:" + start + ":" + max + ":f&";
 		case "F" : return ",oq:devwatch:" + start + ":" + max + ":f:tg=forums&";
 		case "WA": return ",oq:devwatch:" + start + ":" + max + ":f:tg=activities&";
 		case "M" : return ",oq:fb_mentions:" + start + ":" + max + ":f&";
@@ -231,11 +230,11 @@ function DiFi_countNext(){
 	if(DiFi_foldersToCount.length){
 		var id = DiFi_foldersToCount.shift();
 		DiFi_folders[id].counts = {"C" : 0, "R" : 0, "UN" : 0, "N" : 0, "CA" : 0, "A" : 0, "CO" : 0, 
-							"D" : 0, "J" : 0, "WC" : 0, "P" : 0, "F" : 0, "WA": 0, "M": 0, "B": 0, "S": 0, "CN" : 0, "GD" : 0};
+							"D" : 0, "J" : 0, "WC" : 0, "P" : 0, "F" : 0, "WA": 0, "M": 0, "B": 0, "CN" : 0, "GD" : 0};
 		DiFi_folders[id].newCounts = {"C" : 0, "R" : 0, "UN" : 0, "N" : 0, "CA" : 0, "A" : 0, "CO" : 0, 
-							"D" : 0, "J" : 0, "WC" : 0, "P" : 0, "F" : 0, "WA": 0, "M": 0, "B": 0, "S": 0, "CN" : 0, "GD" : 0};
+							"D" : 0, "J" : 0, "WC" : 0, "P" : 0, "F" : 0, "WA": 0, "M": 0, "B": 0, "CN" : 0, "GD" : 0};
 		DiFi_folders[id].highestTimestamps = {"C" : 0, "R" : 0, "UN" : 0, "N" : 0, "CA" : 0, "A" : 0, "CO" : 0, 
-							"D" : 0, "J" : 0, "WC" : 0, "P" : 0, "F" : 0, "WA": 0, "M": 0, "B": 0, "S": 0, "CN" : 0, "GD" : 0};
+							"D" : 0, "J" : 0, "WC" : 0, "P" : 0, "F" : 0, "WA": 0, "M": 0, "B": 0, "CN" : 0, "GD" : 0};
 		switch(DiFi_folders[id].type){
 		case "inbox":
 			DiFi_JSONrequest(DiFi_allMessagesRequest(id), id, DiFi_countMessages);
