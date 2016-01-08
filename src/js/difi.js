@@ -174,9 +174,9 @@ function getFolderInfo(giveUp){
 
 // --------------------------------------------------------------
 
-var DiFi_types = ["C", "R", "UN", "N", "CA", "A", "CO", "D", "GD", "J", "WC", "P", "F", "SU", "WA", "M", "B", "CN"];
-var DiFi_groupTypes = ["CO", "N"];
-var DiFi_groupFeedTypes = ["C", "A"];
+var DiFi_types = Object.keys(messagesInfo);
+var DiFi_groupTypes = Object.keys(groupMessagesInfo).filter(key => !groupMessagesInfo[key].feed);
+var DiFi_groupFeedTypes = Object.keys(groupMessagesInfo).filter(key => groupMessagesInfo[key].feed);
 
 function DiFi_requestSuffix (type, start, max) {
 	switch(type){
@@ -228,14 +228,19 @@ function DiFi_countBegin(){
 }
 
 function DiFi_countNext(){
+	function zeroObject() {
+		var obj = {};
+		for(key of DiFi_types) {
+			obj[key] = 0;
+		}
+		return obj;
+	}
+
 	if(DiFi_foldersToCount.length){
 		var id = DiFi_foldersToCount.shift();
-		DiFi_folders[id].counts = {"C" : 0, "R" : 0, "UN" : 0, "N" : 0, "CA" : 0, "A" : 0, "CO" : 0, 
-							"D" : 0, "J" : 0, "WC" : 0, "P" : 0, "F" : 0, "SU": 0, "WA": 0, "M": 0, "B": 0, "CN" : 0, "GD" : 0};
-		DiFi_folders[id].newCounts = {"C" : 0, "R" : 0, "UN" : 0, "N" : 0, "CA" : 0, "A" : 0, "CO" : 0, 
-							"D" : 0, "J" : 0, "WC" : 0, "P" : 0, "F" : 0, "SU": 0, "WA": 0, "M": 0, "B": 0, "CN" : 0, "GD" : 0};
-		DiFi_folders[id].highestTimestamps = {"C" : 0, "R" : 0, "UN" : 0, "N" : 0, "CA" : 0, "A" : 0, "CO" : 0, 
-							"D" : 0, "J" : 0, "WC" : 0, "P" : 0, "F" : 0, "SU": 0, "WA": 0, "M": 0, "B": 0, "CN" : 0, "GD" : 0};
+		DiFi_folders[id].counts = zeroObject();
+		DiFi_folders[id].newCounts = zeroObject();
+		DiFi_folders[id].highestTimestamps = zeroObject();
 		switch(DiFi_folders[id].type){
 		case "inbox":
 			DiFi_JSONrequest(DiFi_allMessagesRequest(id), id, DiFi_countMessages);

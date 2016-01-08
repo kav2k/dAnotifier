@@ -23,7 +23,7 @@
 	},
 	"name": "dA Message Notifier BETA",
 	"short_name": "dA Notifier",
-	"minimum_chrome_version": "16",
+	"minimum_chrome_version": "45",
 	"options_page": "options.html",
 	"permissions": [ 
 		"notifications",
