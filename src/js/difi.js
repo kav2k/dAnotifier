@@ -17,69 +17,51 @@ function DiFi_JSONrequest(request, id, callback){
 	}
 
 	var xhr = new XMLHttpRequest();
-	var abortTimerId = window.setTimeout(function() {
-		xhr.abort();
+
+	xhr.responseType = "json";
+
+	xhr.timeout = Prefs.timeoutInterval.get();
+	xhr.ontimeout = function() {
 		handleError({type: "TIMEOUT"});
-	}, Prefs.timeoutInterval.get());
+	}
 
-	xhr.onreadystatechange = function(){
-		if (xhr.readyState != 4 || (xhr.status != 200 && xhr.status != 403))
-			return;
-
-		if (xhr.status == 403){ // doesn't really work anymore
-			handleError({type: "LOGGED_OUT"});
-			window.clearTimeout(abortTimerId);
-			loggedOut = true;
-			return;
-		}
-
+	xhr.onload = function() {
 		loggedOut = false;
 
-		if (xhr.responseText) {
-			window.clearTimeout(abortTimerId);
-		
-			var result;
-			try {
-				result = JSON.parse(xhr.responseText);
-				
-				if(result.DiFi.status == "FAIL" && result.DiFi.response.error == "500 Server Error"){
-					console.log("DEBUG: Outer hiccup");
-					handleError({type: "SERVER_ERROR"});
-					window.clearTimeout(abortTimerId);
-					return;
-				}
-				
-				if (result.DiFi.response && 
-					result.DiFi.response.calls[0].response.content.error &&
-					result.DiFi.response.calls[0].response.content.error.code == "ERR_DIFI_ACCESS_DENIED")
-				{ 
-					handleError({type: "LOGGED_OUT"});
-					window.clearTimeout(abortTimerId);
-					loggedOut = true;
-					return;
-				}
-				
-				for (var call of result.DiFi.response.calls){
-					if(call.response.status == "FAIL" &&
-							call.response.content.error == "500 Server Error"){
-						console.log("DEBUG: Inner hiccup");
-						handleError({type: "SERVER_ERROR"});
-						window.clearTimeout(abortTimerId);
-						return;
-					}
-				}
-			}
-			catch(e){
-				handleError({type: "PARSE_ERROR", raw: e.stack.replace(traceRegexp, '')});
-				console.log(e.stack);
-				window.clearTimeout(abortTimerId);
+		if (xhr.response) {
+			result = xhr.response;
+			
+			if(result.DiFi.status == "FAIL" && result.DiFi.response.error == "500 Server Error"){
+				console.log("DEBUG: Outer hiccup");
+				handleError({type: "SERVER_ERROR"});
 				return;
 			}
 			
-			if(DiFi_capturing) DiFi_capture.folderData[id] = result;
-			callback(id, result);
+			if (result.DiFi.response && 
+				result.DiFi.response.calls[0].response.content.error &&
+				result.DiFi.response.calls[0].response.content.error.code == "ERR_DIFI_ACCESS_DENIED")
+			{ 
+				handleError({type: "LOGGED_OUT"});
+				loggedOut = true;
+				return;
+			}
+			
+			for (var call of result.DiFi.response.calls){
+				if(call.response.status == "FAIL" &&
+						call.response.content.error == "500 Server Error"){
+					console.log("DEBUG: Inner hiccup");
+					handleError({type: "SERVER_ERROR"});
+					return;
+				}
+			}
+		} else {
+			handleError({type: "PARSE_ERROR", raw: e.stack.replace(traceRegexp, '')});
+			console.log(e.stack);
+			return;
 		}
-		else{return;} // Catches abort()
+			
+		if(DiFi_capturing) DiFi_capture.folderData[id] = result;
+		callback(id, result);
 	};
 	
 	xhr.open("GET", DiFi_baseURL()+request, true);
@@ -634,8 +616,7 @@ function DiFi_updatePopup() {
 	popupData.folders = new Object();
 	for (var i in DiFi_folders) popupData.folders[i] = DiFi_folders[i];
 	
-	popupData.aggregateClasses = new Array();
-	for(var aClass of aggregateClasses) popupData.aggregateClasses.push(aClass);
+	popupData.aggregateClasses = aggregateClasses.slice();
 	
 	popupData.totalCount = DiFi_totalCount;
 	popupData.totalNewCount = DiFi_totalNewCount;
@@ -783,78 +764,55 @@ var dAMC_deviantInfo = {};
 
 function dAMC_folderInfoRequest(){
 	var xhr = new XMLHttpRequest();
-	var abortTimerId = window.setTimeout(function() {
-		xhr.abort();
+
+	xhr.timeout = Prefs.timeoutInterval.get();
+	xhr.ontimeout = function() {
 		handleError({type: "TIMEOUT"});
-	}, Prefs.timeoutInterval.get());
+	}
 
-	xhr.onreadystatechange = function(){
-		if (xhr.readyState != 4 || (xhr.status != 200 && xhr.status != 403))
-			return;
-
-		if (xhr.status == 403){ // doesn't really work anymore
-			handleError({type: "LOGGED_OUT"});
-			window.clearTimeout(abortTimerId);
-			loggedOut = true;
-			return;
-		}
-
+	xhr.onload = function(){
 		loggedOut = false;
 
-		if (xhr.responseText) {
-			window.clearTimeout(abortTimerId);
+		var username;
 		
-			var result;
-			
-			var tmp = new String();
-			tmp = xhr.responseText;
-			
-			try{
-				//result = (/<a class=oh-l .*?\.deviantart\.com">.*?<\/span>(.*?) <img/.exec(xhr.responseText))[1];
-				if(/deviantART.deviant\s*=\s*({.*?})/.test(tmp))
-				{ // Found deviant's info block
-					dAMC_deviantInfo = JSON.parse((/deviantART.deviant\s*=\s*({.*?})/.exec(tmp))[1]);
-					if (dAMC_deviantInfo.username == undefined)
-					{
-						result = '???';
-						console.error("dAMC: Unable to resolve username; failing gracefully"); 
-					}
-					result = dAMC_deviantInfo.symbol + dAMC_deviantInfo.username;
-				}
-				else
-				{
-					result = '???';
+		try {
+			if(/deviantART.deviant\s*=\s*({.*?})/.test(xhr.responseText)) { // Found deviant's info block
+				dAMC_deviantInfo = JSON.parse((/deviantART.deviant\s*=\s*({.*?})/.exec(xhr.responseText))[1]);
+				if (dAMC_deviantInfo.username == undefined)	{
+					username = '???';
 					console.error("dAMC: Unable to resolve username; failing gracefully"); 
 				}
-				
-				DiFi_folderInfo = new Object();
-				
-				console.log("Username: '"+result+"'"); 
-				DiFi_folderInfo[DiFi_inboxID] = {name: result, type: "inbox"};
-				
-				for(var i in DiFi_folders) if(DiFi_folders[i].type != "inbox"){
-					if(((new RegExp('mcdata="\\\{(.*?'+i+'.*?)\\\}"','g')).exec(tmp)) && 
-						/is_group\&quot\;\:true/.test(((new RegExp('mcdata="\\\{(.*?'+i+'.*?)\\\}"','g')).exec(tmp))[0]))
-					{
-						console.log("Folder: "+i+", is a group");
-						DiFi_folderInfo[i] = {name: DiFi_folders[i].name, type: "group"};
-					}
-					else {
-						console.log("Folder: "+i+", is not a group");
-						DiFi_folderInfo[i] = {name: DiFi_folders[i].name, type: "folder"};	
-					}
-				}
-				
-				getFolderInfo(true);
+				username = dAMC_deviantInfo.symbol + dAMC_deviantInfo.username;
 			}
-			catch(e){
-				handleError({type: "PARSE_ERROR", raw: e.stack.replace(traceRegexp, '')});
-				console.log(e.stack);
+			else {
+				username = '???';
+				console.error("dAMC: Unable to resolve username; failing gracefully"); 
 			}
 			
-			//callback(result);
+			DiFi_folderInfo = new Object();
+			
+			console.log("Username: '"+username+"'"); 
+			DiFi_folderInfo[DiFi_inboxID] = {name: username, type: "inbox"};
+			
+			for(var i in DiFi_folders) if(DiFi_folders[i].type != "inbox"){
+				if(((new RegExp('mcdata="\\\{(.*?'+i+'.*?)\\\}"','g')).exec(xhr.responseText)) && 
+					/is_group\&quot\;\:true/.test(((new RegExp('mcdata="\\\{(.*?'+i+'.*?)\\\}"','g')).exec(xhr.responseText))[0]))
+				{
+					console.log("Folder: "+i+", is a group");
+					DiFi_folderInfo[i] = {name: DiFi_folders[i].name, type: "group"};
+				}
+				else {
+					console.log("Folder: "+i+", is not a group");
+					DiFi_folderInfo[i] = {name: DiFi_folders[i].name, type: "folder"};	
+				}
+			}
+			
+			getFolderInfo(true);
 		}
-		else{return;} // Catches abort()
+		catch(e) {
+			handleError({type: "PARSE_ERROR", raw: e.stack.replace(traceRegexp, '')});
+			console.log(e.stack);
+		}
 	};
 	
 	xhr.open("GET", getMessagesUrl(), true);
