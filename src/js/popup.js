@@ -158,11 +158,11 @@ function P_createContainer(data) {
 	
 	var aggregateClasses = data.aggregateClasses;
 	
-	for (var cl in aggregateClasses) {
+	for (var aClass of aggregateClasses) {
 	
-		if(aggregateClasses[cl].special && aggregateClasses[cl].special == "group") {
+		if(aClass.special && aClass.special == "group") {
 		
-			for(var id in data.folders) if (data.folders[id].type == "group" && aggregateClasses[cl].groups[id].count + aggregateClasses[cl].groups[id].newCount > 0) {
+			for(var id in data.folders) if (data.folders[id].type == "group" && aClass.groups[id].count + aClass.groups[id].newCount > 0) {
 			
 				var group_name = data.folders[id].name;
 				
@@ -180,11 +180,11 @@ function P_createContainer(data) {
 				
 				var entries = $();
 				
-				for(var t in aggregateClasses[cl].types) if (
-						data.folders[id].counts[aggregateClasses[cl].types[t]] + data.folders[id].newCounts[aggregateClasses[cl].types[t]] > 0
-						&& !(data.skipNew && data.folders[id].counts[aggregateClasses[cl].types[t]] == 0)){
+				for(var t in aClass.types) if (
+						data.folders[id].counts[aClass.types[t]] + data.folders[id].newCounts[aClass.types[t]] > 0
+						&& !(data.skipNew && data.folders[id].counts[aClass.types[t]] == 0)){
 					entries = entries.add(
-						P_createGroupEntry(aggregateClasses[cl].types[t], data.folders[id], id, data.skipNew)
+						P_createGroupEntry(aClass.types[t], data.folders[id], id, data.skipNew)
 					);
 				}
 				
@@ -194,9 +194,9 @@ function P_createContainer(data) {
 			}
 		}
 		
-		else if (aggregateClasses[cl].count + aggregateClasses[cl].newCount > 0) {
+		else if (aClass.count + aClass.newCount > 0) {
 		
-			var singleton = (aggregateClasses[cl].special && aggregateClasses[cl].special == "singleton");
+			var singleton = (aClass.special && aClass.special == "singleton");
 			
 			var ac_container = $('<div class="class_container">');
 				
@@ -204,13 +204,13 @@ function P_createContainer(data) {
 				
 				if (!singleton){
 					entries = entries.add(
-						P_createClassHeader(aggregateClasses[cl], cl, data.skipNew)
+						P_createClassHeader(aClass, aClass.UP, data.skipNew)
 					);
 				}
 								
-				for(var t in aggregateClasses[cl].types) if (data.folders[data.inboxID].counts[aggregateClasses[cl].types[t]] > 0){
+				for(var type of aClass.types) if (data.folders[data.inboxID].counts[type] > 0){
 					entries = entries.add(
-						P_createEntry(aggregateClasses[cl].types[t], data.folders[data.inboxID], data.skipNew)
+						P_createEntry(type, data.folders[data.inboxID], data.skipNew)
 					);
 				}
 				

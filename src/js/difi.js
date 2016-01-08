@@ -59,9 +59,9 @@ function DiFi_JSONrequest(request, id, callback){
 					return;
 				}
 				
-				for (var call in result.DiFi.response.calls){
-					if(result.DiFi.response.calls[call].response.status == "FAIL" &&
-							result.DiFi.response.calls[call].response.content.error == "500 Server Error"){
+				for (var call of result.DiFi.response.calls){
+					if(call.response.status == "FAIL" &&
+							call.response.content.error == "500 Server Error"){
 						console.log("DEBUG: Inner hiccup");
 						handleError({type: "SERVER_ERROR"});
 						window.clearTimeout(abortTimerId);
@@ -103,15 +103,15 @@ function DiFi_getInboxID(id, result) {
 		//var needInfo = false;
 		DiFi_folders = new Object();
 		
-		for (var folder in result.DiFi.response.calls[0].response.content)
+		for (var folder of result.DiFi.response.calls[0].response.content)
 		{	
-			if (result.DiFi.response.calls[0].response.content[folder].is_inbox){
-				DiFi_inboxID = result.DiFi.response.calls[0].response.content[folder].folderid; 
+			if (folder.is_inbox){
+				DiFi_inboxID = folder.folderid; 
 				found = true;
-				DiFi_folders[result.DiFi.response.calls[0].response.content[folder].folderid] = {type: "inbox", name: "?"};
+				DiFi_folders[folder.folderid] = {type: "inbox", name: "?"};
 			}
-			else DiFi_folders[result.DiFi.response.calls[0].response.content[folder].folderid] = 
-				{type: "?", name: result.DiFi.response.calls[0].response.content[folder].title};
+			else DiFi_folders[folder.folderid] = 
+				{type: "?", name: folder.title};
 		}
 		
 		if(!found) throw Error("DiFi: inbox ID missing");
@@ -525,31 +525,31 @@ function DiFi_tooltipFull() {
 }
 
 function DiFi_fillAggregation(){
-	for(var c in aggregateClasses){
-		if(aggregateClasses[c].special && aggregateClasses[c].special == "group") { 
+	for(var aClass of aggregateClasses){
+		if(aClass.special && aClass.special == "group") { 
 			for(var id in DiFi_folders) if (DiFi_folders[id].type == "group") {
-				aggregateClasses[c].groups[id] = {"count" : 0, "newCount" : 0, "newCountApprox" : false};
-				for(var t in aggregateClasses[c].types){
-					aggregateClasses[c].groups[id].count += parseInt(DiFi_folders[id].counts[aggregateClasses[c].types[t]]);
-					aggregateClasses[c].groups[id].newCount += parseInt(DiFi_folders[id].newCounts[aggregateClasses[c].types[t]]);
-					if (DiFi_folders[id].newCounts[aggregateClasses[c].types[t]] == DiFi_maxItems) aggregateClasses[c].groups[id].newCountApprox = true;
+				aClass.groups[id] = {"count" : 0, "newCount" : 0, "newCountApprox" : false};
+				for(var type of aClass.types){
+					aClass.groups[id].count += parseInt(DiFi_folders[id].counts[type]);
+					aClass.groups[id].newCount += parseInt(DiFi_folders[id].newCounts[type]);
+					if (DiFi_folders[id].newCounts[type] == DiFi_maxItems) aClass.groups[id].newCountApprox = true;
 				}
 			}
 		}
 		else {
-			aggregateClasses[c].count = 0;
-			aggregateClasses[c].newCount = 0;
-			aggregateClasses[c].newCountApprox = false;				
-			for(var t in aggregateClasses[c].types){
-				aggregateClasses[c].count += parseInt(DiFi_folders[DiFi_inboxID].counts[aggregateClasses[c].types[t]]);
-				aggregateClasses[c].newCount += parseInt(DiFi_folders[DiFi_inboxID].newCounts[aggregateClasses[c].types[t]]);
-				if (DiFi_folders[DiFi_inboxID].newCounts[aggregateClasses[c].types[t]] == DiFi_maxItems) aggregateClasses[c].newCountApprox = true;
+			aClass.count = 0;
+			aClass.newCount = 0;
+			aClass.newCountApprox = false;				
+			for(var type of aClass.types){
+				aClass.count += parseInt(DiFi_folders[DiFi_inboxID].counts[type]);
+				aClass.newCount += parseInt(DiFi_folders[DiFi_inboxID].newCounts[type]);
+				if (DiFi_folders[DiFi_inboxID].newCounts[type] == DiFi_maxItems) aClass.newCountApprox = true;
 			}
 		}
 	}
 	
 	var totalApprox = false;
-	for(var c in aggregateClasses) totalApprox = totalApprox || aggregateClasses[c].newCountApprox;
+	for(var aClass of aggregateClasses) totalApprox = totalApprox || aClass.newCountApprox;
 	DiFi_totalNewCountApprox = totalApprox;
 }
 
@@ -568,41 +568,41 @@ function DiFi_tooltipAggregate() {
 	var title = "Last updated: " + getTimestamp() + " for " + DiFi_folders[DiFi_inboxID].name;
 	var message_text = "";
 	
-	for (var cl in aggregateClasses) {
-		if(aggregateClasses[cl].special && aggregateClasses[cl].special == "group") { 
-			for(var id in DiFi_folders) if (DiFi_folders[id].type == "group" && aggregateClasses[cl].groups[id].count + aggregateClasses[cl].groups[id].newCount > 0) {
+	for (var aClass of aggregateClasses) {
+		if(aClass.special && aClass.special == "group") { 
+			for(var id in DiFi_folders) if (DiFi_folders[id].type == "group" && aClass.groups[id].count + aClass.groups[id].newCount > 0) {
 				message_text += "\n\n" + "#" + DiFi_folders[id].name + ": ";
-				message_text += aggregateClasses[cl].groups[id].count + " " + 
-					( (aggregateClasses[cl].groups[id].count == 1) ? aggregateClasses[cl].S : aggregateClasses[cl].P );
-				if(aggregateClasses[cl].groups[id].newCount){
-					message_text += " (" + aggregateClasses[cl].groups[id].newCount + ( (aggregateClasses[cl].groups[id].newCountApprox)?"+":"" ) + " new)";
-					for(var t in aggregateClasses[cl].types) if (DiFi_folders[id].newCounts[aggregateClasses[cl].types[t]]){
+				message_text += aClass.groups[id].count + " " + 
+					( (aClass.groups[id].count == 1) ? aClass.S : aClass.P );
+				if(aClass.groups[id].newCount){
+					message_text += " (" + aClass.groups[id].newCount + ( (aClass.groups[id].newCountApprox)?"+":"" ) + " new)";
+					for(var type of aClass.types) if (DiFi_folders[id].newCounts[type]){
 						message_text += "\n> " + 
 							DiFi_tooltipAggregateLine(
-								aggregateClasses[cl].types[t], 
-								DiFi_folders[id].newCounts[aggregateClasses[cl].types[t]], 
-								(DiFi_folders[id].counts[aggregateClasses[cl].types[t]] == 0)
+								type, 
+								DiFi_folders[id].newCounts[type], 
+								(DiFi_folders[id].counts[type] == 0)
 							);
 					}
 				}				
 			}
 		}
-		else if (aggregateClasses[cl].count + aggregateClasses[cl].newCount > 0) {
-			if (aggregateClasses[cl].special && aggregateClasses[cl].special == "singleton") {
+		else if (aClass.count + aClass.newCount > 0) {
+			if (aClass.special && aClass.special == "singleton") {
 				message_text += "\n\n";
-				message_text += aggregateClasses[cl].count + " " + ( (aggregateClasses[cl].count == 1) ? aggregateClasses[cl].S : aggregateClasses[cl].P );
-				if(aggregateClasses[cl].newCount){
-					message_text += " (" + aggregateClasses[cl].newCount + ( (aggregateClasses[cl].newCountApprox)?"+":"" ) + " new)";
+				message_text += aClass.count + " " + ( (aClass.count == 1) ? aClass.S : aClass.P );
+				if(aClass.newCount){
+					message_text += " (" + aClass.newCount + ( (aClass.newCountApprox)?"+":"" ) + " new)";
 				}
 			}
 			else {
 				message_text += "\n\n";
-				message_text += aggregateClasses[cl].count + " " + ( (aggregateClasses[cl].count == 1) ? aggregateClasses[cl].S : aggregateClasses[cl].P );
-				if(aggregateClasses[cl].newCount){
-					message_text += " (" + aggregateClasses[cl].newCount + ( (aggregateClasses[cl].newCountApprox)?"+":"" ) + " new)";
-					for(var t in aggregateClasses[cl].types) if (DiFi_folders[DiFi_inboxID].newCounts[aggregateClasses[cl].types[t]]){
+				message_text += aClass.count + " " + ( (aClass.count == 1) ? aClass.S : aClass.P );
+				if(aClass.newCount){
+					message_text += " (" + aClass.newCount + ( (aClass.newCountApprox)?"+":"" ) + " new)";
+					for(var type of aClass.types) if (DiFi_folders[DiFi_inboxID].newCounts[type]){
 						message_text += "\n> " + 
-							DiFi_tooltipAggregateLine(aggregateClasses[cl].types[t], DiFi_folders[DiFi_inboxID].newCounts[aggregateClasses[cl].types[t]], false);
+							DiFi_tooltipAggregateLine(type, DiFi_folders[DiFi_inboxID].newCounts[type], false);
 					}
 				}		
 			}
@@ -634,8 +634,8 @@ function DiFi_updatePopup() {
 	popupData.folders = new Object();
 	for (var i in DiFi_folders) popupData.folders[i] = DiFi_folders[i];
 	
-	popupData.aggregateClasses = new Object();
-	for(var c in aggregateClasses) popupData.aggregateClasses[c] = aggregateClasses[c];
+	popupData.aggregateClasses = new Array();
+	for(var aClass of aggregateClasses) popupData.aggregateClasses.push(aClass);
 	
 	popupData.totalCount = DiFi_totalCount;
 	popupData.totalNewCount = DiFi_totalNewCount;

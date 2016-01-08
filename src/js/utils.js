@@ -63,14 +63,14 @@ var groupMessagesInfo = {
 	"A" 	: {"pref" : "followGroupActivity", "feed" : true}
 };
 
-var aggregateClasses = {
-	"NTC" : {"S" : "Notice", "P": "Notices", "types": ["N", "CA", "B"], "count" : 0, "newCount" : 0, "UP" : "notices"},
-	"DWA" : {"S" : "Watch Notification", "P" : "Watch Notifications", "types": ["D", "GD", "WC", "J", "F", "P", "SU", "WA"], "count" : 0, "newCount": 0, "UP" : "deviantwatch"},
-	"FEE" : {"S" : "Feedback Notification", "P" : "Feedback Notifications", "types": ["CN", "C", "R", "A", "M"], "count" : 0, "newCount" : 0, "UP" : "feedback"},
-	"COR" : {"S" : "Correspondence Item", "P" : "Correspondence Items", "special" : "singleton", "types": ["CO"], "count" : 0, "newCount" : 0, "UP" : "correspondence"},
-	"NOT" : {"S" : "Note", "P" : "Notes", "special" : "singleton", "types": ["UN"], "count" : 0, "newCount" : 0, "UP" : "notes"},
-	"GRP" : {"S" : "Notification", "P" : "Notifications", "special" : "group", "types": ["CO", "N", "C", "A"], "groups": new Object(), "UP" : ""}
-};
+var aggregateClasses = [
+	{"S" : "Notice", "P": "Notices", "types": ["N", "CA", "B"], "count" : 0, "newCount" : 0, "UP" : "notices"},
+	{"S" : "Watch Notification", "P" : "Watch Notifications", "types": ["D", "GD", "WC", "J", "F", "P", "SU", "WA"], "count" : 0, "newCount": 0, "UP" : "deviantwatch"},
+	{"S" : "Feedback Notification", "P" : "Feedback Notifications", "types": ["CN", "C", "R", "A", "M"], "count" : 0, "newCount" : 0, "UP" : "feedback"},
+	{"S" : "Correspondence Item", "P" : "Correspondence Items", "special" : "singleton", "types": ["CO"], "count" : 0, "newCount" : 0, "UP" : "correspondence"},
+	{"S" : "Note", "P" : "Notes", "special" : "singleton", "types": ["UN"], "count" : 0, "newCount" : 0, "UP" : "notes"},
+	{"S" : "Notification", "P" : "Notifications", "special" : "group", "types": ["CO", "N", "C", "A"], "groups": new Object(), "UP" : ""}
+];
 
 // Combined text preparation for the tooltip
 function prepText(text) {
@@ -196,8 +196,7 @@ function goToUrl(getUrl, distinct, background) {
 
 function messageClassURL(type) {
 	if(type == 'all') { return getMessagesUrl() + "?random=" + Math.ceil(10000*Math.random()); }
-	else if(type.match(/^\d+$/)) { return getMessagesUrl() + "?random=" + Math.ceil(10000*Math.random()) + "#view=" + type; }
-	else if(type.match(/^\w{3}$/)) { return getMessagesUrl() + "?random=" + Math.ceil(10000*Math.random()) + "#view=" + aggregateClasses[type].UP; }
+	else if(type.length) { return getMessagesUrl() + "?random=" + Math.ceil(10000*Math.random()) + "#view=" + type; }
 	else return getMessagesUrl() + "?random=" + Math.ceil(10000*Math.random()) + "#view=" + messagesInfo[type].UP;
 }
 
