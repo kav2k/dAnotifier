@@ -243,7 +243,7 @@ function P_createClassHeader(ac_data, ac, skip_new) {
 
 function P_createEntry(type, data, skip_new) {
 	var element = $('<td class="entry">', {id : 'entry-' +  type});
-	element.click( function(e) { P_onEntryClick(type, e); } );
+	element.click( function(e) { P_onEntryClick(messagesInfo[type].UP, e); } );
 	
 	element.text( 
 		data.counts[type] + ' ' 

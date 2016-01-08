@@ -113,7 +113,7 @@ function DN_RichOnButtonClick(id, button){
 		switch(button){
 			case 0:
 				for(var type in messagesInfo) if(DN_notificationData[type]){
-					goToMTUrl(type, true);
+					goToMTUrl(messagesInfo[type].UP, true);
 				}
 				chrome.notifications.clear(id, function(){});
 				break;
