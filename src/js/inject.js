@@ -1,14 +1,23 @@
 chrome.runtime.sendMessage({'action' : 'seenInbox'});
+chrome.runtime.sendMessage({'action' : 'seenFolder', 'view' : getView()});
+
+function getView() {
+	var match = location.hash.match(/view=([\w\d]+)/);
+	if(match) {
+		return match[1];
+	} else {
+		return undefined;
+	}
+}
 
 $(document).ready( function() {
-	chrome.runtime.sendMessage({'action': 'getMCReminder'}, function(response){
-		if (!response) return;
-	
+	chrome.runtime.sendMessage({'action': 'getMCReminder'}, function(response) {
 		var target = document.querySelector('.messages-right');
 		
 		var observer = new window.WebKitMutationObserver(
 		  function(mutations) {
-		    for(var i in mutations){
+		  	chrome.runtime.sendMessage({'action' : 'seenFolder', 'view' : getView()});
+		    if(response) for(var i in mutations){
 		    	for(var j=0; j<mutations[i].addedNodes.length; j++){
 		    		// Fired when a new '.mczone' is added
 		    		appendCounts(); return;
@@ -19,7 +28,7 @@ $(document).ready( function() {
 		
 		observer.observe(target, {childList : true});
 		
-		appendCounts();
+		if (response) appendCounts();
 	});
 
 	chrome.runtime.sendMessage({'action': 'getMCHighlight'}, function(response){
