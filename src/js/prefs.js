@@ -168,13 +168,12 @@
 	Prefs.add({
 		key: "toastMode", 
 		name: "Tooltip mode",
-		def: (isHTMLNotificationAvailable())?"html":((isRichNotificationAvailable())?"rich":"basic"), 
+		def: (isRichNotificationAvailable())?"rich":"basic", 
 		fields: {
 			basic: "Basic: text-only notifications (integrate with OS X Notifiaction Center)",
-			html: "HTML: interactive \"old-style\" notifications (doesn't work on all platforms)",
 			rich: "Brief: \"new-style\" rich notifications (integrate with Chrome Notifications)"
 		},
-		validators: [EnumValidator(["basic", "html", "rich"]), NotificationsAvailableValidator]
+		validators: [EnumValidator(["basic", "rich"]), NotificationsAvailableValidator]
 	});
 	
 	Prefs.add({
@@ -228,23 +227,12 @@ var DebugValidator = function(input) {
 	else return wrapWarnMessage("You've been warned! The debug section is all the way down.");
 };
 
-function isHTMLNotificationAvailable() {
-	try{
-    return (webkitNotifications && webkitNotifications.createHTMLNotification);
-	} catch(e) {
-		return false;
-	}
-}
-
 function isRichNotificationAvailable() {
-	return (!isHTMLNotificationAvailable() && chrome.notifications);
+	return (!!chrome.notifications);
 }
 
 var NotificationsAvailableValidator = function(input){
-	if(input == 'html' && !isHTMLNotificationAvailable()) {
-		return wrapFailMessage("HTML notifications are not available in your browser version and are disabled.");
-	}
-	else if(input == 'rich' && !isRichNotificationAvailable()) {
+  if(input == 'rich' && !isRichNotificationAvailable()) {
 		return wrapFailMessage("Rich notifications are not available in your browser version and are disabled.");
 	}
 	else return wrapPassMessage();
