@@ -21,8 +21,8 @@ $mtime = localtime((stat "build/${beta_file}")[9]);
 open UPDATE_XML, $deploy_dir.'update_danb.xml' or die "Can't open deployed update XML file in ${deploy_dir}: $!\n";;
 open REPLACE_XML, '>build/update_danb.xml';
 while (<UPDATE_XML>){
-	if (s/(<updatecheck.*version=')([0-9.]+)('.*>)/$1.$version.$3/e) { $old_version = $2; }
-	print REPLACE_XML;
+  if (s/(<updatecheck.*version=')([0-9.]+)('.*>)/$1.$version.$3/e) { $old_version = $2; }
+  print REPLACE_XML;
 }
 close UPDATE_XML;
 close REPLACE_XML;
@@ -51,36 +51,36 @@ print "Beta deployed successfully.\n";
 # Open current manifest file, extract current version number
 sub read_manifest 
 {
-	my $version, $manifest, $manifest_json;
-	open MANIFEST, 'src/manifest.json' or die "Can't open manifest file! $!\n";
-		while(<MANIFEST>) { $manifest_json .= $_; }
-		$manifest = decode_json($manifest_json);
-		$version = $manifest->{version};
-	close MANIFEST;
-	
-	return $version;	
+  my $version, $manifest, $manifest_json;
+  open MANIFEST, 'src/manifest.json' or die "Can't open manifest file! $!\n";
+    while(<MANIFEST>) { $manifest_json .= $_; }
+    $manifest = decode_json($manifest_json);
+    $version = $manifest->{version};
+  close MANIFEST;
+  
+  return $version;  
 }
 
 # Build beta package from current source (needs .pem file outside project)
 sub build_beta
 {
-	if (system("./crxmake.sh src ../dA_notifier_beta.pem")) { die "Build faiulre!\n"; }
-	move("src.crx", "build/".$beta_file) or die "Build failure! $!\n";
-	print "Built 'build/${beta_file}' successfully.\n";
+  if (system("./crxmake.sh src ../dA_notifier_beta.pem")) { die "Build faiulre!\n"; }
+  move("src.crx", "build/".$beta_file) or die "Build failure! $!\n";
+  print "Built 'build/${beta_file}' successfully.\n";
 }
 
 # Compares 2 version strings a la <=> according to Chrome specs
 sub compare_versions
 {
-	my($a, $b) = @_;
-	
-	my @a = split(/\./, $a);
-	my @b = split(/\./, $b);
-	
-	foreach (1..4){
-		my $cmp = (shift @a or 0) <=> (shift @b or 0);
-		if($cmp) { return $cmp; }
-	}
-	
-	return 0;
+  my($a, $b) = @_;
+  
+  my @a = split(/\./, $a);
+  my @b = split(/\./, $b);
+  
+  foreach (1..4){
+    my $cmp = (shift @a or 0) <=> (shift @b or 0);
+    if($cmp) { return $cmp; }
+  }
+  
+  return 0;
 }

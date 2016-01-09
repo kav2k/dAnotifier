@@ -1,8 +1,8 @@
 document.addEventListener('DOMContentLoaded', function () {
-	initPrefs();
-	initPrefsHTML_relnotes();
+  initPrefs();
+  initPrefsHTML_relnotes();
 });
 
 function save(){
-	Prefs.hideRelnotes.saveHTML();
+  Prefs.hideRelnotes.saveHTML();
 }

@@ -17,57 +17,57 @@ var COLOR_INACTIVE = {color: [24, 24, 24, 128]};
 
 // Main button click handler
 function OnClickHandler(tab) {
-    if(loggedOut) { // If logged out, go to login page instead
-        goToUrl(getLoginUrl());
-    }
-    else{
-        goToUrl(getMessagesUrl());
-    }
+  if(loggedOut) { // If logged out, go to login page instead
+    goToUrl(getLoginUrl());
+  }
+  else{
+    goToUrl(getMessagesUrl());
+  }
 }
 
 function OnTabUpdateHandler(tabId, changeInfo, tab) {
-		if (
-			changeInfo.url && 
-			(
-				/http:.*deviantart.com\/journal\//.test(changeInfo.url) || 
-				/http:.*deviantart.com\/blog\//.test(changeInfo.url)
-			) && 
-			Prefs.useHTTPS.get()
-		)
-		{
-			chrome.tabs.update(tabId, {url: changeInfo.url.replace(/^http:/, "https:")});
-		}
+  if (
+    changeInfo.url && 
+    (
+      /http:.*deviantart.com\/journal\//.test(changeInfo.url) || 
+      /http:.*deviantart.com\/blog\//.test(changeInfo.url)
+    ) && 
+    Prefs.useHTTPS.get()
+  )
+  {
+    chrome.tabs.update(tabId, {url: changeInfo.url.replace(/^http:/, "https:")});
+  }
 }
 
 function onMessage(request, sender, callback) {
-	switch(request.action){
-		case 'seenInbox':
-			DiFi_seenInbox();
-			break;
-		case 'showMC':
-			goToMTUrl(request.type, request.alt, request.alt);
-			break;
-		case 'openURL':
-			goToUrl(request.url);
-			break;
-		case 'updateNow':
-			scheduleRequest();
-			break;
-		case 'clearPopupNew':
-			DiFi_clearPopupNew();
-			DN_clear();
-			scheduleRequest();
-			break;
-		case 'getMCReminder':
-			callback(Prefs.MCReminder.get());
-			break;
-		case 'getMCHighlight':
-			callback(Prefs.MCHighlight.get());
-			break;
-		case 'getLastNewCount':
-			callback(DiFi_getLastNewCount(request));
-			break;
-	}
+  switch(request.action){
+    case 'seenInbox':
+      DiFi_seenInbox();
+      break;
+    case 'showMC':
+      goToMTUrl(request.type, request.alt, request.alt);
+      break;
+    case 'openURL':
+      goToUrl(request.url);
+      break;
+    case 'updateNow':
+      scheduleRequest();
+      break;
+    case 'clearPopupNew':
+      DiFi_clearPopupNew();
+      DN_clear();
+      scheduleRequest();
+      break;
+    case 'getMCReminder':
+      callback(Prefs.MCReminder.get());
+      break;
+    case 'getMCHighlight':
+      callback(Prefs.MCHighlight.get());
+      break;
+    case 'getLastNewCount':
+      callback(DiFi_getLastNewCount(request));
+      break;
+  }
 }
 
 // Enabling event handlers
@@ -76,62 +76,62 @@ chrome.runtime.onMessage.addListener(onMessage);
 chrome.tabs.onUpdated.addListener(OnTabUpdateHandler);
 
 chrome.runtime.onUpdateAvailable.addListener(function(details) { 
-	chrome.runtime.reload(); // Update immediately if an update is available
+  chrome.runtime.reload(); // Update immediately if an update is available
 });
 
 var relNotesVersion = 28; // FIXME: HAAAAAAAX!
 
 document.addEventListener('DOMContentLoaded', function () {
-	init();
+  init();
 });
 
 // *** Init function
 function init(){
-	//document.getElementById('audio_placeholder').innerHTML = 
-	//	'<audio src="'+chrome.runtime.getURL('audio/notify.ogg')+'" id="notify_sound"></audio>';
-		
-	var audio_element = document.createElement("audio");
-		audio_element.id = "notify_sound";
-		audio_element.src = chrome.runtime.getURL('audio/notify.ogg');
-	document.body.appendChild(audio_element);
-	
-	initPrefs();
-	
-	if(chrome.browserAction.onClicked.hasListeners()) chrome.browserAction.onClicked.removeListener(OnClickHandler);
-	if(Prefs.UIMode.get() == "tooltipOnly") {
-		chrome.browserAction.onClicked.addListener(OnClickHandler);
-		chrome.browserAction.setPopup({popup: ''});
-	}
-	else {
-		chrome.browserAction.setPopup({popup: 'popup.html'});
-	}
-	
-	if(!localStorage['relnotesver']) localStorage['relnotesver'] = 0;
-	if(!(Prefs.hideRelnotes.get()) && (localStorage['relnotesver'] < relNotesVersion)) goToUrl(chrome.runtime.getURL("release_notes.html"));
-	localStorage['relnotesver'] = relNotesVersion;
-	
-	chrome.browserAction.setIcon( {path: "img/dan_logo2_19_grey.png"} );
-	
-	if(Prefs.rememberState.get()){
-		DiFi_lastTotalCount = parseInt(localStorage.lastState_lastTotalCount) || 0;
-		DiFi_timestamp = parseInt(localStorage.lastState_timestamp) || 0;
-		DiFi_alertTimestamp = parseInt(localStorage.lastState_alertTimestamp) || 0;
-		DiFi_lastTotalNewCount = parseInt(localStorage.lastState_lastTotalNewCount) || 0;
-		DiFi_lastTotalNewCountApprox = (localStorage.lastState_lastTotalNewCountApprox == "true");
-		
-		if(DiFi_lastTotalCount > 0 && Prefs.badgeMode.get() == "all"){
-			chrome.browserAction.setBadgeBackgroundColor(COLOR_INACTIVE);
-			chrome.browserAction.setBadgeText({text: prepText(''+DiFi_lastTotalCount)});
-		} else if (DiFi_lastTotalNewCount > 0 && Prefs.badgeMode.get() == "newOnly") {
-			chrome.browserAction.setBadgeBackgroundColor(COLOR_INACTIVE);
-			chrome.browserAction.setBadgeText({text: prepText(DiFi_lastTotalNewCount + ((DiFi_lastTotalNewCountApprox)?'+':''))});		
-		}
-	}
-	
-	DiFi_maxItems = Prefs.maxItems.get();
-	
-    console.log("Setting refresh interval as "+Prefs.refreshInterval.get());
-    scheduleRequest();
+  //document.getElementById('audio_placeholder').innerHTML = 
+  //  '<audio src="'+chrome.runtime.getURL('audio/notify.ogg')+'" id="notify_sound"></audio>';
+    
+  var audio_element = document.createElement("audio");
+    audio_element.id = "notify_sound";
+    audio_element.src = chrome.runtime.getURL('audio/notify.ogg');
+  document.body.appendChild(audio_element);
+  
+  initPrefs();
+  
+  if(chrome.browserAction.onClicked.hasListeners()) chrome.browserAction.onClicked.removeListener(OnClickHandler);
+  if(Prefs.UIMode.get() == "tooltipOnly") {
+    chrome.browserAction.onClicked.addListener(OnClickHandler);
+    chrome.browserAction.setPopup({popup: ''});
+  }
+  else {
+    chrome.browserAction.setPopup({popup: 'popup.html'});
+  }
+  
+  if(!localStorage['relnotesver']) localStorage['relnotesver'] = 0;
+  if(!(Prefs.hideRelnotes.get()) && (localStorage['relnotesver'] < relNotesVersion)) goToUrl(chrome.runtime.getURL("release_notes.html"));
+  localStorage['relnotesver'] = relNotesVersion;
+  
+  chrome.browserAction.setIcon( {path: "img/dan_logo2_19_grey.png"} );
+  
+  if(Prefs.rememberState.get()){
+    DiFi_lastTotalCount = parseInt(localStorage.lastState_lastTotalCount) || 0;
+    DiFi_timestamp = parseInt(localStorage.lastState_timestamp) || 0;
+    DiFi_alertTimestamp = parseInt(localStorage.lastState_alertTimestamp) || 0;
+    DiFi_lastTotalNewCount = parseInt(localStorage.lastState_lastTotalNewCount) || 0;
+    DiFi_lastTotalNewCountApprox = (localStorage.lastState_lastTotalNewCountApprox == "true");
+    
+    if(DiFi_lastTotalCount > 0 && Prefs.badgeMode.get() == "all"){
+      chrome.browserAction.setBadgeBackgroundColor(COLOR_INACTIVE);
+      chrome.browserAction.setBadgeText({text: prepText(''+DiFi_lastTotalCount)});
+    } else if (DiFi_lastTotalNewCount > 0 && Prefs.badgeMode.get() == "newOnly") {
+      chrome.browserAction.setBadgeBackgroundColor(COLOR_INACTIVE);
+      chrome.browserAction.setBadgeText({text: prepText(DiFi_lastTotalNewCount + ((DiFi_lastTotalNewCountApprox)?'+':''))});    
+    }
+  }
+  
+  DiFi_maxItems = Prefs.maxItems.get();
+  
+  console.log("Setting refresh interval as "+Prefs.refreshInterval.get());
+  scheduleRequest();
 }
 
 // *** Scheduler
@@ -150,4 +150,3 @@ function runRequest() { // (wrap-around for now)
   //getMessages();
   DiFi_doEverything();
 }
-

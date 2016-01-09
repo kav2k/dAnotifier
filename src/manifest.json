@@ -1,58 +1,58 @@
 {
-	"background": {
-		"scripts" : [
-			"js/utils.js",
-			"js/prefs_lib.js",
-			"js/prefs.js",
-			"js/dn.js",
-			"js/errors.js",
-			"js/difi.js",
-			"js/main.js"
-		]
-	},
-	"browser_action": {
-		"default_icon": "img/dan_logo2_19_grey.png",
-		"default_popup": "popup.html"
-	},
-	"description": "A notifier for deviantART messages. Keep track of your dA inbox!",
-	"homepage_url": "http://danotifier.deviantart.com/",
-	"icons": {
-		"128": "img/dan_logo2_128_padded.png",
-		"48": "img/dan_logo2_48.png",
-		"16": "img/dan_logo2_16_crisp.png"
-	},
-	"name": "dA Message Notifier BETA",
-	"short_name": "dA Notifier",
-	"minimum_chrome_version": "45",
-	"options_page": "options.html",
-	"permissions": [ 
-		"notifications",
-		"tabs",
-		"*://*.deviantart.com/",
-		"clipboardWrite"
-	],
-	"optional_permissions": [ "background" ],
-	"content_scripts": [ 
-		{ 
-			"matches": [
-				"*://*.deviantart.com/notifications/", 
-				"*://*.deviantart.com/notifications/?random=*"
-			],
-			"js": ["js/utils.js", "js/lib/jquery.js", "js/inject.js"],
-			"run_at": "document_start" 
-		},
-		{ 
-			"matches": [
-				"https://*.deviantart.com/*"
-			],
-			"js": ["js/https-ify.js"],
-			"run_at": "document_start" 
-		}
-	],
-	"web_accessible_resources" : [
+  "background": {
+    "scripts" : [
+      "js/utils.js",
+      "js/prefs_lib.js",
+      "js/prefs.js",
+      "js/dn.js",
+      "js/errors.js",
+      "js/difi.js",
+      "js/main.js"
+    ]
+  },
+  "browser_action": {
+    "default_icon": "img/dan_logo2_19_grey.png",
+    "default_popup": "popup.html"
+  },
+  "description": "A notifier for deviantART messages. Keep track of your dA inbox!",
+  "homepage_url": "http://danotifier.deviantart.com/",
+  "icons": {
+    "128": "img/dan_logo2_128_padded.png",
+    "48": "img/dan_logo2_48.png",
+    "16": "img/dan_logo2_16_crisp.png"
+  },
+  "name": "dA Message Notifier BETA",
+  "short_name": "dA Notifier",
+  "minimum_chrome_version": "45",
+  "options_page": "options.html",
+  "permissions": [ 
+    "notifications",
+    "tabs",
+    "*://*.deviantart.com/",
+    "clipboardWrite"
+  ],
+  "optional_permissions": [ "background" ],
+  "content_scripts": [ 
+    { 
+      "matches": [
+        "*://*.deviantart.com/notifications/", 
+        "*://*.deviantart.com/notifications/?random=*"
+      ],
+      "js": ["js/utils.js", "js/lib/jquery.js", "js/inject.js"],
+      "run_at": "document_start" 
+    },
+    { 
+      "matches": [
+        "https://*.deviantart.com/*"
+      ],
+      "js": ["js/https-ify.js"],
+      "run_at": "document_start" 
+    }
+  ],
+  "web_accessible_resources" : [
     "js/colorize.js",
     "js/lib/mutation-summary.js"
-	],
-	"version": "0.7.6.0",
-	"manifest_version": 2
+  ],
+  "version": "0.7.6.0",
+  "manifest_version": 2
 }
