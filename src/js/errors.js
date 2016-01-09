@@ -1,24 +1,3 @@
-function oldHandleError(error, badge, critical) {
-    chrome.browserAction.setIcon(
-		critical ? {path: "img/dan_logo2_19_red.png"} : {path: "img/dan_logo2_19_grey.png"}
-	);
-
-    var title = "Last updated: " + getTimestamp() + "\n" + error;
-    
-	if(critical) console.warn(title);
-	
-    chrome.browserAction.setTitle({title: prepText(title)});
-	if(badge == "?" && DiFi_lastTotalCount) // 0.5: Last seen count
-		chrome.browserAction.setBadgeText({text: prepText(DiFi_lastTotalCount+badge)});
-	else
-		chrome.browserAction.setBadgeText({text: prepText(badge)});
-    chrome.browserAction.setBadgeBackgroundColor(COLOR_INACTIVE);
-	
-	DiFi_skipUpdate = false;
-	popupData.refreshing = false;
-	chrome.runtime.sendMessage({action : 'updatePopup', data : popupData});
-}
-
 /**** Error object scructure ****
  * 
  * type (required): a string containing one of the following error types:
