@@ -782,7 +782,6 @@ function DiFi_showDesktopNotification() {
 function DiFi_seenInbox() { // Assume user have seen inbox
   DiFi_timestamp = DiFi_highestTimestamp || epochTS();
   if (Prefs.rememberState.get()) { localStorage.lastState_timestamp = DiFi_timestamp; }
-  //DiFi_alertTimestamp = DiFi_highestTimestamp || epochTS();
   chrome.browserAction.setBadgeBackgroundColor(COLOR_INACTIVE);
 }
 
@@ -794,8 +793,6 @@ var DiFi_capturing = false;
 var DiFi_mustCapture = false;
 
 function DiFi_doEverything() {
-  // DiFi_callChain([ ... ]); // Okay, that was a pretty idea.. R.I.P.
-
   if (DiFi_skipUpdate && DiFi_skipGuard < 5) {
     console.log("Request skipped at " + getTimestamp());
     DiFi_skipGuard++;

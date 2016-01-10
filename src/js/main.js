@@ -128,6 +128,5 @@ function scheduleRequest() {
 }
 
 function runRequest() { // (wrap-around for now)
-  //getMessages();
   DiFi_doEverything();
 }
