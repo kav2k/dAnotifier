@@ -1,7 +1,5 @@
-if (chrome.notifications) {
-  chrome.notifications.onClicked.addListener(DN_RichOnClick);
-  chrome.notifications.onButtonClicked.addListener(DN_RichOnButtonClick);
-}
+chrome.notifications.onClicked.addListener(DN_RichOnClick);
+chrome.notifications.onButtonClicked.addListener(DN_RichOnButtonClick);
 
 function DN_notify(data) {
   DN_notificationData = data;
@@ -12,20 +10,12 @@ function DN_notify(data) {
 }
 
 function DN_clear() {
-  if (DN_currentNotification) {
-    DN_currentNotification.cancel();
-    //DN_notificationStatus = "UNINIT";
-    console.log("Notification reset");
-  }
-  if (chrome.notifications) {
-    chrome.notifications.clear("dANotifier");
-    for (var id in DiFi_folders) {
-      chrome.notifications.clear("dANotifier-" + id);
-    }
+  chrome.notifications.clear("dANotifier");
+  for (var id in DiFi_folders) {
+    chrome.notifications.clear("dANotifier-" + id);
   }
 }
 
-var DN_currentNotification;
 var DN_notificationData;
 
 function DN_createNewNotification() {

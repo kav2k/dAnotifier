@@ -17,8 +17,6 @@ Prefs.foreach = function(fun) {
 };
 
 function initPrefs() {
-  if (localStorage.prefsVersion != '"7.0"') { convertPrefs(); }
-
   if (Prefs.ready) {
     Prefs.foreach("init");
     return;
@@ -173,12 +171,12 @@ function initPrefs() {
   Prefs.add({
     key: "toastMode",
     name: "Tooltip mode",
-    def: (isRichNotificationAvailable()) ? "rich" : "basic",
+    def: "rich",
     fields: {
       basic: "Basic: text-only notifications (integrate with OS X Notifiaction Center)",
       rich: "Brief: \"new-style\" rich notifications (integrate with Chrome Notifications)"
     },
-    validators: [EnumValidator(["basic", "rich"]), NotificationsAvailableValidator]
+    validators: [EnumValidator(["basic", "rich"])]
   });
 
   Prefs.add({
@@ -217,39 +215,11 @@ Prefs.GMT = function(type) {
   return Prefs[groupMessagesInfo[type].pref].get();
 };
 
-var DepressedValidator = function(input) {
-  if (input) {
-    return wrapPassMessage();
-  } else {
-    return wrapWarnMessage("Warning: negative values are depressing!");
-  }
-};
-
-var DisableTooltipValidator = function(input) {
-  if (!input) {
-    return wrapPassMessage();
-  } else {
-    return wrapWarnMessage("Warning: tooltip-only display may be broken!");
-  }
-};
-
 var DebugValidator = function(input) {
   if (!input) {
     return wrapWarnMessage("Warning: very advanced options for testing only!");
   } else {
     return wrapWarnMessage("You've been warned! The debug section is all the way down.");
-  }
-};
-
-function isRichNotificationAvailable() {
-  return (!!chrome.notifications);
-}
-
-var NotificationsAvailableValidator = function(input) {
-  if (input == "rich" && !isRichNotificationAvailable()) {
-    return wrapFailMessage("Rich notifications are not available in your browser version and are disabled.");
-  } else {
-    return wrapPassMessage();
   }
 };
 
@@ -273,19 +243,12 @@ var NotificationsEnabler = function(hc) {
     for (var cm in hc.fields) {
       switch (checkmark.field) {
         case "basic": return false;
-        case "html": return isHTMLNotificationAvailable();
-        case "rich": return isRichNotificationAvailable();
+        case "rich": return true;
         default: return true;
       }
     }
   };
 };
-
-function convertPrefs() {
-  if (!isHTMLNotificationAvailable()) { localStorage.showToast = "true"; }
-  localStorage.prefsVersion = '"7.0"';
-  console.log("Converted prefs to version 7.0");
-}
 
 function initPrefsHTML() {
   if (Prefs.HTMLready) { return; }

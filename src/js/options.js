@@ -12,7 +12,7 @@ function save(fake) {
   Prefs.foreach("saveHTML");
   markClean();
 
-  if (!fake && chrome.extension) {
+  if (!fake) {
     chrome.extension.getBackgroundPage().init();
     document.getElementById("debug-section").style.display = (Prefs.debug.get()) ? "block" : "none";
   }
@@ -57,11 +57,6 @@ function markClean() {
   if (!document.getElementsByClassName("pref-fail").length) {
     document.getElementById("save-button").disabled = true;
   }
-}
-
-function testSound() {
-  chrome.extension.getBackgroundPage().playSound();
-  //chrome.extension.sendRequest({playSound : true});
 }
 
 function debug_setDiFi_ts() {

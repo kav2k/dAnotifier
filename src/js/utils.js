@@ -298,8 +298,8 @@ function goToUrl(getUrl, distinct, background) {
     }
   }
 
-  chrome.tabs.getAllInWindow(
-    undefined,
+  chrome.tabs.query(
+    {currentWindow: true},
     function(tabs) {
       var rtabs = tabs.reverse();
       for (var i in rtabs) {
