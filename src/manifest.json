@@ -40,13 +40,6 @@
       ],
       "js": ["js/utils.js", "js/lib/jquery.js", "js/inject.js"],
       "run_at": "document_start" 
-    },
-    { 
-      "matches": [
-        "https://*.deviantart.com/*"
-      ],
-      "js": ["js/https-ify.js"],
-      "run_at": "document_start" 
     }
   ],
   "web_accessible_resources" : [

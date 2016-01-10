@@ -24,19 +24,6 @@ function OnClickHandler(tab) {
   }
 }
 
-function OnTabUpdateHandler(tabId, changeInfo, tab) {
-  if (
-    changeInfo.url &&
-    (
-      /http:.*deviantart.com\/journal\//.test(changeInfo.url) ||
-      /http:.*deviantart.com\/blog\//.test(changeInfo.url)
-    ) &&
-    Prefs.useHTTPS.get()
-  ) {
-    chrome.tabs.update(tabId, {url: changeInfo.url.replace(/^http:/, "https:")});
-  }
-}
-
 function onMessage(request, sender, callback) {
   switch (request.action) {
     case "seenInbox":
@@ -71,7 +58,6 @@ function onMessage(request, sender, callback) {
 // Enabling event handlers
 
 chrome.runtime.onMessage.addListener(onMessage);
-chrome.tabs.onUpdated.addListener(OnTabUpdateHandler);
 
 var relNotesVersion = 28; // FIXME: HAAAAAAAX!
 
