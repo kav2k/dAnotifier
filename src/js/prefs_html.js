@@ -151,7 +151,7 @@ function HTMLControl_addCheckmarkRow(args) {
   HTML += "</td><td>";
   HTML += "<b>" + args.pref.name + "</b>";
   HTML += args.comment || "";
-  HTML += '"<span id="pref-"' + args.pref.key + '-err"></span>';
+  HTML += '<span id="pref-' + args.pref.key + '-err"></span>';
   HTML += "</td></tr>";
 
   args.parent.innerHTML += HTML;
@@ -185,7 +185,6 @@ function HTMLControl_addEnum(args) {
     HTML += "<td><b>" + args.pref.fields[field] + "</b></td>";
     HTML += "</tr>";
   }
-  //HTML += '<span id="pref-' + args.pref.key +'-err"></span>';
 
   args.parent.innerHTML += HTML;
 
@@ -219,7 +218,6 @@ function HTMLControl_addEnum(args) {
 
     this.saveHTML = function() {
       var result = this.set(this.HTMLControl.get());
-      //document.getElementById('pref-' + this.key + '-err').innerHTML = result.message;
     };
 
     this.HTMLControl.set(this.get());
@@ -268,26 +266,6 @@ function HTMLControl_addCheckArrayHeader(args) {
 
   args.parent.innerHTML += HTML;
 }
-
-/* function HTMLControl_addCheckArraySpan(args) {
-  var n = 0;
-  for(var field in args.pref.fields) n++;
-
-  var HTML = '<tr><td colspan=' + (n+1) + ' class="span">';
-  HTML += '<i><b>'+args.name+'</b></i>';
-  HTML += "</td></tr>";
-
-  args.parent.innerHTML += HTML;
-} */
-
-/* function HTMLControl_addCheckArraySpan(args) {
-  var HTML = '<tr><td class="span">';
-  HTML += '<i><b>'+args.name+'</b></i></td>';
-  for(var field in args.pref.fields) HTML += '<td></td>';
-  HTML += "</tr>";
-
-  args.parent.innerHTML += HTML;
-}*/
 
 function HTMLControl_addCheckArraySpan(args) {
   var HTML = '<tr class="span"><td></td>';
