@@ -118,13 +118,13 @@ function DN_RichOnButtonClick(id, button){
 				chrome.notifications.clear(id, function(){});
 				break;
 			case 1:
-				chrome.runtime.sendMessage({'action' : 'seenInbox'});
-				chrome.runtime.sendMessage({'action' : 'clearPopupNew'});
+				onMessage({'action' : 'seenInbox'});
+				onMessage({'action' : 'clearPopupNew'});
 				break;
 		}
 	} else {
-		chrome.runtime.sendMessage({'action' : 'seenInbox'});
-		chrome.runtime.sendMessage({'action' : 'clearPopupNew'});
+		onMessage({'action' : 'seenInbox'});
+		onMessage({'action' : 'clearPopupNew'});
 	}
 }
 
