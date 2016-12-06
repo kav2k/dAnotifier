@@ -9,9 +9,9 @@ var loggedOut = false;
 // Plugin options
 
 // Badge colors
-var COLOR_ACTIVE = {color: [208, 0, 24, 128]}; // TODO: make adjustable
-var COLOR_DEBUG = {color: [0, 150, 0, 128]};
-var COLOR_INACTIVE = {color: [24, 24, 24, 128]};
+var COLOR_ACTIVE = {color: [208, 0, 24, 255]}; // TODO: make adjustable
+var COLOR_DEBUG = {color: [0, 150, 0, 255]};
+var COLOR_INACTIVE = {color: [24, 24, 24, 255]};
 
 // *** Event handlers
 
