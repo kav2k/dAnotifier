@@ -227,6 +227,7 @@ function P_createContainer(data) {
 function P_createClassHeader(ac_data, ac, skip_new) {
   var element = $('<td class="entry class_header">');
   element.click(function(e) { P_onEntryClick(ac, e); });
+  element.on("auxclick", function(e) { P_onEntryClickAux(ac, e); });
 
   element.text(
     ac_data.count + " " + ((ac_data.count == 1) ? ac_data.S : ac_data.P)
@@ -244,6 +245,7 @@ function P_createClassHeader(ac_data, ac, skip_new) {
 function P_createEntry(type, data, skip_new) {
   var element = $('<td class="entry">', {id: "entry-" +  type});
   element.click(function(e) { P_onEntryClick(messagesInfo[type].UP, e); });
+  element.on("auxclick", function(e) { P_onEntryClickAux(messagesInfo[type].UP, e); });
 
   element.text(
     data.counts[type] + " " +
@@ -265,6 +267,7 @@ function P_createGroupEntry(type, data, id, skip_new) {
 
   var element = $('<td class="entry">', {id: "entry-" + id + "-" +  type});
   element.click(function(e) { P_onEntryClick(id, e); });
+  element.on("auxclick", function(e) { P_onEntryClickAux(id, e); });
 
   element.text(
     data.counts[type] + " " +
@@ -335,6 +338,20 @@ function P_createFooter(data) {
 /** UTILITY FUNCTIONS **/
 
 function P_onEntryClick(type, e) {
+  var alt = (e.metaKey || e.ctrlKey || e.shiftKey || e.button == 1);
+
+  P_openMC(type, alt);
+
+  if (type.match(/^\d+$/)) {
+    $("#P_group-" + type + " .entry").addClass("entry_seen");
+  } else {
+    $("#entry-" + type).addClass("entry_seen");
+  }
+
+  return false;
+}
+
+function P_onEntryClickAux(type, e) {
   var alt = (e.metaKey || e.ctrlKey || e.shiftKey || e.button == 1);
 
   P_openMC(type, alt);
