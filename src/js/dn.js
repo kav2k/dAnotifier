@@ -42,17 +42,28 @@ function DN_RichNotify() {
   }
   if (entries.length) {
     chrome.notifications.clear("dANotifier");
-    chrome.notifications.create("dANotifier", {
-      type: "basic",
-      title: "New notifications for " + DiFi_folders[DiFi_inboxID].name,
-      message: entries.join("\n"),
-      priority: 1,
-      iconUrl: chrome.runtime.getURL("img/dan_logo2_128_padded.png"),
-      buttons: [{title: "Open all"}, {title: "Dismiss as read"}],
-      isClickable: true
-    });
+
+    if (typeof browser !== "undefined") { // Assume Firefox
+      chrome.notifications.create("dANotifier", {
+        type: "basic",
+        title: "New notifications for " + DiFi_folders[DiFi_inboxID].name,
+        message: entries.join("\n"),
+        iconUrl: chrome.runtime.getURL("img/dan_logo2_128_padded.png")
+      });
+    } else {
+      chrome.notifications.create("dANotifier", {
+        type: "basic",
+        title: "New notifications for " + DiFi_folders[DiFi_inboxID].name,
+        message: entries.join("\n"),
+        priority: 1,
+        iconUrl: chrome.runtime.getURL("img/dan_logo2_128_padded.png"),
+        buttons: [{title: "Open all"}, {title: "Dismiss as read"}],
+        isClickable: true
+      });
+    }
   }
 
+  var timeout = 0;
   for (var name in DN_notificationData.groups) {
     var id = DN_notificationData.groups[name].id;
     var has_new = false;
@@ -67,17 +78,35 @@ function DN_RichNotify() {
 
     if (has_new) {
       chrome.notifications.clear("dANotifier-" + id, function() {});
-      chrome.notifications.create("dANotifier-" + id, {
-        type: "basic",
-        title: "New notifications for #" + DiFi_folders[id].name,
-        message: entries.join("\n"),
-        priority: 1,
-        iconUrl: chrome.runtime.getURL("img/dan_logo2_128_padded.png"),
-        buttons: [{title: "Dismiss as read"}],
-        isClickable: true
-      });
+
+      if (typeof browser !== "undefined") { // Assume Firefox
+        timeout += 100;
+        setTimeout(FFCreateNotificationWorkaround(id, entries), timeout);
+      } else {
+        chrome.notifications.create("dANotifier-" + id, {
+          type: "basic",
+          title: "New notifications for #" + DiFi_folders[id].name,
+          message: entries.join("\n"),
+          priority: 1,
+          iconUrl: chrome.runtime.getURL("img/dan_logo2_128_padded.png"),
+          buttons: [{title: "Dismiss as read"}],
+          isClickable: true
+        });
+      }
     }
   }
+}
+
+function FFCreateNotificationWorkaround(id, entries) {
+  return function() {
+    console.log(id, DiFi_folders[id].name, entries);
+    chrome.notifications.create("dANotifier-" + id, {
+      type: "basic",
+      title: "New notifications for #" + DiFi_folders[id].name,
+      message: entries.join("\n"),
+      iconUrl: chrome.runtime.getURL("img/dan_logo2_128_padded.png")
+    });
+  };
 }
 
 function DN_RichOnClick(id) {

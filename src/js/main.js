@@ -61,9 +61,7 @@ chrome.runtime.onMessage.addListener(onMessage);
 
 var relNotesVersion = 28; // FIXME: HAAAAAAAX!
 
-document.addEventListener("DOMContentLoaded", function() {
-  init();
-});
+init();
 
 // *** Init function
 function init() {
@@ -74,9 +72,7 @@ function init() {
 
   initPrefs();
 
-  if (chrome.browserAction.onClicked.hasListeners()) {
-    chrome.browserAction.onClicked.removeListener(OnClickHandler);
-  }
+  chrome.browserAction.onClicked.removeListener(OnClickHandler);
 
   if (Prefs.UIMode.get() == "tooltipOnly") {
     chrome.browserAction.onClicked.addListener(OnClickHandler);

@@ -14,7 +14,7 @@ $(document).ready(function() {
   chrome.runtime.sendMessage({action: "getMCReminder"}, function(response) {
     var target = document.querySelector(".messages-right");
 
-    var observer = new window.WebKitMutationObserver(
+    var observer = new window.MutationObserver(
       function(mutations) {
         chrome.runtime.sendMessage({action: "seenFolder", view: getView()});
         if (response) {
