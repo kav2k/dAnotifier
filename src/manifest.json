@@ -15,7 +15,7 @@
     "default_popup": "popup.html"
   },
   "description": "A notifier for deviantART messages. Keep track of your dA inbox!",
-  "homepage_url": "http://danotifier.deviantart.com/",
+  "homepage_url": "https://danotifier.deviantart.com/",
   "icons": {
     "128": "img/dan_logo2_128_padded.png",
     "48": "img/dan_logo2_48.png",
@@ -46,6 +46,6 @@
     "js/colorize.js",
     "js/lib/mutation-summary.js"
   ],
-  "version": "0.7.7",
+  "version": "0.7.8",
   "manifest_version": 2
 }
