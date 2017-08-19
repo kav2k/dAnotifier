@@ -104,13 +104,6 @@ function initPrefs() {
   });
 
   Prefs.add({
-    key: "useHTTPS",
-    name: "Use HTTPS (use ONLY if dA is URL-blocked)",
-    def: false,
-    validators: [BoolValidator]
-  });
-
-  Prefs.add({
     key: "debug",
     name: "Show debug controls",
     def: false,
@@ -377,12 +370,6 @@ function initPrefsHTML() {
 
   HTMLControl_addCheckmarkRow({
     pref: Prefs.notifyPromoted,
-    images: HTMLControl_checkmarkImages,
-    parent: document.getElementById("prefs-advanced")
-  });
-
-  HTMLControl_addCheckmarkRow({
-    pref: Prefs.useHTTPS,
     images: HTMLControl_checkmarkImages,
     parent: document.getElementById("prefs-advanced")
   });

@@ -250,11 +250,7 @@ function newlineMagic(text) {
 
 // *** URL helper functions
 function getMessagesUrl() {
-  if (Prefs.useHTTPS.get()) {
-    return "https://www.deviantart.com/notifications/";
-  } else {
-    return "http://www.deviantart.com/notifications/";
-  }
+  return "https://www.deviantart.com/notifications/";
 }
 
 function getLoginUrl() {

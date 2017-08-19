@@ -1,9 +1,5 @@
 function DiFi_baseURL() {
-  if (Prefs.useHTTPS.get()) {
-    return "https://www.deviantart.com/global/difi.php";
-  } else {
-    return "http://www.deviantart.com/global/difi.php";
-  }
+  return "https://www.deviantart.com/global/difi.php";
 }
 
 function DiFi_JSONrequest(request, id, callback) {

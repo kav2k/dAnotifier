@@ -370,7 +370,7 @@ function P_openMC(type, alt) {
 }
 
 function P_openURL(url) {
-  url = (Prefs.useHTTPS.get() ? "https://" : "http://") + url.toLowerCase();
+  url = "https://" + url.toLowerCase();
   chrome.runtime.sendMessage({action: "openURL", url: url});
 }
 
