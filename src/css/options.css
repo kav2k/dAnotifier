@@ -94,6 +94,7 @@ text-decoration: none;
 .field {
   margin-left: 30px;
   margin-right: 30px;
+  white-space: nowrap;
 }
 
 .array {
