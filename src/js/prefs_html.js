@@ -127,7 +127,7 @@ function HTMLControl_addInputFieldRow(args) {
     this.HTMLControl.set = function(value) { this.value = (value / args.multiplier); };
     this.saveHTML = function() {
       var result = this.set(this.HTMLControl.get());
-      $(`#pref-${this.key}-err`).text(result.message);
+      $(`#pref-${this.key}-err`).empty().append($(result.message));
     };
 
     this.HTMLControl.set(this.get());
@@ -160,7 +160,7 @@ function HTMLControl_addCheckmarkRow(args) {
     this.HTMLControl.images = args.images;
     this.saveHTML = function() {
       var result = this.set(this.HTMLControl.get());
-      $(`#pref-${this.key}-err`).text(result.message);
+      $(`#pref-${this.key}-err`).empty().append($(result.message));
     };
 
     this.HTMLControl.set(this.get());
@@ -239,7 +239,7 @@ function HTMLControl_addCheckmarkImmediateRow(args) {
     this.HTMLControl.images = args.images;
     this.saveHTML = function() {
       var result = this.set(this.HTMLControl.get());
-      $(`#pref-${this.key}-err`).text(result.message);
+      $(`#pref-${this.key}-err`).empty().append($(result.message));
     };
 
     this.HTMLControl.set(this.get());
@@ -311,7 +311,7 @@ function HTMLControl_addCheckArrayRow(args) {
 
     this.saveHTML = function() {
       var result = this.set(this.HTMLControl.get());
-      $(`#pref-${this.key}-err`).text(result.message);
+      $(`#pref-${this.key}-err`).empty().append($(result.message));
     };
 
     this.HTMLControl.set(this.get());
