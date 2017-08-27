@@ -1,4 +1,4 @@
-var HTMLControl_checkmarkImages = {
+const HTMLControl_checkmarkImages = {
   on: "img/checkmark_active.svg",
   off: "img/checkmark_inactive.svg",
   disabled: "img/checkmark_disabled.svg"
@@ -7,11 +7,7 @@ var HTMLControl_checkmarkImages = {
 function HTMLControl_checkmarkToggle() {
   if (!this.enabled) { return; }
 
-  if (this.value) {
-    this.value = false;
-  } else {
-    this.value = true;
-  }
+  this.value = !(this.value);
 
   this.update();
   markDirty();
@@ -36,11 +32,7 @@ function HTMLControl_EnumToggle() {
 function HTMLControl_checkmarkImmediateToggle() {
   if (!this.enabled) { return; }
 
-  if (this.value) {
-    this.value = false;
-  } else {
-    this.value = true;
-  }
+  this.value = !(this.value);
 
   this.update();
   save();
@@ -123,7 +115,7 @@ function HTMLControl_addInputFieldRow(args) {
 
   args.multiplier = args.multiplier || 1;
 
-  args.parent.innerHTML += HTML;
+  $(HTML).appendTo(args.parent);
   if (args.size) {
     document.getElementById("pref-" + args.pref.key).style.width = args.size;
     document.getElementById("pref-" + args.pref.key).style.textAlign = "center";
@@ -135,7 +127,7 @@ function HTMLControl_addInputFieldRow(args) {
     this.HTMLControl.set = function(value) { this.value = (value / args.multiplier); };
     this.saveHTML = function() {
       var result = this.set(this.HTMLControl.get());
-      document.getElementById("pref-" + this.key + "-err").innerHTML = result.message;
+      $(`#pref-${this.key}-err`).text(result.message);
     };
 
     this.HTMLControl.set(this.get());
@@ -154,7 +146,7 @@ function HTMLControl_addCheckmarkRow(args) {
   HTML += '<span id="pref-' + args.pref.key + '-err"></span>';
   HTML += "</td></tr>";
 
-  args.parent.innerHTML += HTML;
+  $(HTML).appendTo(args.parent);
 
   args.pref.initHTMLControl = function() {
     this.HTMLControl = document.getElementById("pref-" + this.key);
@@ -168,7 +160,7 @@ function HTMLControl_addCheckmarkRow(args) {
     this.HTMLControl.images = args.images;
     this.saveHTML = function() {
       var result = this.set(this.HTMLControl.get());
-      document.getElementById("pref-" + this.key + "-err").innerHTML = result.message;
+      $(`#pref-${this.key}-err`).text(result.message);
     };
 
     this.HTMLControl.set(this.get());
@@ -186,7 +178,7 @@ function HTMLControl_addEnum(args) {
     HTML += "</tr>";
   }
 
-  args.parent.innerHTML += HTML;
+  $(HTML).appendTo(args.parent);
 
   args.pref.initHTMLControl = function() {
     this.HTMLControl = {};
@@ -233,7 +225,7 @@ function HTMLControl_addCheckmarkImmediateRow(args) {
   HTML += '<span id="pref-' + args.pref.key + '-err"></span>';
   HTML += "</td></tr>";
 
-  args.parent.innerHTML += HTML;
+  $(HTML).appendTo(args.parent);
 
   args.pref.initHTMLControl = function() {
     this.HTMLControl = document.getElementById("pref-" + this.key);
@@ -247,7 +239,7 @@ function HTMLControl_addCheckmarkImmediateRow(args) {
     this.HTMLControl.images = args.images;
     this.saveHTML = function() {
       var result = this.set(this.HTMLControl.get());
-      document.getElementById("pref-" + this.key + "-err").innerHTML = result.message;
+      $(`#pref-${this.key}-err`).text(result.message);
     };
 
     this.HTMLControl.set(this.get());
@@ -264,7 +256,7 @@ function HTMLControl_addCheckArrayHeader(args) {
   }
   HTML += "</tr>";
 
-  args.parent.innerHTML += HTML;
+  $(HTML).appendTo(args.parent);
 }
 
 function HTMLControl_addCheckArraySpan(args) {
@@ -272,7 +264,7 @@ function HTMLControl_addCheckArraySpan(args) {
   for (var field in args.pref.fields) { HTML += "<td></td>"; }
   HTML += "</tr>";
 
-  args.parent.innerHTML += HTML;
+  $(HTML).appendTo(args.parent);
 }
 
 function HTMLControl_addCheckArrayRow(args) {
@@ -287,7 +279,7 @@ function HTMLControl_addCheckArrayRow(args) {
   }
   HTML += "</tr>";
 
-  args.parent.innerHTML += HTML;
+  $(HTML).appendTo(args.parent);
 
   args.pref.initHTMLControl = function() {
 
@@ -319,7 +311,7 @@ function HTMLControl_addCheckArrayRow(args) {
 
     this.saveHTML = function() {
       var result = this.set(this.HTMLControl.get());
-      document.getElementById("pref-" + this.key + "-err").innerHTML = result.message;
+      $(`#pref-${this.key}-err`).text(result.message);
     };
 
     this.HTMLControl.set(this.get());
