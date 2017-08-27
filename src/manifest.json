@@ -24,7 +24,10 @@
   "name": "dA Message Notifier BETA",
   "short_name": "dA Notifier",
   "minimum_chrome_version": "45",
-  "options_page": "options.html",
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": true
+  },
   "permissions": [ 
     "notifications",
     "tabs",
