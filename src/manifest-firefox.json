@@ -1,4 +1,11 @@
 {
+  "applications": {
+    "gecko": {
+      "id": "preview@danotifier.deviantart.com",
+      "strict_min_version": "55.0",
+      "update_url": "https://kashev.me/da-notifier/updates.json"
+    }
+  },
   "background": {
     "scripts" : [
       "js/utils.js",
@@ -21,7 +28,7 @@
     "48": "img/dan_logo2_48.png",
     "16": "img/dan_logo2_16_crisp.png"
   },
-  "name": "dA Message Notifier BETA",
+  "name": "dA Message Notifier PREVIEW",
   "short_name": "dA Notifier",
   "minimum_chrome_version": "45",
   "options_ui": {
@@ -49,6 +56,6 @@
     "js/colorize.js",
     "js/lib/mutation-summary.js"
   ],
-  "version": "0.7.8",
+  "version": "0.8.0",
   "manifest_version": 2
 }
