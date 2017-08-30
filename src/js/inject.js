@@ -1,3 +1,5 @@
+/* global messagesInfo */
+
 chrome.runtime.sendMessage({action: "seenInbox"});
 chrome.runtime.sendMessage({action: "seenFolder", view: getView()});
 

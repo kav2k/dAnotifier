@@ -14,6 +14,7 @@
 // def (object): default value assigned to the preference if in is uninitialized, reset to default or fails validation with no fallback
 //// Note: assumes that the default value passes validation
 
+/* exported Preference */
 function Preference(args) {
   this.key = args.key;
   this.name = args.name;
@@ -118,6 +119,7 @@ var wrapFailMessage = function(text) {
 
 //// Standard validators
 
+/* exported NonEmptyValidator */
 var NonEmptyValidator = function(input) {
   if (input) {
     wrapPassMessage();
@@ -128,6 +130,7 @@ var NonEmptyValidator = function(input) {
 
 // Type
 
+/* exported IntValidator */
 var IntValidator = function(input) {
   if (isFinite(input) && (input == Math.round(input))) {
     return wrapPassMessage();
@@ -136,6 +139,7 @@ var IntValidator = function(input) {
   }
 };
 
+/* exported FloatValidator */
 var FloatValidator = function(input) {
   if (isFinite(input)) {
     return wrapPassMessage();
@@ -144,10 +148,13 @@ var FloatValidator = function(input) {
   }
 };
 
-var StringValidator = function(input) { return wrapPassMessage(); };
+/* exported StringValidator */
+var StringValidator = function() { return wrapPassMessage(); };
 
-var ArrayValidator = function(input) { return wrapPassMessage(); };
+/* exported ArrayValidator */
+var ArrayValidator = function() { return wrapPassMessage(); };
 
+/* exported JSONFieldsValidator */
 var JSONFieldsValidator = function(input, pref) {
   var messages = "";
   var status = "PASS";
@@ -177,8 +184,9 @@ var JSONFieldsValidator = function(input, pref) {
   }
 };
 
+/* exported BoolValidator */
 var BoolValidator = function(input) {
-  if (typeof(input) == "boolean") {
+  if (typeof input === "boolean") {
     return wrapPassMessage();
   } else {
     return wrapFailMessage("Must be a boolean value (user should never see this!)");
@@ -187,6 +195,7 @@ var BoolValidator = function(input) {
 
 // Comparison
 
+/* exported PositiveValidator */
 var PositiveValidator = function(input) {
   if (input <= 0) {
     return wrapFailMessage("Must be positive");
@@ -195,6 +204,7 @@ var PositiveValidator = function(input) {
   }
 };
 
+/* exported GTValidator */
 var GTValidator = function(min) {
   return function(input) {
     if (input < min) {
@@ -205,6 +215,7 @@ var GTValidator = function(min) {
   };
 };
 
+/* exported LTValidator */
 var LTValidator = function(max) {
   return function(input) {
     if (input > max) {
@@ -215,6 +226,7 @@ var LTValidator = function(max) {
   };
 };
 
+/* exported BetweenValidator */
 var BetweenValidator = function(min, max) {
   return function(input) {
     if ((input > max) || (input < min)) {
@@ -225,6 +237,7 @@ var BetweenValidator = function(min, max) {
   };
 };
 
+/* exported EnumValidator */
 function EnumValidator(values) {
   return function(input) {
     if (values.indexOf(input) > -1) { return wrapPassMessage(); }
@@ -235,6 +248,7 @@ function EnumValidator(values) {
 // Special time comparisons (incomplete)
 // Differ only in error messages
 
+/* exported GTValidatorSeconds */
 var GTValidatorSeconds = function(min) {
   return function(input) {
     if (input < min) {
@@ -245,6 +259,7 @@ var GTValidatorSeconds = function(min) {
   };
 };
 
+/* exported GTValidatorMinutes */
 var GTValidatorMinutes = function(min) {
   return function(input) {
     if (input < min) {

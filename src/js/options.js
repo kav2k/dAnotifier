@@ -1,3 +1,4 @@
+/* global handleOnClick, Prefs, initPrefs, initPrefsHTML */
 document.addEventListener("DOMContentLoaded", function() {
   handleOnClick("save-button", save);
   handleOnClick("revert-button", revert);
@@ -49,6 +50,7 @@ function reset() {
   }
 }
 
+/* exported markDirty */
 function markDirty() {
   document.getElementById("save-button").disabled = false;
 }

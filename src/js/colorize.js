@@ -1,26 +1,5 @@
+/* global MutationSummary */
 (function() {
-  function color(val) {
-    var newColor     = {r: 255, g: 215, b:   0};
-    var defaultColor = {r: 204, g: 215, b: 204};
-    var blended = blendColor(newColor, defaultColor, val);
-    return colorToRGB(blended);
-  }
-
-  function blendColor(first, second, value) {
-    if (value < 0 || value > 1) {
-      throw Error("Blend value outside [0;1] range");
-    }
-    var blend = {};
-    blend.r = first.r + value * (second.r - first.r);
-    blend.g = first.g + value * (second.g - first.g);
-    blend.b = first.b + value * (second.b - first.b);
-    return blend;
-  }
-
-  function colorToRGB(color) {
-    return "rgb(" + Math.round(color.r) + ", " + Math.round(color.g) + ", " + Math.round(color.b) + ")";
-  }
-
   function normalize(x) {
     var x1 = 1000 * 60 * 5; // 5 minutes
     var x2 = 1000 * 60 * 60 * 24 * 1.5; // 3 days
@@ -51,7 +30,7 @@
     summaries[0].added.forEach(function(el) { colorize.call(el); });
   }
 
-  var observer = new MutationSummary({
+  new MutationSummary({
     callback: changeHandler,
     queries: [{element: ".mc-ctrl", elementAttributes: "class"}]
   });

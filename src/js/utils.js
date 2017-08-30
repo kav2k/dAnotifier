@@ -1,5 +1,7 @@
-var traceRegexp = /chrome-extension:\/\/\w*\//g;
+/* global Prefs */
+const traceRegexp = /chrome-extension:\/\/\w*\//g;
 
+/* exported getTimestamp */
 function getTimestamp() {
   var d = new Date();
 
@@ -8,6 +10,7 @@ function getTimestamp() {
   return pad(d.getHours()) + ":" + pad(d.getMinutes()) + ":" + pad(d.getSeconds());
 }
 
+/* exported getExtTimestamp */
 function getExtTimestamp(ts) {
   var d = new Date(ts * 1000);
 
@@ -17,17 +20,18 @@ function getExtTimestamp(ts) {
   return (d.getDate() + " " + months[d.getMonth()] + ", " + d.getFullYear() + ", " + pad(d.getHours()) + ":" + pad(d.getMinutes()));
 }
 
+/* exported playSound */
 function playSound() {
   try {
     if (!Prefs.playSound.get()) { return; }
     document.getElementById("notify_sound").currentTime = 0;
     document.getElementById("notify_sound").play();
-  }
-  catch (e) {
+  } catch (e) {
     console.log(e.stack.replace(traceRegexp, ""));
   }
 }
 
+/* exported messagesInfo */
 var messagesInfo = {
   // Notices
   N: {
@@ -164,14 +168,16 @@ var messagesInfo = {
   }
 };
 
-var groupMessagesInfo = {
+/* exported groupMessagesInfo */
+const groupMessagesInfo = {
   CO: {pref: "followGroupCorrespondence", feed: false},
   N: {pref: "followGroupNotices", feed: false},
   C: {pref: "followGroupComments", feed: true},
   A: {pref: "followGroupActivity", feed: true}
 };
 
-var aggregateClasses = [
+/* exported aggregateClasses */
+const aggregateClasses = [
   {
     S: "Notice",
     P: "Notices",
@@ -219,6 +225,7 @@ var aggregateClasses = [
   }
 ];
 
+/* exported prepText */
 // Combined text preparation for the tooltip
 function prepText(text) {
   text = text.replace("<br>","\n");
@@ -249,6 +256,7 @@ function newlineMagic(text) {
 }
 
 // *** URL helper functions
+/* exported getMessagesUrl, getLoginUrl */
 function getMessagesUrl() {
   return "https://www.deviantart.com/notifications/";
 }
@@ -326,14 +334,17 @@ function messageClassURL(type) {
   }
 }
 
+/* exported goToMTUrl */
 function goToMTUrl(type, distinct, background) {
   goToUrl(messageClassURL(type), distinct, background);
 }
 
+/* exported handleOnClick */
 function handleOnClick(id, func) {
-  document.getElementById(id).addEventListener("click", function(e) { func(); });
+  document.getElementById(id).addEventListener("click", () => { func(); });
 }
 
+/* exported copyTextToClipboard */
 function copyTextToClipboard(text) {
   var copyFrom = $("<textarea/>");
   copyFrom.text(text);

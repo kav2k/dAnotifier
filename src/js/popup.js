@@ -1,3 +1,6 @@
+/* global initPrefs, Prefs, messagesInfo, groupMessagesInfo */
+/* global errorCritical, errorText, copyTextToClipboard, goToUrl, getLoginUrl */
+
 /** TOP LEVEL CODE **/
 
 $(document).ready(function() {
@@ -94,11 +97,9 @@ function P_createHeader(data) {
         .append($('<div class="raw_hint">Click to copy:</div>'))
         .append($("<div id='raw_data'>" + data.error.raw.replace(/\n\s*/g, "<br>") + "</div>"));
 
-      raw_display.click(
-        function(e) {
-          copyTextToClipboard(data.error.raw);
-        }
-      );
+      raw_display.click(function() {
+        copyTextToClipboard(data.error.raw);
+      });
 
       error_display.append(raw_display);
     }
@@ -112,22 +113,22 @@ function P_createHeader(data) {
 function P_createProfileLink(username) {
   return $("<a href='#' />")
     .text(username)
-    .click(function(e) { P_openURL(username + ".deviantart.com/"); });
+    .click(function() { P_openURL(username + ".deviantart.com/"); });
 }
 
 function P_createMCLink(type) {
   return $("<a href='#' />").click(
-    function(e) {
+    function() {
       P_openMC(type || "all");
       return false;
     }
   );
 }
 
-function P_createMarkReadLink(type) {
+function P_createMarkReadLink() {
   return $('<a href="#" />')
     .text("Mark all as read")
-    .click(function(e) {
+    .click(function() {
       chrome.runtime.sendMessage({action: "seenInbox"});
       chrome.runtime.sendMessage({action: "clearPopupNew"});
     });
@@ -145,7 +146,7 @@ function P_createContainer(data) {
   if (data.error && data.error.type == "LOGGED_OUT") {
     var login_button = $('<div class="login_button">')
       .text("Click here to log in")
-      .click(function(e) {goToUrl(getLoginUrl());});
+      .click(function() {goToUrl(getLoginUrl());});
 
     return container.append(login_button);
   }
@@ -180,8 +181,8 @@ function P_createContainer(data) {
 
           for (var t in aClass.types) {
             if (
-                data.folders[id].counts[aClass.types[t]] + data.folders[id].newCounts[aClass.types[t]] > 0 &&
-                !(data.skipNew && data.folders[id].counts[aClass.types[t]] === 0)
+              data.folders[id].counts[aClass.types[t]] + data.folders[id].newCounts[aClass.types[t]] > 0 &&
+              !(data.skipNew && data.folders[id].counts[aClass.types[t]] === 0)
             ) {
               entries = entries.add(
                 P_createGroupEntry(aClass.types[t], data.folders[id], id, data.skipNew)
@@ -274,8 +275,6 @@ function P_createGroupEntry(type, data, id, skip_new) {
     ((data.counts[type] == 1) ? messagesInfo[type].S : messagesInfo[type].P)
   );
 
-  var new_span = $('<span class="new_text">');
-
   if (groupMessagesInfo[type].feed && !skip_new) {
     element.text(
       data.newCounts[type] + ((data.newCounts[type] == Prefs.maxItems.get()) ? "+" : "") + " " +
@@ -315,19 +314,16 @@ function P_createFooter(data) {
 
   var footer_commands = $('<div class="footer">');
 
-  footer_commands
-    .append(
-      $('<a href="#">').text("Options").click(function(e) { P_openOptions(); })
-    ).append(" | ")
-    .append(
-      $('<a href="#">').text("Update now").click(function(e) { P_forceUpdate(); })
-    );
+  footer_commands.append(
+    $('<a href="#">').text("Options").click(() => { P_openOptions(); })
+  ).append(" | ").append(
+    $('<a href="#">').text("Update now").click(() => { P_forceUpdate(); })
+  );
 
   if (Prefs.debug.get()) {
-    footer_commands.append(" | ")
-      .append(
-        $('<a href="#">').text("Time machine!").click(function(e) { P_debugTimestamp(); })
-      );
+    footer_commands.append(" | ").append(
+      $('<a href="#">').text("Time machine!").click(() => { P_debugTimestamp(); })
+    );
   }
 
   footer.append(footer_commands);

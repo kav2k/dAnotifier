@@ -1,3 +1,5 @@
+/* global markDirty, save */
+/* exported HTMLControl_checkmarkImages */
 const HTMLControl_checkmarkImages = {
   on: "img/checkmark_active.svg",
   off: "img/checkmark_inactive.svg",
@@ -103,6 +105,7 @@ function HTMLControl_checkmarkArrayUpdate(indirect) {
   }
 }
 
+/* exported HTMLControl_addInputFieldRow */
 function HTMLControl_addInputFieldRow(args) {
   var HTML = "<tr><td>";
   HTML += '<input type="text" ' +
@@ -136,6 +139,7 @@ function HTMLControl_addInputFieldRow(args) {
   };
 }
 
+/* exported HTMLControl_addCheckmarkRow */
 function HTMLControl_addCheckmarkRow(args) {
 
   var HTML = "<tr><td>";
@@ -169,6 +173,7 @@ function HTMLControl_addCheckmarkRow(args) {
   };
 }
 
+/* exported HTMLControl_addEnum */
 function HTMLControl_addEnum(args) {
   var HTML = "";
   for (var field in args.pref.fields) {
@@ -209,13 +214,14 @@ function HTMLControl_addEnum(args) {
     };
 
     this.saveHTML = function() {
-      var result = this.set(this.HTMLControl.get());
+      this.set(this.HTMLControl.get());
     };
 
     this.HTMLControl.set(this.get());
   };
 }
 
+/* exported HTMLControl_addCheckmarkImmediateRow */
 function HTMLControl_addCheckmarkImmediateRow(args) {
   var HTML = "<tr><td>";
   HTML += "<img " + 'id="pref-' + args.pref.key + '" class="checkmark">';
@@ -248,6 +254,7 @@ function HTMLControl_addCheckmarkImmediateRow(args) {
   };
 }
 
+/* exported HTMLControl_addCheckArrayHeader */
 function HTMLControl_addCheckArrayHeader(args) {
 
   var HTML = "<tr><td></td>";
@@ -259,14 +266,16 @@ function HTMLControl_addCheckArrayHeader(args) {
   $(HTML).appendTo(args.parent);
 }
 
+/* exported HTMLControl_addCheckArraySpan */
 function HTMLControl_addCheckArraySpan(args) {
   var HTML = '<tr class="span"><td></td>';
-  for (var field in args.pref.fields) { HTML += "<td></td>"; }
+  Object.keys(args.pref.fields).forEach(() => {HTML += "<td></td>";});
   HTML += "</tr>";
 
   $(HTML).appendTo(args.parent);
 }
 
+/* exported HTMLControl_addCheckArrayRow */
 function HTMLControl_addCheckArrayRow(args) {
 
   var HTML = '<tr id="pref-' + args.pref.key + '" ';

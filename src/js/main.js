@@ -1,22 +1,27 @@
-// (c) Alexander Kashev, 2010
-// Portions of the code (c) Google, Inc (BSD license) and PostaL2600 (MPL license)
+/* global goToUrl, goToMTUrl, getLoginUrl, getMessagesUrl, prepText */
+/* global DiFi_seenInbox, DiFi_clearPopupNew, DiFi_getLastNewCount, DiFi_doEverything */
+/* global DN_clear */
+/* global Prefs, initPrefs */
+
+/* HALL OF GLOBAL SHAME */
+/* global DiFi_timestamp:true, DiFi_lastTotalCount:true, DiFi_alertTimestamp:true, DiFi_lastTotalNewCount:true, DiFi_lastTotalNewCountApprox:true, DiFi_maxItems:true */
+/* exported DiFi_timestamp, DiFi_alertTimestamp, DiFi_lastTotalNewCount, DiFi_maxItems */
 
 // Global variable to hold current interval id
 var runningInterval;
 // Global variable to hold current login state
 var loggedOut = false;
 
-// Plugin options
-
 // Badge colors
-var COLOR_ACTIVE = {color: [208, 0, 24, 255]}; // TODO: make adjustable
-var COLOR_DEBUG = {color: [0, 150, 0, 255]};
-var COLOR_INACTIVE = {color: [24, 24, 24, 255]};
+/* exported COLOR_ACTIVE, COLOR_DEBUG, COLOR_INACTIVE */
+const COLOR_ACTIVE = {color: [208, 0, 24, 255]}; // TODO: make adjustable
+const COLOR_DEBUG = {color: [0, 150, 0, 255]};
+const COLOR_INACTIVE = {color: [24, 24, 24, 255]};
 
 // *** Event handlers
 
 // Main button click handler
-function OnClickHandler(tab) {
+function OnClickHandler() {
   if (loggedOut) { // If logged out, go to login page instead
     goToUrl(getLoginUrl());
   } else {
@@ -82,7 +87,7 @@ function init() {
   }
 
   if (!localStorage.relnotesver) { localStorage.relnotesver = 0; }
-  if (!(Prefs.hideRelnotes.get()) && (localStorage.relnotesver < relNotesVersion)) {
+  if (!(Prefs.hideRelnotes.get()) && (localStorage.relnotesver < relNotesVersion) && localStorage.relnotesver > relNotesVersion) {
     goToUrl(chrome.runtime.getURL("release_notes.html"));
   }
   localStorage.relnotesver = relNotesVersion;

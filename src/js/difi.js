@@ -1,3 +1,7 @@
+/* global Prefs, handleError, loggedOut:true, DN_notify, COLOR_DEBUG, COLOR_ACTIVE, COLOR_INACTIVE */
+/* global getMessagesUrl, traceRegexp, getTimestamp, getExtTimestamp, prepText, playSound */
+/* global messagesInfo, groupMessagesInfo, aggregateClasses */
+/* exported loggedOut */
 function DiFi_baseURL() {
   return "https://www.deviantart.com/global/difi.php";
 }
@@ -25,45 +29,49 @@ function DiFi_JSONrequest(request, id, callback) {
   };
 
   xhr.onload = function() {
-    loggedOut = false;
+    try {
+      loggedOut = false;
+      let result;
 
-    if (xhr.response) {
-      result = xhr.response;
+      if (xhr.response) {
+        result = xhr.response;
 
-      if (result.DiFi.status == "FAIL" && result.DiFi.response.error == "500 Server Error") {
-        console.log("DEBUG: Outer hiccup");
-        handleError({type: "SERVER_ERROR"});
-        return;
-      }
-
-      if (
-        result.DiFi.response &&
-        result.DiFi.response.calls[0].response.content.error &&
-        result.DiFi.response.calls[0].response.content.error.code == "ERR_DIFI_ACCESS_DENIED"
-      ) {
-        handleError({type: "LOGGED_OUT"});
-        loggedOut = true;
-        return;
-      }
-
-      for (var call of result.DiFi.response.calls) {
-        if (
-          call.response.status == "FAIL" &&
-          call.response.content.error == "500 Server Error"
-        ) {
-          console.log("DEBUG: Inner hiccup");
+        if (result.DiFi.status == "FAIL" && result.DiFi.response.error == "500 Server Error") {
+          console.log("DEBUG: Outer hiccup");
           handleError({type: "SERVER_ERROR"});
           return;
         }
+
+        if (
+          result.DiFi.response &&
+          result.DiFi.response.calls[0].response.content.error &&
+          result.DiFi.response.calls[0].response.content.error.code == "ERR_DIFI_ACCESS_DENIED"
+        ) {
+          handleError({type: "LOGGED_OUT"});
+          loggedOut = true;
+          return;
+        }
+
+        for (var call of result.DiFi.response.calls) {
+          if (
+            call.response.status == "FAIL" &&
+            call.response.content.error == "500 Server Error"
+          ) {
+            console.log("DEBUG: Inner hiccup");
+            handleError({type: "SERVER_ERROR"});
+            return;
+          }
+        }
+      } else {
+        throw 'No data';
       }
-    } else {
+
+      if (DiFi_capturing) { DiFi_capture.folderData[id] = result; }
+      callback(id, result);
+    } catch (e) {
       handleError({type: "PARSE_ERROR", raw: e.stack.replace(traceRegexp, "")});
       console.log(e.stack);
-      return;
     }
-
-    if (DiFi_capturing) { DiFi_capture.folderData[id] = result; }
-    callback(id, result);
   };
 
   xhr.open("GET", DiFi_baseURL() + request, true);
@@ -99,8 +107,7 @@ function DiFi_getInboxID(id, result) {
     if (!found) { throw Error("DiFi: inbox ID missing"); }
 
     getFolderInfo(false);
-  }
-  catch (e) {
+  } catch (e) {
     handleError({type: "INTERNAL_ERROR", raw: e.stack.replace(traceRegexp, "")});
     console.log(e.stack);
     return false;
@@ -112,7 +119,6 @@ function DiFi_getInboxID(id, result) {
 var DiFi_foldersToCount;
 
 function getFolderInfo(giveUp) {
-  var needInfo = false;
   DiFi_foldersToCount = [];
 
   try {
@@ -121,7 +127,7 @@ function getFolderInfo(giveUp) {
         var capture = JSON.parse(localStorage.captureData);
         DiFi_folderInfo = capture.folderInfo;
       } else {
-        console.warn("No capture data for id=" + id);
+        console.warn("No capture folderInfo data");
       }
     }
 
@@ -147,8 +153,7 @@ function getFolderInfo(giveUp) {
     }
 
     DiFi_countBegin();
-  }
-  catch (e) {
+  } catch (e) {
     handleError({type: "INTERNAL_ERROR", raw: e.stack.replace(traceRegexp, "")});
     console.log(e.stack);
     return false;
@@ -225,14 +230,14 @@ function DiFi_countNext() {
     DiFi_folders[id].newCounts = zeroObject();
     DiFi_folders[id].highestTimestamps = zeroObject();
     switch (DiFi_folders[id].type) {
-    case "inbox":
-      DiFi_JSONrequest(DiFi_allMessagesRequest(id), id, DiFi_countMessages);
-      return;
-    case "group":
-      DiFi_JSONrequest(DiFi_groupMessagesRequest(id), id, DiFi_countGroupMessages);
-      return;
-    default:
-      DiFi_countNext();
+      case "inbox":
+        DiFi_JSONrequest(DiFi_allMessagesRequest(id), id, DiFi_countMessages);
+        return;
+      case "group":
+        DiFi_JSONrequest(DiFi_groupMessagesRequest(id), id, DiFi_countGroupMessages);
+        return;
+      default:
+        DiFi_countNext();
     }
   } else {
     DiFi_countEnd();
@@ -272,13 +277,19 @@ function DiFi_countEnd() {
   DiFi_updateTooltip();
 }
 
+/* exported DiFi_getLastNewCount */
 function DiFi_getLastNewCount(request) {
   var folder = request.folder || DiFi_inboxID || undefined;
   if (folder) {
     if (DiFi_lastNewCounts.folders[folder][request.type]) {
+      let boundedCount;
+      if (DiFi_lastNewCounts.folders[folder][request.type] == DiFi_maxItems) {
+        boundedCount = DiFi_maxItems + "+";
+      } else {
+        boundedCount = DiFi_lastNewCounts.folders[folder][request.type];
+      }
       return {
-        count: (DiFi_lastNewCounts.folders[folder][request.type] == DiFi_maxItems) ?
-          DiFi_maxItems + "+" : DiFi_lastNewCounts.folders[folder][request.type],
+        count: boundedCount,
         ts: DiFi_lastNewCounts.ts
       };
     } else { return {error: true}; }
@@ -328,8 +339,7 @@ function DiFi_countMessages(id, result) {
     }
 
     DiFi_countNext();
-  }
-  catch (e) {
+  } catch (e) {
     handleError({type: "INTERNAL_ERROR", raw: e.stack.replace(traceRegexp, "")});
     console.log(e.stack);
     return false;
@@ -401,15 +411,12 @@ function DiFi_countGroupMessages(id, result) {
     }
 
     DiFi_countNext();
-  }
-  catch (e) {
+  } catch (e) {
     handleError({type: "INTERNAL_ERROR", raw: e.stack.replace(traceRegexp, "")});
     console.log(e.stack);
     return false;
   }
 }
-
-var currentTooltip = "";
 
 function DiFi_updateTooltip() {
   var title;
@@ -427,7 +434,6 @@ function DiFi_updateTooltip() {
   }
 
   chrome.browserAction.setTitle({title: title});
-  currentTooltip = title;
 
   DiFi_updatePopup();
 }
@@ -650,7 +656,7 @@ function DiFi_updatePopup() {
 
   popupData.state = "done";
   popupData.refreshing = false;
-  delete(popupData.error);
+  delete popupData.error;
   popupData.skipNew = false;
 
   popupData.lastUpdateAt = getTimestamp();
@@ -673,9 +679,9 @@ function DiFi_updatePopup() {
   DiFi_updateBadge();
 }
 
+/* exported DiFi_clearPopupNew */
 function DiFi_clearPopupNew() {
   popupData.totalNewCount = 0;
-  var totalApprox = false;
   popupData.skipNew = true;
 }
 
@@ -685,7 +691,7 @@ function DiFi_updateBadge() {
   chrome.browserAction.setIcon({path: "img/dan_logo2_19_crisp.png"});
   var badgeText = "";
 
-  switch (Prefs.badgeMode.get()){
+  switch (Prefs.badgeMode.get()) {
     case "all":
       if (DiFi_totalCount) {
         badgeText = DiFi_totalCount + "";
@@ -775,6 +781,7 @@ function DiFi_showDesktopNotification() {
   if (dispatch) { DN_notify(data); }
 }
 
+/* exported DiFi_seenInbox */
 function DiFi_seenInbox() { // Assume user have seen inbox
   DiFi_timestamp = DiFi_highestTimestamp || epochTS();
   if (Prefs.rememberState.get()) { localStorage.lastState_timestamp = DiFi_timestamp; }
@@ -788,6 +795,7 @@ var DiFi_capture = {};
 var DiFi_capturing = false;
 var DiFi_mustCapture = false;
 
+/* exported DiFi_doEverything */
 function DiFi_doEverything() {
   if (DiFi_skipUpdate && DiFi_skipGuard < 5) {
     console.log("Request skipped at " + getTimestamp());
@@ -847,8 +855,8 @@ function dAMC_folderInfoRequest() {
       for (var i in DiFi_folders) {
         if (DiFi_folders[i].type != "inbox") {
           if (
-            ((new RegExp('mcdata="\\\{(.*?' + i + '.*?)\\\}"', "g")).exec(xhr.responseText)) &&
-            /is_group\&quot\;\:true/.test(((new RegExp('mcdata="\\\{(.*?' + i + '.*?)\\\}"', "g")).exec(xhr.responseText))[0])
+            ((new RegExp('mcdata="\\{(.*?' + i + '.*?)\\}"', "g")).exec(xhr.responseText)) &&
+            /is_group&quot;:true/.test(((new RegExp('mcdata="\\{(.*?' + i + '.*?)\\}"', "g")).exec(xhr.responseText))[0])
           ) {
             console.log("Folder: " + i + ", is a group");
             DiFi_folderInfo[i] = {name: DiFi_folders[i].name, type: "group"};
@@ -860,8 +868,7 @@ function dAMC_folderInfoRequest() {
       }
 
       getFolderInfo(true);
-    }
-    catch (e) {
+    } catch (e) {
       handleError({type: "PARSE_ERROR", raw: e.stack.replace(traceRegexp, "")});
       console.log(e.stack);
     }

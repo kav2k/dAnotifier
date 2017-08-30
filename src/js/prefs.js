@@ -1,3 +1,8 @@
+/* global messagesInfo, groupMessagesInfo, aggregateClasses */
+/* global wrapWarnMessage */
+/* global Preference, IntValidator, GTValidatorMinutes, GTValidatorSeconds, BoolValidator, JSONFieldsValidator, EnumValidator */
+/* */
+/* exported Prefs */
 var Prefs = {};
 
 Prefs.add = function(args) {
@@ -7,15 +12,16 @@ Prefs.add = function(args) {
 Prefs.foreach = function(fun) {
   for (var i in this) {
     if (Prefs[i].key) { // Is a Preference
-      if (typeof(fun) == "function") {
+      if (typeof fun === "function") {
         fun(Prefs[i]);
-      } else if (typeof(Prefs[i][fun]) == "function") {
+      } else if (typeof Prefs[i][fun] === "function") {
         Prefs[i][fun]();
       }
     }
   }
 };
 
+/* exported initPrefs */
 function initPrefs() {
   if (Prefs.ready) {
     Prefs.foreach("init");
@@ -218,31 +224,20 @@ var DebugValidator = function(input) {
 
 var PrefMessageEnabler = function(hc) {
   return function(checkmark) {
-    for (var cm in hc.fields) {
-      switch (checkmark.field) {
-        case "count": return !(hc.feed || false);
-        case "watch": return hc.count.value;
-        case "badge": return hc.watch.value && hc.count.value;
-        case "audio": return hc.watch.value && hc.count.value;
-        case "popup": return hc.watch.value && hc.count.value;
-        default: return true;
-      }
+    switch (checkmark.field) {
+      case "count": return !(hc.feed || false);
+      case "watch": return hc.count.value;
+      case "badge": return hc.watch.value && hc.count.value;
+      case "audio": return hc.watch.value && hc.count.value;
+      case "popup": return hc.watch.value && hc.count.value;
+      default:      return true;
     }
   };
 };
 
-var NotificationsEnabler = function(hc) {
-  return function(checkmark) {
-    for (var cm in hc.fields) {
-      switch (checkmark.field) {
-        case "basic": return false;
-        case "rich": return true;
-        default: return true;
-      }
-    }
-  };
-};
-
+/* global HTMLControl_addInputFieldRow, HTMLControl_addCheckmarkRow, HTMLControl_checkmarkImages, HTMLControl_addCheckArrayHeader,
+          HTMLControl_addCheckArraySpan, HTMLControl_addCheckArrayRow, HTMLControl_addEnum, HTMLControl_addCheckmarkImmediateRow */
+/* exported initPrefsHTML */
 function initPrefsHTML() {
   if (Prefs.HTMLready) { return; }
 
@@ -396,6 +391,7 @@ function initPrefsHTML() {
   Prefs.HTMLready = true;
 }
 
+/* exported initPrefsHTML_relnotes */
 function initPrefsHTML_relnotes() {
   if (Prefs.HTMLready) { return; }
 

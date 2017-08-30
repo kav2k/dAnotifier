@@ -13,6 +13,10 @@
  *
  */
 
+/* global getTimestamp, prepText, Prefs, COLOR_INACTIVE, popupData, DN_clear */
+/* global DiFi_lastTotalCount, DiFi_lastTotalNewCount, DiFi_lastTotalNewCountApprox, DiFi_skipUpdate:true */
+/* exported handleError, DiFi_skipUpdate */
+
 function handleError(error) {
   var title = "Last updated: " + getTimestamp() + "\n" + errorText(error) + ((error.raw) ? ("\n" + error.raw) : "");
   var badge = errorBadge(error);
@@ -40,7 +44,7 @@ function handleError(error) {
 
   popupData.error = error;
   if (error.type == "LOGGED_OUT") {
-    delete(popupData.aggregateClasses); // prevent old data from showing after log in
+    delete popupData.aggregateClasses; // prevent old data from showing after log in
     DN_clear();
   }
 

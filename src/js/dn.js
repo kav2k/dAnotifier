@@ -1,6 +1,9 @@
+/* global DiFi_folders, DiFi_inboxID, Prefs, messagesInfo, groupMessagesInfo, goToMTUrl, onMessage */
+
 chrome.notifications.onClicked.addListener(DN_RichOnClick);
 chrome.notifications.onButtonClicked.addListener(DN_RichOnButtonClick);
 
+/* exported DN_notify */
 function DN_notify(data) {
   DN_notificationData = data;
 
@@ -9,6 +12,7 @@ function DN_notify(data) {
   return;
 }
 
+/* exported DN_clear */
 function DN_clear() {
   chrome.notifications.clear("dANotifier");
   for (var id in DiFi_folders) {
@@ -146,7 +150,7 @@ function DN_RichOnButtonClick(id, button) {
   }
 }
 
-function DN_TextEntry(type, data, id) {
+function DN_TextEntry(type, data) {
   return data[type].count + " " +
          ((data[type].feed) ? "Feed " : "") +
          ((data[type].count == 1) ? messagesInfo[type].S : messagesInfo[type].P);
