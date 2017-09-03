@@ -1,21 +1,23 @@
 /* global markDirty, save */
-/* exported HTMLControl_checkmarkImages */
-const HTMLControl_checkmarkImages = {
+/* exported HTMLControl */
+var HTMLControl = {};
+
+HTMLControl.checkmarkImages = {
   on: "img/checkmark_active.svg",
   off: "img/checkmark_inactive.svg",
   disabled: "img/checkmark_disabled.svg"
 };
 
-function HTMLControl_checkmarkToggle() {
+HTMLControl.checkmarkToggle = function() {
   if (!this.enabled) { return; }
 
   this.value = !(this.value);
 
   this.update();
   markDirty();
-}
+};
 
-function HTMLControl_EnumToggle() {
+HTMLControl.EnumToggle = function() {
   if (!this.enabled) { return; }
 
   if (this.value) {
@@ -29,18 +31,18 @@ function HTMLControl_EnumToggle() {
 
   this.update();
   markDirty();
-}
+};
 
-function HTMLControl_checkmarkImmediateToggle() {
+HTMLControl.checkmarkImmediateToggle = function() {
   if (!this.enabled) { return; }
 
   this.value = !(this.value);
 
   this.update();
   save();
-}
+};
 
-function HTMLControl_checkmarkUpdate() {
+HTMLControl.checkmarkUpdate = function() {
   this.enabled = this.enabler(this);
   if (!this.enabled) {
     this.src = this.images.disabled;
@@ -55,9 +57,9 @@ function HTMLControl_checkmarkUpdate() {
     this.alt = "unchecked";
     this.style.cursor = "pointer";
   }
-}
+};
 
-function HTMLControl_EnumUpdate(indirect) {
+HTMLControl.EnumUpdate = function(indirect) {
   if (!indirect) { // Broadcast update
     for (var field in this.parentControl.fields) {
       this.parentControl[field].update(true);
@@ -79,9 +81,9 @@ function HTMLControl_EnumUpdate(indirect) {
     this.alt = "unchecked";
     this.style.cursor = "pointer";
   }
-}
+};
 
-function HTMLControl_checkmarkArrayUpdate(indirect) {
+HTMLControl.checkmarkArrayUpdate = function(indirect) {
   if (!indirect) { // Broadcast update
     for (var field in this.parentControl.fields) {
       this.parentControl[field].update(true);
@@ -103,10 +105,9 @@ function HTMLControl_checkmarkArrayUpdate(indirect) {
     this.alt = "unchecked";
     this.style.cursor = "pointer";
   }
-}
+};
 
-/* exported HTMLControl_addInputFieldRow */
-function HTMLControl_addInputFieldRow(args) {
+HTMLControl.addInputFieldRow = function(args) {
   var HTML = "<tr><td>";
   HTML += '<input type="text" ' +
     'id="pref-' + args.pref.key + '">';
@@ -137,11 +138,9 @@ function HTMLControl_addInputFieldRow(args) {
 
     this.HTMLControl.oninput = markDirty;
   };
-}
+};
 
-/* exported HTMLControl_addCheckmarkRow */
-function HTMLControl_addCheckmarkRow(args) {
-
+HTMLControl.addCheckmarkRow = function(args) {
   var HTML = "<tr><td>";
   HTML += "<img " + 'id="pref-' + args.pref.key + '" class="checkmark">';
   HTML += "</td><td>";
@@ -160,7 +159,7 @@ function HTMLControl_addCheckmarkRow(args) {
       this.update();
     };
     this.HTMLControl.enabler = args.enabler || (function() {return true;});
-    this.HTMLControl.update = HTMLControl_checkmarkUpdate;
+    this.HTMLControl.update = HTMLControl.checkmarkUpdate;
     this.HTMLControl.images = args.images;
     this.saveHTML = function() {
       var result = this.set(this.HTMLControl.get());
@@ -169,12 +168,11 @@ function HTMLControl_addCheckmarkRow(args) {
 
     this.HTMLControl.set(this.get());
 
-    this.HTMLControl.onclick = HTMLControl_checkmarkToggle;
+    this.HTMLControl.onclick = HTMLControl.checkmarkToggle;
   };
-}
+};
 
-/* exported HTMLControl_addEnum */
-function HTMLControl_addEnum(args) {
+HTMLControl.addEnum = function(args) {
   var HTML = "";
   for (var field in args.pref.fields) {
     HTML += "<tr>";
@@ -193,8 +191,8 @@ function HTMLControl_addEnum(args) {
       this.HTMLControl[field] = document.getElementById("pref-" + this.key + "-" + field);
       this.HTMLControl[field].enabler = (args.enabler) ? args.enabler(this.HTMLControl) : (function() {return true;});
       this.HTMLControl[field].images = args.images;
-      this.HTMLControl[field].update = HTMLControl_EnumUpdate;
-      this.HTMLControl[field].onclick = HTMLControl_EnumToggle;
+      this.HTMLControl[field].update = HTMLControl.EnumUpdate;
+      this.HTMLControl[field].onclick = HTMLControl.EnumToggle;
       this.HTMLControl[field].field = field;
       this.HTMLControl[field].parentControl = this.HTMLControl;
     }
@@ -219,10 +217,9 @@ function HTMLControl_addEnum(args) {
 
     this.HTMLControl.set(this.get());
   };
-}
+};
 
-/* exported HTMLControl_addCheckmarkImmediateRow */
-function HTMLControl_addCheckmarkImmediateRow(args) {
+HTMLControl.addCheckmarkImmediateRow = function(args) {
   var HTML = "<tr><td>";
   HTML += "<img " + 'id="pref-' + args.pref.key + '" class="checkmark">';
   HTML += "</td><td>";
@@ -241,7 +238,7 @@ function HTMLControl_addCheckmarkImmediateRow(args) {
       this.update();
     };
     this.HTMLControl.enabler = args.enabler || (function() { return true; });
-    this.HTMLControl.update = HTMLControl_checkmarkUpdate;
+    this.HTMLControl.update = HTMLControl.checkmarkUpdate;
     this.HTMLControl.images = args.images;
     this.saveHTML = function() {
       var result = this.set(this.HTMLControl.get());
@@ -250,13 +247,11 @@ function HTMLControl_addCheckmarkImmediateRow(args) {
 
     this.HTMLControl.set(this.get());
 
-    this.HTMLControl.onclick = HTMLControl_checkmarkImmediateToggle;
+    this.HTMLControl.onclick = HTMLControl.checkmarkImmediateToggle;
   };
-}
+};
 
-/* exported HTMLControl_addCheckArrayHeader */
-function HTMLControl_addCheckArrayHeader(args) {
-
+HTMLControl.addCheckArrayHeader = function(args) {
   var HTML = "<tr><td></td>";
   for (var field in args.pref.fields) {
     HTML += "<td><b>" + args.pref.fields[field].name + "</b></td>";
@@ -264,20 +259,17 @@ function HTMLControl_addCheckArrayHeader(args) {
   HTML += "</tr>";
 
   $(HTML).appendTo(args.parent);
-}
+};
 
-/* exported HTMLControl_addCheckArraySpan */
-function HTMLControl_addCheckArraySpan(args) {
+HTMLControl.addCheckArraySpan = function(args) {
   var HTML = '<tr class="span"><td></td>';
   Object.keys(args.pref.fields).forEach(() => {HTML += "<td></td>";});
   HTML += "</tr>";
 
   $(HTML).appendTo(args.parent);
-}
+};
 
-/* exported HTMLControl_addCheckArrayRow */
-function HTMLControl_addCheckArrayRow(args) {
-
+HTMLControl.addCheckArrayRow = function(args) {
   var HTML = '<tr id="pref-' + args.pref.key + '" ';
   if (args.parity) { HTML += 'class="' + args.parity + '"'; }
   HTML += "><td>";
@@ -299,8 +291,8 @@ function HTMLControl_addCheckArrayRow(args) {
       this.HTMLControl[field] = document.getElementById("pref-" + this.key + "-" + field);
       this.HTMLControl[field].enabler = (args.enabler) ? args.enabler(this.HTMLControl) : (function() {return true;});
       this.HTMLControl[field].images = args.images;
-      this.HTMLControl[field].update = HTMLControl_checkmarkArrayUpdate;
-      this.HTMLControl[field].onclick = HTMLControl_checkmarkToggle;
+      this.HTMLControl[field].update = HTMLControl.checkmarkArrayUpdate;
+      this.HTMLControl[field].onclick = HTMLControl.checkmarkToggle;
       this.HTMLControl[field].field = field;
       this.HTMLControl[field].parentControl = this.HTMLControl;
     }
@@ -325,4 +317,4 @@ function HTMLControl_addCheckArrayRow(args) {
 
     this.HTMLControl.set(this.get());
   };
-}
+};

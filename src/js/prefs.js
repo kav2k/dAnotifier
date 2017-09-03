@@ -231,13 +231,12 @@ var PrefMessageEnabler = function(hc) {
   };
 };
 
-/* global HTMLControl_addInputFieldRow, HTMLControl_addCheckmarkRow, HTMLControl_checkmarkImages, HTMLControl_addCheckArrayHeader,
-          HTMLControl_addCheckArraySpan, HTMLControl_addCheckArrayRow, HTMLControl_addEnum, HTMLControl_addCheckmarkImmediateRow */
+/* global HTMLControl */
 /* exported initPrefsHTML */
 function initPrefsHTML() {
   if (Prefs.HTMLready) { return; }
 
-  HTMLControl_addInputFieldRow({
+  HTMLControl.addInputFieldRow({
     pref: Prefs.refreshInterval,
     size: "30px",
     multiplier: 60000,
@@ -245,25 +244,25 @@ function initPrefsHTML() {
     parent: document.getElementById("prefs-interval")
   });
 
-  HTMLControl_addCheckmarkRow({
+  HTMLControl.addCheckmarkRow({
     pref: Prefs.playSound,
-    images: HTMLControl_checkmarkImages,
+    images: HTMLControl.checkmarkImages,
     parent: document.getElementById("prefs-alert")
   });
 
-  HTMLControl_addCheckmarkRow({
+  HTMLControl.addCheckmarkRow({
     pref: Prefs.showToast,
-    images: HTMLControl_checkmarkImages,
+    images: HTMLControl.checkmarkImages,
     parent: document.getElementById("prefs-alert")
   });
 
-  HTMLControl_addCheckmarkRow({
+  HTMLControl.addCheckmarkRow({
     pref: Prefs.rememberState,
-    images: HTMLControl_checkmarkImages,
+    images: HTMLControl.checkmarkImages,
     parent: document.getElementById("prefs-advanced")
   });
 
-  HTMLControl_addInputFieldRow({
+  HTMLControl.addInputFieldRow({
     pref: Prefs.timeoutInterval,
     size: "30px",
     multiplier: 1000,
@@ -271,7 +270,7 @@ function initPrefsHTML() {
     parent: document.getElementById("prefs-interval")
   });
 
-  HTMLControl_addCheckArrayHeader({
+  HTMLControl.addCheckArrayHeader({
     pref: Prefs.followNotices,
     parent: document.getElementById("prefs-array")
   });
@@ -282,7 +281,7 @@ function initPrefsHTML() {
   for (i in aggregateClasses) {
     if (aggregateClasses[i].special == "group") { continue; }
 
-    HTMLControl_addCheckArraySpan({
+    HTMLControl.addCheckArraySpan({
       pref: Prefs.followNotices,
       name: aggregateClasses[i].P,
       parent: document.getElementById("prefs-array")
@@ -291,9 +290,9 @@ function initPrefsHTML() {
     for (var j in aggregateClasses[i].types) {
       if (messagesInfo[aggregateClasses[i].types[j]].pref) {
         parity = !parity;
-        HTMLControl_addCheckArrayRow({
+        HTMLControl.addCheckArrayRow({
           pref: Prefs[messagesInfo[aggregateClasses[i].types[j]].pref],
-          images: HTMLControl_checkmarkImages,
+          images: HTMLControl.checkmarkImages,
           parent: document.getElementById("prefs-array"),
           //parent: document.getElementById('prefs-array-'+i),
           enabler: PrefMessageEnabler,
@@ -303,7 +302,7 @@ function initPrefsHTML() {
     }
   }
 
-  HTMLControl_addCheckArrayHeader({
+  HTMLControl.addCheckArrayHeader({
     pref: Prefs.followGroupNotices,
     parent: document.getElementById("prefs-group-array")
   });
@@ -311,9 +310,9 @@ function initPrefsHTML() {
   for (i in groupMessagesInfo) {
     if (groupMessagesInfo[i].pref) {
       parity = !parity;
-      HTMLControl_addCheckArrayRow({
+      HTMLControl.addCheckArrayRow({
         pref: Prefs[groupMessagesInfo[i].pref],
-        images: HTMLControl_checkmarkImages,
+        images: HTMLControl.checkmarkImages,
         parent: document.getElementById("prefs-group-array"),
         //parent: document.getElementById('prefs-array-'+i),
         enabler: PrefMessageEnabler,
@@ -322,64 +321,64 @@ function initPrefsHTML() {
     }
   }
 
-  HTMLControl_addCheckmarkRow({
+  HTMLControl.addCheckmarkRow({
     pref: Prefs.hideRelnotes,
-    images: HTMLControl_checkmarkImages,
+    images: HTMLControl.checkmarkImages,
     //comment: " (will display a warning if unset)",
     parent: document.getElementById("prefs-advanced")
   });
 
-  HTMLControl_addEnum({
+  HTMLControl.addEnum({
     pref: Prefs.UIMode,
-    images: HTMLControl_checkmarkImages,
+    images: HTMLControl.checkmarkImages,
     parent: document.getElementById("prefs-ui-mode")
   });
 
-  HTMLControl_addEnum({
+  HTMLControl.addEnum({
     pref: Prefs.tooltipMode,
-    images: HTMLControl_checkmarkImages,
+    images: HTMLControl.checkmarkImages,
     parent: document.getElementById("prefs-tooltip-mode")
   });
 
-  HTMLControl_addEnum({
+  HTMLControl.addEnum({
     pref: Prefs.badgeMode,
-    images: HTMLControl_checkmarkImages,
+    images: HTMLControl.checkmarkImages,
     parent: document.getElementById("prefs-counter-mode")
   });
 
-  HTMLControl_addCheckmarkRow({
+  HTMLControl.addCheckmarkRow({
     pref: Prefs.MCReminder,
-    images: HTMLControl_checkmarkImages,
+    images: HTMLControl.checkmarkImages,
     parent: document.getElementById("prefs-advanced")
   });
 
-  HTMLControl_addCheckmarkRow({
+  HTMLControl.addCheckmarkRow({
     pref: Prefs.MCHighlight,
-    images: HTMLControl_checkmarkImages,
+    images: HTMLControl.checkmarkImages,
     parent: document.getElementById("prefs-advanced")
   });
 
-  HTMLControl_addCheckmarkRow({
+  HTMLControl.addCheckmarkRow({
     pref: Prefs.notifyPromoted,
-    images: HTMLControl_checkmarkImages,
+    images: HTMLControl.checkmarkImages,
     parent: document.getElementById("prefs-advanced")
   });
 
-  HTMLControl_addCheckmarkRow({
+  HTMLControl.addCheckmarkRow({
     pref: Prefs.debug,
-    images: HTMLControl_checkmarkImages,
+    images: HTMLControl.checkmarkImages,
     parent: document.getElementById("prefs-advanced")
   });
 
-  HTMLControl_addCheckmarkRow({
+  HTMLControl.addCheckmarkRow({
     pref: Prefs.useCapture,
-    images: HTMLControl_checkmarkImages,
+    images: HTMLControl.checkmarkImages,
     parent: document.getElementById("prefs-debug")
   });
 
-  HTMLControl_addCheckmarkRow({
+  HTMLControl.addCheckmarkRow({
     pref: Prefs.newlineMagic,
-    images: HTMLControl_checkmarkImages,
+    images: HTMLControl.checkmarkImages,
     parent: document.getElementById("prefs-debug")
   });
 
@@ -391,9 +390,9 @@ function initPrefsHTML() {
 function initPrefsHTML_relnotes() {
   if (Prefs.HTMLready) { return; }
 
-  HTMLControl_addCheckmarkImmediateRow({
+  HTMLControl.addCheckmarkImmediateRow({
     pref: Prefs.hideRelnotes,
-    images: HTMLControl_checkmarkImages,
+    images: HTMLControl.checkmarkImages,
     comment: " (you can unset this later in options)",
     parent: document.getElementById("prefs-relnotes")
   });
