@@ -85,7 +85,7 @@ class Preference {
     return result;
   }
 
-  get get() {
+  get() {
     this.init();
     return this.value;
   }
