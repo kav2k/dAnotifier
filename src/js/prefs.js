@@ -31,8 +31,8 @@ class Preference {
   validate(input) { // Check candidate value with all registered validators
     let messages = "";
     let status = "PASS";
-    for (let i in this.validators) {
-      const result = (this.validators[i])(input, this);
+    for (let validator of this.validators) {
+      const result = validator(input, this);
       messages += result.message;
       if (result.status == "FAIL") {
         status = "FAIL";
@@ -129,12 +129,12 @@ function JSONFieldsValidator(input, pref) {
   let messages = "";
   let status = "PASS";
 
-  for (let i in pref.fields) {
-    if (input[i] === undefined) {
+  for (let field in pref.fields) {
+    if (input[field] === undefined) {
       wrapFailMessage("Wrong JSON structure (user should never see this!)");
     }
-    for (let j in pref.fields.validators) {
-      const result = (this.fields[i].validators[j])(input[i], pref);
+    for (let validator of pref.fields[field].validators) {
+      const result = validator(input[field], pref);
       messages += result.message;
       if (result.status == "FAIL") {
         status = "FAIL";
@@ -201,12 +201,12 @@ Prefs.add = function(args) {
 };
 
 Prefs.foreach = function(fun) {
-  for (let i in this) {
-    if (Prefs[i] instanceof Preference) { // Is a Preference
+  for (let key in this) {
+    if (Prefs[key] instanceof Preference) { // Is a Preference
       if (typeof fun === "function") {
-        fun(Prefs[i]);
-      } else if (typeof Prefs[i][fun] === "function") {
-        Prefs[i][fun]();
+        fun(Prefs[key]);
+      } else if (typeof Prefs[key][fun] === "function") {
+        Prefs[key][fun]();
       }
     }
   }
@@ -253,11 +253,11 @@ Prefs.init = function() {
     validators: [BoolValidator]
   });
 
-  for (let i in messagesInfo) {
-    if (messagesInfo[i].pref) {
+  for (let type in messagesInfo) {
+    if (messagesInfo[type].pref) {
       Prefs.add({
-        key: messagesInfo[i].pref,
-        name: messagesInfo[i].P,
+        key: messagesInfo[type].pref,
+        name: messagesInfo[type].P,
         def: {count: true, watch: true, badge: true, audio: true, popup: true},
         fields: {
           count: {name: "Watch", validators: [BoolValidator]},
@@ -271,11 +271,11 @@ Prefs.init = function() {
     }
   }
 
-  for (let i in groupMessagesInfo) {
-    if (groupMessagesInfo[i].pref) {
+  for (let type in groupMessagesInfo) {
+    if (groupMessagesInfo[type].pref) {
       Prefs.add({
-        key: groupMessagesInfo[i].pref,
-        name: messagesInfo[i].P + ((groupMessagesInfo[i].feed) ? " feed" : ""),
+        key: groupMessagesInfo[type].pref,
+        name: messagesInfo[type].P + ((groupMessagesInfo[type].feed) ? " feed" : ""),
         def: {count: true, watch: true, badge: true, audio: true, popup: true},
         fields: {
           count: {name: "Watch", validators: [BoolValidator]},
@@ -286,7 +286,7 @@ Prefs.init = function() {
         },
         validators: [JSONFieldsValidator]
       });
-      Prefs[groupMessagesInfo[i].pref].feed = groupMessagesInfo[i].feed;
+      Prefs[groupMessagesInfo[type].pref].feed = groupMessagesInfo[type].feed;
     }
   }
 
@@ -468,20 +468,20 @@ Prefs.initHTML = function() {
 
   let parity = true;
 
-  for (let i in aggregateClasses) {
-    if (aggregateClasses[i].special == "group") { continue; }
+  for (let aClass of aggregateClasses) {
+    if (aClass.special == "group") { continue; }
 
     HTMLControl.addCheckArraySpan({
       pref: Prefs.followNotices,
-      name: aggregateClasses[i].P,
+      name: aClass.P,
       parent: document.getElementById("prefs-array")
     });
 
-    for (let j in aggregateClasses[i].types) {
-      if (messagesInfo[aggregateClasses[i].types[j]].pref) {
+    for (let type of aClass.types) {
+      if (messagesInfo[type].pref) {
         parity = !parity;
         HTMLControl.addCheckArrayRow({
-          pref: Prefs[messagesInfo[aggregateClasses[i].types[j]].pref],
+          pref: Prefs[messagesInfo[type].pref],
           images: HTMLControl.checkmarkImages,
           parent: document.getElementById("prefs-array"),
           //parent: document.getElementById('prefs-array-'+i),
@@ -497,11 +497,11 @@ Prefs.initHTML = function() {
     parent: document.getElementById("prefs-group-array")
   });
 
-  for (let i in groupMessagesInfo) {
-    if (groupMessagesInfo[i].pref) {
+  for (let type in groupMessagesInfo) {
+    if (groupMessagesInfo[type].pref) {
       parity = !parity;
       HTMLControl.addCheckArrayRow({
-        pref: Prefs[groupMessagesInfo[i].pref],
+        pref: Prefs[groupMessagesInfo[type].pref],
         images: HTMLControl.checkmarkImages,
         parent: document.getElementById("prefs-group-array"),
         //parent: document.getElementById('prefs-array-'+i),

@@ -21,8 +21,8 @@ $(document).ready(function() {
       function(mutations) {
         chrome.runtime.sendMessage({action: "seenFolder", view: getView()});
         if (response) {
-          for (let i in mutations) {
-            for (let j = 0; j < mutations[i].addedNodes.length; j++) {
+          for (let mutation of mutations) {
+            if (mutation.addedNodes.length) {
               // Fired when a new '.mczone' is added
               appendCounts(); return;
             }

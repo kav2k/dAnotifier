@@ -325,18 +325,18 @@ DiFi.countMessages = function(id, result) {
   try {
     if (result.DiFi.status != "SUCCESS") { throw Error("DiFi: message request failed"); }
 
-    for (let typeIdx in DiFi.types) {
-      if (Prefs.MT(DiFi.types[typeIdx]).count) {
-        DiFi.totalCount += parseInt(DiFi.folders[id].counts[DiFi.types[typeIdx]] = result.DiFi.response.calls[typeIdx].response.content[0].result.matches);
+    DiFi.types.forEach((type, index) => {
+      if (Prefs.MT(type).count) {
+        DiFi.totalCount += parseInt(DiFi.folders[id].counts[type] = result.DiFi.response.calls[index].response.content[0].result.matches);
       }
-    }
+    });
 
     if (DiFi.timestamp) { // gotta count new messages
-      for (let typeIdx in DiFi.types) {
-        if (Prefs.MT(DiFi.types[typeIdx]).count && Prefs.MT(DiFi.types[typeIdx]).watch) {
-          DiFi.parseNew(id, DiFi.types[typeIdx], result.DiFi.response.calls[typeIdx].response.content[0].result);
+      DiFi.types.forEach((type, index) => {
+        if (Prefs.MT(type).count && Prefs.MT(type).watch) {
+          DiFi.parseNew(id, type, result.DiFi.response.calls[index].response.content[0].result);
         }
-      }
+      });
     }
 
     DiFi.countNext();
@@ -386,27 +386,25 @@ DiFi.countGroupMessages = function(id, result) {
   try {
     if (result.DiFi.status != "SUCCESS") { throw Error("DiFi: message request failed"); }
 
-    for (let typeIdx in DiFi.groupTypes) {
-      if (Prefs.GMT(DiFi.groupTypes[typeIdx]).count) {
+    DiFi.groupTypes.forEach((type, index) => {
+      if (Prefs.GMT(type).count) {
         DiFi.totalCount += parseInt(
-          DiFi.folders[id].counts[DiFi.groupTypes[typeIdx]] = result.DiFi.response.calls[typeIdx].response.content[0].result.matches
+          DiFi.folders[id].counts[type] = result.DiFi.response.calls[index].response.content[0].result.matches
         );
       }
-    }
+    });
 
     if (DiFi.timestamp) { // gotta count new messages
-      for (let typeIdx in DiFi.groupTypes) {
-        if (Prefs.GMT(DiFi.groupTypes[typeIdx]).count && Prefs.GMT(DiFi.groupTypes[typeIdx]).watch) {
-          DiFi.parseNew(id, DiFi.groupTypes[typeIdx],
-            result.DiFi.response.calls[typeIdx].response.content[0].result, true);
+      DiFi.groupTypes.forEach((type, index) => {
+        if (Prefs.GMT(type).count && Prefs.GMT(type).watch) {
+          DiFi.parseNew(id, type, result.DiFi.response.calls[index].response.content[0].result, true);
         }
-      }
-      for (let typeIdx in DiFi.groupFeedTypes) {
-        if (Prefs.GMT(DiFi.groupFeedTypes[typeIdx]).count && Prefs.GMT(DiFi.groupFeedTypes[typeIdx]).watch) {
-          DiFi.parseNew(id, DiFi.groupFeedTypes[typeIdx],
-            result.DiFi.response.calls[typeIdx + DiFi.groupTypes.length].response.content[0].result, true);
+      });
+      DiFi.groupFeedTypes.forEach((type, index) => {
+        if (Prefs.GMT(type).count && Prefs.GMT(type).watch) {
+          DiFi.parseNew(id, type, result.DiFi.response.calls[DiFi.groupTypes.length + index].response.content[0].result, true);
         }
-      }
+      });
     }
 
     DiFi.countNext();
