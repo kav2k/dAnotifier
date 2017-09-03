@@ -57,16 +57,16 @@ function onMessage(request, sender, callback) {
 }
 
 // Enabling event handlers
-
 chrome.runtime.onMessage.addListener(onMessage);
 
+// Controls whether we need to show a release notes update
 var relNotesVersion = 28; // FIXME: HAAAAAAAX!
 
 init();
 
 // *** Init function
 function init() {
-  var audio_element = document.createElement("audio");
+  let audio_element = document.createElement("audio");
   audio_element.id = "notify_sound";
   audio_element.src = chrome.runtime.getURL("audio/notify.ogg");
   document.body.appendChild(audio_element);

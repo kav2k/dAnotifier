@@ -47,7 +47,7 @@ DiFi.baseURL = function() {
 DiFi.JSONrequest = function(request, id, callback) {
   if (Prefs.useCapture.get()) {
     if (localStorage.captureData) {
-      var capture = JSON.parse(localStorage.captureData);
+      const capture = JSON.parse(localStorage.captureData);
       if (capture.folderData[id]) {
         callback(id, capture.folderData[id]);
         return;
@@ -56,7 +56,7 @@ DiFi.JSONrequest = function(request, id, callback) {
     console.warn("No capture data for id=" + id);
   }
 
-  var xhr = new XMLHttpRequest();
+  let xhr = new XMLHttpRequest();
 
   xhr.responseType = "json";
 
@@ -89,7 +89,7 @@ DiFi.JSONrequest = function(request, id, callback) {
           return;
         }
 
-        for (var call of result.DiFi.response.calls) {
+        for (let call of result.DiFi.response.calls) {
           if (
             call.response.status == "FAIL" &&
             call.response.content.error == "500 Server Error"
@@ -124,10 +124,10 @@ DiFi.getInboxID = function(id, result) {
   try {
     if (result.DiFi.status != "SUCCESS") { throw Error("DiFi: folder request failed"); }
 
-    var found = false;
+    let found = false;
     DiFi.folders = {};
 
-    for (var folder of result.DiFi.response.calls[0].response.content) {
+    for (let folder of result.DiFi.response.calls[0].response.content) {
       if (folder.is_inbox) {
         DiFi.inboxID = folder.folderid;
         found = true;
@@ -155,14 +155,14 @@ DiFi.getFolderInfo = function(giveUp) {
   try {
     if (Prefs.useCapture.get()) {
       if (localStorage.captureData) {
-        var capture = JSON.parse(localStorage.captureData);
+        const capture = JSON.parse(localStorage.captureData);
         DiFi.folderInfo = capture.folderInfo;
       } else {
         console.warn("No capture folderInfo data");
       }
     }
 
-    for (var i in DiFi.folders) {
+    for (let i in DiFi.folders) {
       if (!DiFi.folderInfo[i]) {
         if (!giveUp) {
           DiFi.folderInfoRequest();
@@ -171,7 +171,7 @@ DiFi.getFolderInfo = function(giveUp) {
           throw Error("dAMC: folderInfo can't be retrieved (" + i + ")");
         }
       } else {
-        for (var j in DiFi.folderInfo[i]) {
+        for (let j in DiFi.folderInfo[i]) {
           DiFi.folders[i][j] = DiFi.folderInfo[i][j];
         }
       }
@@ -229,15 +229,15 @@ DiFi.countBegin = function() {
 
 DiFi.countNext = function() {
   function zeroObject() {
-    var obj = {};
-    for (var key of DiFi.types) {
+    let obj = {};
+    for (let key of DiFi.types) {
       obj[key] = 0;
     }
     return obj;
   }
 
   if (DiFi.foldersToCount.length) {
-    let id = DiFi.foldersToCount.shift();
+    const id = DiFi.foldersToCount.shift();
     DiFi.folders[id].counts = zeroObject();
     DiFi.folders[id].newCounts = zeroObject();
     DiFi.folders[id].highestTimestamps = zeroObject();
@@ -288,7 +288,7 @@ DiFi.countEnd = function() {
 };
 
 DiFi.getLastNewCount = function(request) {
-  var folder = request.folder || DiFi.inboxID || undefined;
+  const folder = request.folder || DiFi.inboxID || undefined;
   if (folder) {
     if (DiFi.lastNewCounts.folders[folder][request.type]) {
       let boundedCount;
@@ -306,8 +306,8 @@ DiFi.getLastNewCount = function(request) {
 };
 
 DiFi.allMessagesRequest = function(folderID) {
-  var queryStr = "?";
-  for (var type in DiFi.types) /*if(Prefs.MT(DiFi.types[type]).count)*/ {
+  let queryStr = "?";
+  for (let type in DiFi.types) /*if(Prefs.MT(DiFi.types[type]).count)*/ {
     queryStr += "c[]=MessageCenter;get_views;" + folderID + DiFi.requestSuffix(DiFi.types[type], 0, DiFi.maxItems);
   }
   queryStr += "t=json";
@@ -315,12 +315,11 @@ DiFi.allMessagesRequest = function(folderID) {
 };
 
 DiFi.groupMessagesRequest = function(folderID) {
-  var queryStr = "?";
-  var type;
-  for (type in DiFi.groupTypes) /*if(Prefs.MT(DiFi.groupTypes[type]).count)*/ {
+  let queryStr = "?";
+  for (let type in DiFi.groupTypes) /*if(Prefs.MT(DiFi.groupTypes[type]).count)*/ {
     queryStr += "c[]=MessageCenter;get_views;" + folderID + DiFi.requestSuffix(DiFi.groupTypes[type], 0, DiFi.maxItems);
   }
-  for (type in DiFi.groupFeedTypes) /*if(Prefs.MT(DiFi.groupTypes[type]).count)*/ {
+  for (let type in DiFi.groupFeedTypes) /*if(Prefs.MT(DiFi.groupTypes[type]).count)*/ {
     queryStr += "c[]=MessageCenter;get_views;" + folderID + DiFi.requestSuffix(DiFi.groupFeedTypes[type], 0, DiFi.maxItems);
   }
   queryStr += "t=json";
@@ -329,18 +328,16 @@ DiFi.groupMessagesRequest = function(folderID) {
 
 DiFi.countMessages = function(id, result) {
   try {
-    var type;
-
     if (result.DiFi.status != "SUCCESS") { throw Error("DiFi: message request failed"); }
 
-    for (type in DiFi.types) {
+    for (let type in DiFi.types) {
       if (Prefs.MT(DiFi.types[type]).count) {
         DiFi.totalCount += parseInt(DiFi.folders[id].counts[DiFi.types[type]] = result.DiFi.response.calls[type].response.content[0].result.matches);
       }
     }
 
     if (DiFi.timestamp) { // gotta count new messages
-      for (type in DiFi.types) {
+      for (let type in DiFi.types) {
         if (Prefs.MT(DiFi.types[type]).count && Prefs.MT(DiFi.types[type]).watch) {
           DiFi.parseNew(id, DiFi.types[type], result.DiFi.response.calls[type].response.content[0].result);
         }
@@ -360,7 +357,7 @@ function epochTS() {
 }
 
 DiFi.compareWho = function(who, username) {
-  var match = who.match(/.*<a.*>(.+)<\/a>/);
+  const match = who.match(/.*<a.*>(.+)<\/a>/);
   if (match) {
     return (match[1] == username);
   } else {
@@ -371,9 +368,9 @@ DiFi.compareWho = function(who, username) {
 DiFi.parseNew = function(id, type, result, group) { // Assumes (DiFi.alertTimestamp >= DiFi.timestamp)
   DiFi.folders[id].newCounts[type] = 0;
 
-  var pref = (group) ? Prefs.GMT : Prefs.MT;
+  const pref = (group) ? Prefs.GMT : Prefs.MT;
 
-  for (var i = 0; i < result.count; i++) {
+  for (let i = 0; i < result.count; i++) {
     DiFi.highestTimestamp = (result.hits[i].ts > DiFi.highestTimestamp) ? result.hits[i].ts : DiFi.highestTimestamp;
     DiFi.folders[id].highestTimestamps[type] =
       (result.hits[i].ts > DiFi.folders[id].highestTimestamps[type]) ? result.hits[i].ts : DiFi.folders[id].highestTimestamps[type];
@@ -426,7 +423,7 @@ DiFi.countGroupMessages = function(id, result) {
 };
 
 DiFi.updateTooltip = function() {
-  var title;
+  let title;
 
   switch (Prefs.tooltipMode.get()) {
     case "full":
@@ -446,7 +443,7 @@ DiFi.updateTooltip = function() {
 };
 
 DiFi.tooltipLine = function(type, count, newCount, feed) {
-  var line;
+  let line;
   if (feed) {
     line = newCount + ((newCount == DiFi.maxItems) ? "+" : "") + " new ";
     line += ((newCount == 1) ? messagesInfo[type].S : messagesInfo[type].P) + " (Feed)";
@@ -460,13 +457,11 @@ DiFi.tooltipLine = function(type, count, newCount, feed) {
 };
 
 DiFi.tooltipBrief = function() {
-  var message_text = "";
-  var newline = true;
-  var type;
+  const title = "Last updated: " + getTimestamp() + " for " + DiFi.folders[DiFi.inboxID].name;
+  let message_text = "";
+  let newline = true;
 
-  var title = "Last updated: " + getTimestamp() + " for " + DiFi.folders[DiFi.inboxID].name;
-
-  for (type in messagesInfo) {
+  for (let type in messagesInfo) {
     if (DiFi.folders[DiFi.inboxID].newCounts[type] > 0) {
       message_text +=
         ((newline) ? "\n" : " ") +
@@ -477,17 +472,17 @@ DiFi.tooltipBrief = function() {
     }
   }
 
-  for (var id in DiFi.folders) {
+  for (let id in DiFi.folders) {
     if (DiFi.folders[id].type == "group") {
-      var has_messages = false;
-      for (type in groupMessagesInfo) {
+      let has_messages = false;
+      for (let type in groupMessagesInfo) {
         if (DiFi.folders[id].newCounts[type]) { has_messages = true; }
       }
       if (!has_messages) { continue; }
 
       message_text += "\n#" + DiFi.folders[id].name + ":";
 
-      for (type in groupMessagesInfo) {
+      for (let type in groupMessagesInfo) {
         if (DiFi.folders[id].newCounts[type] > 0) {
           message_text += " " +
             DiFi.folders[id].newCounts[type] +
@@ -500,34 +495,32 @@ DiFi.tooltipBrief = function() {
 
   if (!message_text) { message_text = "\nNo new notifications"; }
 
-  title += message_text;
+  message_text = title + message_text;
 
-  return prepText(title);
+  return prepText(message_text);
 };
 
 DiFi.tooltipFull = function() {
-  var message_text = "";
-  var type;
+  const title = "Last updated: " + getTimestamp() + " for " + DiFi.folders[DiFi.inboxID].name;
+  let message_text = "";
 
-  var title = "Last updated: " + getTimestamp() + " for " + DiFi.folders[DiFi.inboxID].name;
-
-  for (type in messagesInfo) {
+  for (let type in messagesInfo) {
     if (DiFi.folders[DiFi.inboxID].counts[type] > 0) {
       message_text += "\n> " + DiFi.tooltipLine(type, DiFi.folders[DiFi.inboxID].counts[type], DiFi.folders[DiFi.inboxID].newCounts[type], false);
     }
   }
 
-  for (var id in DiFi.folders) {
+  for (let id in DiFi.folders) {
     if (DiFi.folders[id].type == "group") {
-      var has_messages = false;
-      for (type in groupMessagesInfo) {
+      let has_messages = false;
+      for (let type in groupMessagesInfo) {
         if (DiFi.folders[id].counts[type] > 0 || DiFi.folders[id].newCounts[type]) { has_messages = true; }
       }
       if (!has_messages) { continue; }
 
       message_text += "\n#" + DiFi.folders[id].name + ":";
 
-      for (type in groupMessagesInfo) {
+      for (let type in groupMessagesInfo) {
         if (DiFi.folders[id].counts[type] > 0) {
           message_text += "\n> " + DiFi.tooltipLine(type, DiFi.folders[id].counts[type], DiFi.folders[id].newCounts[type], false);
         } else if (DiFi.folders[id].counts[type] === 0 && DiFi.folders[id].newCounts[type] > 0) { // Feed
@@ -539,21 +532,18 @@ DiFi.tooltipFull = function() {
 
   if (!message_text) { message_text = "\n No Notifications"; }
 
-  title += message_text;
+  message_text = title + message_text;
 
-  return prepText(title);
+  return prepText(message_text);
 };
 
 DiFi.fillAggregation = function() {
-  var aClass;
-  var type;
-
-  for (aClass of aggregateClasses) {
+  for (let aClass of aggregateClasses) {
     if (aClass.special && aClass.special == "group") {
-      for (var id in DiFi.folders) {
+      for (let id in DiFi.folders) {
         if (DiFi.folders[id].type == "group") {
           aClass.groups[id] = {count: 0, newCount: 0, newCountApprox: false};
-          for (type of aClass.types) {
+          for (let type of aClass.types) {
             aClass.groups[id].count += parseInt(DiFi.folders[id].counts[type]);
             aClass.groups[id].newCount += parseInt(DiFi.folders[id].newCounts[type]);
             if (DiFi.folders[id].newCounts[type] == DiFi.maxItems) { aClass.groups[id].newCountApprox = true; }
@@ -564,7 +554,7 @@ DiFi.fillAggregation = function() {
       aClass.count = 0;
       aClass.newCount = 0;
       aClass.newCountApprox = false;
-      for (type of aClass.types) {
+      for (let type of aClass.types) {
         aClass.count += parseInt(DiFi.folders[DiFi.inboxID].counts[type]);
         aClass.newCount += parseInt(DiFi.folders[DiFi.inboxID].newCounts[type]);
         if (DiFi.folders[DiFi.inboxID].newCounts[type] == DiFi.maxItems) { aClass.newCountApprox = true; }
@@ -572,36 +562,33 @@ DiFi.fillAggregation = function() {
     }
   }
 
-  var totalApprox = false;
-  for (aClass of aggregateClasses) { totalApprox = totalApprox || aClass.newCountApprox; }
+  let totalApprox = false;
+  for (let aClass of aggregateClasses) { totalApprox = totalApprox || aClass.newCountApprox; }
   DiFi.totalNewCountApprox = totalApprox;
 };
 
 DiFi.tooltipAggregateLine = function(type, newCount, feed) {
-  var line;
   if (feed) {
-    line = newCount +
+    return newCount +
            ((newCount == DiFi.maxItems) ? "+" : "") +
            " new " +
            ((newCount == 1) ? messagesInfo[type].S : messagesInfo[type].P) +
            " (Feed)";
   } else {
-    line = newCount +
+    return newCount +
            ((newCount == DiFi.maxItems) ? "+" : "") +
            " new " +
            ((newCount == 1) ? messagesInfo[type].S : messagesInfo[type].P);
   }
-  return line;
 };
 
 DiFi.tooltipAggregate = function() {
-  var title = "Last updated: " + getTimestamp() + " for " + DiFi.folders[DiFi.inboxID].name;
-  var message_text = "";
-  var type;
+  const title = "Last updated: " + getTimestamp() + " for " + DiFi.folders[DiFi.inboxID].name;
+  let message_text = "";
 
-  for (var aClass of aggregateClasses) {
+  for (let aClass of aggregateClasses) {
     if (aClass.special && aClass.special == "group") {
-      for (var id in DiFi.folders) {
+      for (let id in DiFi.folders) {
         if (DiFi.folders[id].type == "group" && aClass.groups[id].count + aClass.groups[id].newCount > 0) {
           message_text += "\n\n" + "#" + DiFi.folders[id].name + ": ";
           message_text += aClass.groups[id].count + " " +
@@ -611,7 +598,7 @@ DiFi.tooltipAggregate = function() {
                             aClass.groups[id].newCount +
                             ((aClass.groups[id].newCountApprox) ? "+" : "") +
                             " new)";
-            for (type of aClass.types) {
+            for (let type of aClass.types) {
               if (DiFi.folders[id].newCounts[type]) {
                 message_text += "\n> " +
                   DiFi.tooltipAggregateLine(
@@ -636,7 +623,7 @@ DiFi.tooltipAggregate = function() {
         message_text += aClass.count + " " + ((aClass.count == 1) ? aClass.S : aClass.P);
         if (aClass.newCount) {
           message_text += " (" + aClass.newCount + ((aClass.newCountApprox) ? "+" : "") + " new)";
-          for (type of aClass.types) {
+          for (let type of aClass.types) {
             if (DiFi.folders[DiFi.inboxID].newCounts[type]) {
               message_text += "\n> " +
                 DiFi.tooltipAggregateLine(type, DiFi.folders[DiFi.inboxID].newCounts[type], false);
@@ -649,9 +636,9 @@ DiFi.tooltipAggregate = function() {
 
   if (!message_text) { message_text = "\n No Notifications"; }
 
-  title += message_text;
+  message_text += title + message_text;
 
-  return prepText(title);
+  return prepText(message_text);
 };
 
 // ----------------------------------------------------
@@ -693,7 +680,7 @@ DiFi.clearPopupNew = function() {
 
 DiFi.updateBadge = function() {
   chrome.browserAction.setIcon({path: "img/dan_logo2_19_crisp.png"});
-  var badgeText = "";
+  let badgeText = "";
 
   switch (Prefs.badgeMode.get()) {
     case "all":
@@ -741,11 +728,10 @@ DiFi.updateBadge = function() {
 };
 
 DiFi.showDesktopNotification = function() {
-  var data = {};
-  var dispatch = false;
-  var type;
+  let data = {};
+  let dispatch = false;
 
-  for (type in messagesInfo) {
+  for (let type in messagesInfo) {
     if (Prefs.MT(type).popup && (DiFi.folders[DiFi.inboxID].newCounts[type] > 0)) {
       data[type] = {
         count: (
@@ -760,14 +746,14 @@ DiFi.showDesktopNotification = function() {
   }
 
   data.groups = {};
-  for (var id in DiFi.folders) {
+  for (let id in DiFi.folders) {
     if (DiFi.folderInfo[id].type != "group") { continue; }
 
-    var name = DiFi.folderInfo[id].name;
+    const name = DiFi.folderInfo[id].name;
     data.groups[name] = {};
     data.groups[name].id = id;
 
-    for (type in groupMessagesInfo) {
+    for (let type in groupMessagesInfo) {
       if (Prefs.GMT(type).popup && (DiFi.folders[id].newCounts[type] > 0)) {
         data.groups[name][type] = {
           count: (
@@ -814,7 +800,7 @@ DiFi.doEverything = function() {
 
 // Workaround for limitations of known DiFi methods
 DiFi.folderInfoRequest = function() {
-  var xhr = new XMLHttpRequest();
+  let xhr = new XMLHttpRequest();
 
   xhr.timeout = Prefs.timeoutInterval.get();
   xhr.ontimeout = function() {
@@ -824,7 +810,7 @@ DiFi.folderInfoRequest = function() {
   xhr.onload = function() {
     loggedOut = false;
 
-    var username;
+    let username;
 
     try {
       if (/deviantART.deviant\s*=\s*({.*?})/.test(xhr.responseText)) { // Found deviant's info block
@@ -844,7 +830,7 @@ DiFi.folderInfoRequest = function() {
       console.log("Username: '" + username + "'");
       DiFi.folderInfo[DiFi.inboxID] = {name: username, type: "inbox"};
 
-      for (var i in DiFi.folders) {
+      for (let i in DiFi.folders) {
         if (DiFi.folders[i].type != "inbox") {
           if (
             ((new RegExp('mcdata="\\{(.*?' + i + '.*?)\\}"', "g")).exec(xhr.responseText)) &&

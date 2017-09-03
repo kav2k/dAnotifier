@@ -1,14 +1,18 @@
 /* global MutationSummary */
 (function() {
   function normalize(x) {
-    var x1 = 1000 * 60 * 5; // 5 minutes
-    var x2 = 1000 * 60 * 60 * 24 * 1.5; // 3 days
-    var exp = -1;
+    const x1 = 1000 * 60 * 5; // 5 minutes
+    const x2 = 1000 * 60 * 60 * 24 * 1.5; // 3 days
+    const exp = -1;
 
-    var y = (Math.pow(0.15, exp) - 1) * (x - x1) / (x2 - x1) + 1;
-    if (y < 1) { return 1; }
-    if (y > Math.pow(0.05, exp)) { return 0; }
-    return Math.pow(y, exp);
+    const y = (Math.pow(0.15, exp) - 1) * (x - x1) / (x2 - x1) + 1;
+    if (y < 1) {
+      return 1;
+    } else if (y > Math.pow(0.05, exp)) {
+      return 0;
+    } else {
+      return Math.pow(y, exp);
+    }
   }
 
   function colorize() {

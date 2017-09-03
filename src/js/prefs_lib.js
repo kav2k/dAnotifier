@@ -26,7 +26,7 @@ class Preference {
 
     this.validators = [];
     if (args.validators) {
-      for (var i in args.validators) {
+      for (let i in args.validators) {
         this.validators.push(args.validators[i]);
       }
     }
@@ -35,10 +35,10 @@ class Preference {
   }
 
   validate(input) { // Check candidate value with all registered validators
-    var messages = "";
-    var status = "PASS";
-    for (var i in this.validators) {
-      var result = (this.validators[i])(input, this);
+    let messages = "";
+    let status = "PASS";
+    for (let i in this.validators) {
+      const result = (this.validators[i])(input, this);
       messages += result.message;
       if (result.status == "FAIL") {
         status = "FAIL";
@@ -60,7 +60,7 @@ class Preference {
       console.log("[Prefs] No value for " + this.name + " in localStorage[" + this.key + "], using default '" + this.def + "'");
       this.reset();
     } else { // We've got something in localStorage
-      var result = this.validate(this.unpack(localStorage[this.key]));
+      const result = this.validate(this.unpack(localStorage[this.key]));
 
       if (result.status == "FAIL") {  // Validation faliure on saved value
         console.warn(result.message);
@@ -73,7 +73,7 @@ class Preference {
   }
 
   set(input) {
-    var result = this.validate(input);
+    const result = this.validate(input);
 
     if (result.status == "FAIL") {
       console.warn(result.message);
@@ -158,15 +158,15 @@ function ArrayValidator() { return wrapPassMessage(); }
 
 /* exported JSONFieldsValidator */
 function JSONFieldsValidator(input, pref) {
-  var messages = "";
-  var status = "PASS";
+  let messages = "";
+  let status = "PASS";
 
-  for (var i in pref.fields) {
+  for (let i in pref.fields) {
     if (input[i] === undefined) {
       wrapFailMessage("Wrong JSON structure (user should never see this!)");
     }
-    for (var j in pref.fields.validators) {
-      var result = (this.fields[i].validators[j])(input[i], pref);
+    for (let j in pref.fields.validators) {
+      const result = (this.fields[i].validators[j])(input[i], pref);
       messages += result.message;
       if (result.status == "FAIL") {
         status = "FAIL";

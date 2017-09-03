@@ -49,7 +49,7 @@ Footer container [P_createFooter]
 /* Header */
 
 function P_createHeader(data) {
-  var header = $('<div class="header" id="P_header">');
+  let header = $('<div class="header" id="P_header">');
 
   if (data.error && data.error.type == "LOGGED_OUT") {
     header.append("Logged out");
@@ -62,13 +62,13 @@ function P_createHeader(data) {
       )
       .appendTo(header);
 
-    var username = data.folders[data.inboxID].name;
+    const username = data.folders[data.inboxID].name;
     header.append(" for " + username.substring(0,1)); // User symbol
     header.append(P_createProfileLink(username.substring(1))); // User profile
 
     if (data.totalNewCount > 0) {
 
-      var new_header = $('<div class="subheader" id="P_new_header">');
+      let new_header = $('<div class="subheader" id="P_new_header">');
 
       $('<span class="new_text" />')
         .text(
@@ -84,7 +84,7 @@ function P_createHeader(data) {
   }
 
   if (data.error && data.error.type != "LOGGED_OUT") {
-    var error_display = $("<div>");
+    let error_display = $("<div>");
 
     error_display.addClass(
       (errorCritical(data.error)) ? "error" : "warning"
@@ -93,7 +93,7 @@ function P_createHeader(data) {
     error_display.append(errorText(data.error));
 
     if (data.error.raw) {
-      var raw_display = $('<div class="raw">')
+      let raw_display = $('<div class="raw">')
         .append($('<div class="raw_hint">Click to copy:</div>'))
         .append($("<div id='raw_data'>" + data.error.raw.replace(/\n\s*/g, "<br>") + "</div>"));
 
@@ -137,14 +137,13 @@ function P_createMarkReadLink() {
 /* Main container */
 
 function P_createContainer(data) {
-
-  var container = $("<div />", {
+  let container = $("<div />", {
     class: "container",
     id: "P_container"
   });
 
   if (data.error && data.error.type == "LOGGED_OUT") {
-    var login_button = $('<div class="login_button">')
+    let login_button = $('<div class="login_button">')
       .text("Click here to log in")
       .click(function() {goToUrl(getLoginUrl());});
 
@@ -153,22 +152,18 @@ function P_createContainer(data) {
 
   if (!data.aggregateClasses) { return container; }
 
-  var aggregateClasses = data.aggregateClasses;
+  const aggregateClasses = data.aggregateClasses;
 
-  for (var aClass of aggregateClasses) {
-    var entries;
-
+  for (let aClass of aggregateClasses) {
     if (aClass.special && aClass.special == "group") {
-
-      for (var id in data.folders) {
+      for (let id in data.folders) {
         if (data.folders[id].type == "group" && aClass.groups[id].count + aClass.groups[id].newCount > 0) {
-
-          var group_name = data.folders[id].name;
-
-          var group_container = $("<div />", {
+          let group_container = $("<div />", {
             class: "class_container",
             id: "P_group-" + id
           });
+
+          const group_name = data.folders[id].name;
 
           // Group header
           $('<div class="header"/>')
@@ -177,9 +172,9 @@ function P_createContainer(data) {
             .append(":")
             .appendTo(group_container);
 
-          entries = $();
+          let entries = $();
 
-          for (var t in aClass.types) {
+          for (let t in aClass.types) {
             if (
               data.folders[id].counts[aClass.types[t]] + data.folders[id].newCounts[aClass.types[t]] > 0 &&
               !(data.skipNew && data.folders[id].counts[aClass.types[t]] === 0)
@@ -196,11 +191,11 @@ function P_createContainer(data) {
         }
       }
     } else if (aClass.count + aClass.newCount > 0) {
-      var singleton = (aClass.special && aClass.special == "singleton");
+      const singleton = (aClass.special && aClass.special == "singleton");
 
-      var ac_container = $('<div class="class_container">');
+      let ac_container = $('<div class="class_container">');
 
-      entries = $();
+      let entries = $();
 
       if (!singleton) {
         entries = entries.add(
@@ -208,7 +203,7 @@ function P_createContainer(data) {
         );
       }
 
-      for (var type of aClass.types) {
+      for (let type of aClass.types) {
         if (data.folders[data.inboxID].counts[type] > 0) {
           entries = entries.add(
             P_createEntry(type, data.folders[data.inboxID], data.skipNew)
@@ -226,7 +221,7 @@ function P_createContainer(data) {
 }
 
 function P_createClassHeader(ac_data, ac, skip_new) {
-  var element = $('<td class="entry class_header">');
+  let element = $('<td class="entry class_header">');
   element.click(function(e) { P_onEntryClick(ac, e); });
   element.on("auxclick", function(e) { P_onEntryClickAux(ac, e); });
 
@@ -235,7 +230,7 @@ function P_createClassHeader(ac_data, ac, skip_new) {
   );
 
   if (ac_data.newCount && !skip_new) {
-    var new_span = $('<span class="new_text">');
+    let new_span = $('<span class="new_text">');
     new_span.text(" (" +  ac_data.newCount + (ac_data.newCountApprox ? "+" : "") + " new)");
     element.append(new_span);
   }
@@ -244,7 +239,7 @@ function P_createClassHeader(ac_data, ac, skip_new) {
 }
 
 function P_createEntry(type, data, skip_new) {
-  var element = $('<td class="entry">', {id: "entry-" +  type});
+  let element = $('<td class="entry">', {id: "entry-" +  type});
   element.click(function(e) { P_onEntryClick(messagesInfo[type].UP, e); });
   element.on("auxclick", function(e) { P_onEntryClickAux(messagesInfo[type].UP, e); });
 
@@ -254,7 +249,7 @@ function P_createEntry(type, data, skip_new) {
   );
 
   if (data.newCounts[type] && !skip_new) {
-    var new_span = $('<span class="new_text">');
+    let new_span = $('<span class="new_text">');
     new_span.text(" (" +  data.newCounts[type] + ((data.newCounts[type] == Prefs.maxItems.get()) ? "+" : "") + " new)");
     element.append(new_span);
     element.addClass("has_new");
@@ -266,7 +261,7 @@ function P_createEntry(type, data, skip_new) {
 function P_createGroupEntry(type, data, id, skip_new) {
   id = id || 0;
 
-  var element = $('<td class="entry">', {id: "entry-" + id + "-" +  type});
+  let element = $('<td class="entry">', {id: "entry-" + id + "-" +  type});
   element.click(function(e) { P_onEntryClick(id, e); });
   element.on("auxclick", function(e) { P_onEntryClickAux(id, e); });
 
@@ -298,7 +293,7 @@ function P_createGroupEntry(type, data, id, skip_new) {
 }
 
 function P_createFooter(data) {
-  var footer = $('<div class="footer" id="P_footer">');
+  let footer = $('<div class="footer" id="P_footer">');
 
   $('<img src="img/loading.gif" class="spinner left">').appendTo(footer); // padding for symmetry, invisible
 
@@ -312,7 +307,7 @@ function P_createFooter(data) {
     .css("visibility", (data.refreshing) ? "visible" : "hidden")
     .appendTo(footer);
 
-  var footer_commands = $('<div class="footer">');
+  let footer_commands = $('<div class="footer">');
 
   footer_commands.append(
     $('<a href="#">').text("Options").click(() => { P_openOptions(); })
@@ -334,7 +329,7 @@ function P_createFooter(data) {
 /** UTILITY FUNCTIONS **/
 
 function P_onEntryClick(type, e) {
-  var alt = (e.metaKey || e.ctrlKey || e.shiftKey || e.button == 1);
+  const alt = (e.metaKey || e.ctrlKey || e.shiftKey || e.button == 1);
 
   P_openMC(type, alt);
 
@@ -348,7 +343,7 @@ function P_onEntryClick(type, e) {
 }
 
 function P_onEntryClickAux(type, e) {
-  var alt = (e.metaKey || e.ctrlKey || e.shiftKey || e.button == 1);
+  const alt = (e.metaKey || e.ctrlKey || e.shiftKey || e.button == 1);
 
   P_openMC(type, alt);
 
@@ -376,7 +371,7 @@ function P_openOptions() {
 
 function P_debugTimestamp() {
   // 30 days back
-  var ts = Math.round(new Date().getTime() / 1000.0) - 2592000;
+  const ts = Math.round(new Date().getTime() / 1000.0) - 2592000;
   chrome.extension.getBackgroundPage().DiFi.timestamp = ts;
   chrome.extension.getBackgroundPage().DiFi.alertTimestamp = ts;
   P_forceUpdate();

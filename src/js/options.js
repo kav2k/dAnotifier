@@ -26,10 +26,9 @@ function init() {
     document.getElementById("debug-section").style.display = "block";
   }
 
-  var label;
+  let label;
   if (localStorage.captureData) {
-    var capture = JSON.parse(localStorage.captureData);
-    label = "Capture recorded at " + capture.timestamp;
+    label = "Capture recorded at " + JSON.parse(localStorage.captureData).timestamp;
   } else {
     label = "No capture data available";
   }
@@ -62,13 +61,13 @@ function markClean() {
 }
 
 function debug_setDiFi_ts() {
-  var ts_textbox = document.getElementById("DiFi_ts");
+  const ts_textbox = document.getElementById("DiFi_ts");
   chrome.extension.getBackgroundPage().DiFi.timestamp = parseInt(ts_textbox.value);
   chrome.extension.getBackgroundPage().DiFi.alertTimestamp = parseInt(ts_textbox.value);
 }
 
 function debug_setDiFi_ts_month() {
-  var ts = Math.round(new Date().getTime() / 1000.0) - 2592000;
+  const ts = Math.round(new Date().getTime() / 1000.0) - 2592000;
   chrome.extension.getBackgroundPage().DiFi.timestamp = ts;
   chrome.extension.getBackgroundPage().DiFi.alertTimestamp = ts;
 }

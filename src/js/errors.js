@@ -18,8 +18,8 @@
 /* exported handleError */
 
 function handleError(error) {
-  var title = "Last updated: " + getTimestamp() + "\n" + errorText(error) + ((error.raw) ? ("\n" + error.raw) : "");
-  var badge = errorBadge(error);
+  const title = "Last updated: " + getTimestamp() + "\n" + errorText(error) + ((error.raw) ? ("\n" + error.raw) : "");
+  const badge = errorBadge(error);
 
   chrome.browserAction.setTitle({title: prepText(title)});
 

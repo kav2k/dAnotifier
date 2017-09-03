@@ -23,7 +23,7 @@ HTMLControl.EnumToggle = function() {
   if (this.value) {
     return;
   } else {
-    for (var field in this.parentControl.fields) {
+    for (let field in this.parentControl.fields) {
       this.parentControl[field].value = false;
     }
     this.value = true;
@@ -61,7 +61,7 @@ HTMLControl.checkmarkUpdate = function() {
 
 HTMLControl.EnumUpdate = function(indirect) {
   if (!indirect) { // Broadcast update
-    for (var field in this.parentControl.fields) {
+    for (let field in this.parentControl.fields) {
       this.parentControl[field].update(true);
     }
     return;
@@ -85,7 +85,7 @@ HTMLControl.EnumUpdate = function(indirect) {
 
 HTMLControl.checkmarkArrayUpdate = function(indirect) {
   if (!indirect) { // Broadcast update
-    for (var field in this.parentControl.fields) {
+    for (let field in this.parentControl.fields) {
       this.parentControl[field].update(true);
     }
     return;
@@ -108,7 +108,7 @@ HTMLControl.checkmarkArrayUpdate = function(indirect) {
 };
 
 HTMLControl.addInputFieldRow = function(args) {
-  var HTML = "<tr><td>";
+  let HTML = "<tr><td>";
   HTML += '<input type="text" ' +
     'id="pref-' + args.pref.key + '">';
   HTML += "</td><td>";
@@ -130,7 +130,7 @@ HTMLControl.addInputFieldRow = function(args) {
     this.HTMLControl.get = function() { return (this.value * args.multiplier); };
     this.HTMLControl.set = function(value) { this.value = (value / args.multiplier); };
     this.saveHTML = function() {
-      var result = this.set(this.HTMLControl.get());
+      const result = this.set(this.HTMLControl.get());
       $(`#pref-${this.key}-err`).empty().append($(result.message));
     };
 
@@ -141,7 +141,7 @@ HTMLControl.addInputFieldRow = function(args) {
 };
 
 HTMLControl.addCheckmarkRow = function(args) {
-  var HTML = "<tr><td>";
+  let HTML = "<tr><td>";
   HTML += "<img " + 'id="pref-' + args.pref.key + '" class="checkmark">';
   HTML += "</td><td>";
   HTML += "<b>" + args.pref.name + "</b>";
@@ -162,7 +162,7 @@ HTMLControl.addCheckmarkRow = function(args) {
     this.HTMLControl.update = HTMLControl.checkmarkUpdate;
     this.HTMLControl.images = args.images;
     this.saveHTML = function() {
-      var result = this.set(this.HTMLControl.get());
+      const result = this.set(this.HTMLControl.get());
       $(`#pref-${this.key}-err`).empty().append($(result.message));
     };
 
@@ -173,8 +173,8 @@ HTMLControl.addCheckmarkRow = function(args) {
 };
 
 HTMLControl.addEnum = function(args) {
-  var HTML = "";
-  for (var field in args.pref.fields) {
+  let HTML = "";
+  for (let field in args.pref.fields) {
     HTML += "<tr>";
     HTML += "<td><img " + 'id="pref-' + args.pref.key + "-" + field + '" class="checkmark"></td>';
     HTML += "<td><b>" + args.pref.fields[field] + "</b></td>";
@@ -187,7 +187,7 @@ HTMLControl.addEnum = function(args) {
     this.HTMLControl = {};
     this.HTMLControl.fields = this.fields;
 
-    for (var field in this.fields) {
+    for (let field in this.fields) {
       this.HTMLControl[field] = document.getElementById("pref-" + this.key + "-" + field);
       this.HTMLControl[field].enabler = (args.enabler) ? args.enabler(this.HTMLControl) : (function() {return true;});
       this.HTMLControl[field].images = args.images;
@@ -198,7 +198,7 @@ HTMLControl.addEnum = function(args) {
     }
 
     this.HTMLControl.get = function() {
-      for (var field in this.fields) {
+      for (let field in this.fields) {
         if (this[field].value) {
           return field;
         }
@@ -206,9 +206,8 @@ HTMLControl.addEnum = function(args) {
       return null;
     };
     this.HTMLControl.set = function(value) {
-      var field;
-      for (field in this.fields) { this[field].value = (value == field); }
-      for (field in this.fields) { this[field].update(true); }
+      for (let field in this.fields) { this[field].value = (value == field); }
+      for (let field in this.fields) { this[field].update(true); }
     };
 
     this.saveHTML = function() {
@@ -220,7 +219,7 @@ HTMLControl.addEnum = function(args) {
 };
 
 HTMLControl.addCheckmarkImmediateRow = function(args) {
-  var HTML = "<tr><td>";
+  let HTML = "<tr><td>";
   HTML += "<img " + 'id="pref-' + args.pref.key + '" class="checkmark">';
   HTML += "</td><td>";
   HTML += "<b>" + args.pref.name + "</b>";
@@ -241,7 +240,7 @@ HTMLControl.addCheckmarkImmediateRow = function(args) {
     this.HTMLControl.update = HTMLControl.checkmarkUpdate;
     this.HTMLControl.images = args.images;
     this.saveHTML = function() {
-      var result = this.set(this.HTMLControl.get());
+      const result = this.set(this.HTMLControl.get());
       $(`#pref-${this.key}-err`).empty().append($(result.message));
     };
 
@@ -252,8 +251,8 @@ HTMLControl.addCheckmarkImmediateRow = function(args) {
 };
 
 HTMLControl.addCheckArrayHeader = function(args) {
-  var HTML = "<tr><td></td>";
-  for (var field in args.pref.fields) {
+  let HTML = "<tr><td></td>";
+  for (let field in args.pref.fields) {
     HTML += "<td><b>" + args.pref.fields[field].name + "</b></td>";
   }
   HTML += "</tr>";
@@ -262,20 +261,22 @@ HTMLControl.addCheckArrayHeader = function(args) {
 };
 
 HTMLControl.addCheckArraySpan = function(args) {
-  var HTML = '<tr class="span"><td></td>';
-  Object.keys(args.pref.fields).forEach(() => {HTML += "<td></td>";});
+  let HTML = '<tr class="span"><td></td>';
+  Object.keys(args.pref.fields).forEach(
+    () => { HTML += "<td></td>"; }
+  );
   HTML += "</tr>";
 
   $(HTML).appendTo(args.parent);
 };
 
 HTMLControl.addCheckArrayRow = function(args) {
-  var HTML = '<tr id="pref-' + args.pref.key + '" ';
+  let HTML = '<tr id="pref-' + args.pref.key + '" ';
   if (args.parity) { HTML += 'class="' + args.parity + '"'; }
   HTML += "><td>";
   HTML += "<b>" + args.pref.name + "</b>";
   HTML += '<span id="pref-' + args.pref.key + '-err"></span></td>';
-  for (var field in args.pref.fields) {
+  for (let field in args.pref.fields) {
     HTML += "<td><img " + 'id="pref-' + args.pref.key + "-" + field + '" class="checkmark"></td>';
   }
   HTML += "</tr>";
@@ -287,7 +288,7 @@ HTMLControl.addCheckArrayRow = function(args) {
     this.HTMLControl = {};
     this.HTMLControl.fields = this.fields;
 
-    for (var field in this.fields) {
+    for (let field in this.fields) {
       this.HTMLControl[field] = document.getElementById("pref-" + this.key + "-" + field);
       this.HTMLControl[field].enabler = (args.enabler) ? args.enabler(this.HTMLControl) : (function() {return true;});
       this.HTMLControl[field].images = args.images;
@@ -300,18 +301,17 @@ HTMLControl.addCheckArrayRow = function(args) {
     this.HTMLControl.feed = this.feed || false;
 
     this.HTMLControl.get = function() {
-      var result = {};
-      for (var field in this.fields) { result[field] = this[field].value; }
+      let result = {};
+      for (let field in this.fields) { result[field] = this[field].value; }
       return result;
     };
     this.HTMLControl.set = function(value) {
-      var field;
-      for (field in this.fields) { this[field].value = value[field]; }
-      for (field in this.fields) { this[field].update(); }
+      for (let field in this.fields) { this[field].value = value[field]; }
+      for (let field in this.fields) { this[field].update(); }
     };
 
     this.saveHTML = function() {
-      var result = this.set(this.HTMLControl.get());
+      const result = this.set(this.HTMLControl.get());
       $(`#pref-${this.key}-err`).empty().append($(result.message));
     };
 

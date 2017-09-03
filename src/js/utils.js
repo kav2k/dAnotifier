@@ -1,21 +1,21 @@
 /* global Prefs */
 const traceRegexp = /chrome-extension:\/\/\w*\//g;
 
+function pad(n) {
+  return (n < 10) ? "0" + n : n;
+}
+
 /* exported getTimestamp */
 function getTimestamp() {
-  var d = new Date();
-
-  var pad = function(n) {return (n < 10) ? "0" + n : n;};
+  const d = new Date();
 
   return pad(d.getHours()) + ":" + pad(d.getMinutes()) + ":" + pad(d.getSeconds());
 }
 
 /* exported getExtTimestamp */
 function getExtTimestamp(ts) {
-  var d = new Date(ts * 1000);
-
-  var pad = function(n) {return (n < 10) ? "0" + n : n;};
-  var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const d = new Date(ts * 1000);
 
   return (d.getDate() + " " + months[d.getMonth()] + ", " + d.getFullYear() + ", " + pad(d.getHours()) + ":" + pad(d.getMinutes()));
 }
@@ -238,11 +238,11 @@ function prepText(text) {
 // Breaks up long multiline text with \r characters
 // Sadly, this is required for WinXP's tooltips
 function newlineMagic(text) {
-  var lines = text.split("\n");
-  var result = lines.shift();
-  var len = 0;
+  const lines = text.split("\n");
+  let result = lines.shift();
+  let len = 0;
 
-  for (var i in lines) {
+  for (let i in lines) {
     if (len + lines[i].length > 210) {
       result += "\r\n" + lines[i];
       len = 0;
@@ -280,7 +280,7 @@ function isUrl(url, targetUrl, distinct) {
 }
 
 function stripUrl(url, keepAnchor) {
-  var result = url.split("#")[0];
+  let result = url.split("#")[0];
   result = result.split("?")[0];
 
   if (keepAnchor && (url.indexOf("#") > -1)) {
@@ -294,7 +294,7 @@ function stripUrl(url, keepAnchor) {
 // goToUrl selects tab whose url satisfies isUrl(tab.url, getUrl())
 // otherwise opens a new tab with getUrl()
 function goToUrl(getUrl, distinct, background) {
-  var bringUp = background ? false : true;
+  const bringUp = background ? false : true;
 
   function focusTab(tab) {
     if (bringUp) {
@@ -305,8 +305,8 @@ function goToUrl(getUrl, distinct, background) {
   chrome.tabs.query(
     {currentWindow: true},
     function(tabs) {
-      var rtabs = tabs.reverse();
-      for (var i in rtabs) {
+      const rtabs = tabs.reverse();
+      for (let i in rtabs) {
         if (rtabs[i].url && isUrl(rtabs[i].url, getUrl, distinct)) {
           chrome.tabs.update(
             rtabs[i].id,
@@ -347,7 +347,7 @@ function handleOnClick(id, func) {
 
 /* exported copyTextToClipboard */
 function copyTextToClipboard(text) {
-  var copyFrom = $("<textarea/>");
+  let copyFrom = $("<textarea/>");
   copyFrom.text(text);
   $("body").append(copyFrom);
   copyFrom.select();

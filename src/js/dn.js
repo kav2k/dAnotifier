@@ -15,7 +15,7 @@ function DN_notify(data) {
 /* exported DN_clear */
 function DN_clear() {
   chrome.notifications.clear("dANotifier");
-  for (var id in DiFi.folders) {
+  for (let id in DiFi.folders) {
     chrome.notifications.clear("dANotifier-" + id);
   }
 }
@@ -36,10 +36,9 @@ function DN_createNewNotification() {
 }
 
 function DN_RichNotify() {
-  var entries = [];
-  var type;
+  let entries = [];
 
-  for (type in messagesInfo) {
+  for (let type in messagesInfo) {
     if (DN_notificationData[type]) {
       entries.push(DN_TextEntry(type, DN_notificationData));
     }
@@ -67,13 +66,13 @@ function DN_RichNotify() {
     }
   }
 
-  var timeout = 0;
-  for (var name in DN_notificationData.groups) {
-    var id = DN_notificationData.groups[name].id;
-    var has_new = false;
-    entries = [];
+  let timeout = 0;
+  for (let name in DN_notificationData.groups) {
+    const id = DN_notificationData.groups[name].id;
+    let has_new = false;
+    let entries = [];
 
-    for (type in groupMessagesInfo) {
+    for (let type in groupMessagesInfo) {
       if (DN_notificationData.groups[name][type]) {
         has_new = true;
         entries.push(DN_TextEntry(type, DN_notificationData.groups[name], id));
@@ -114,7 +113,7 @@ function FFCreateNotificationWorkaround(id, entries) {
 }
 
 function DN_RichOnClick(id) {
-  var group;
+  let group;
   if (/dANotifier-(\d+)/.exec(id)) {
     group = /dANotifier-(\d+)/.exec(id)[1];
   }
@@ -124,7 +123,7 @@ function DN_RichOnClick(id) {
 }
 
 function DN_RichOnButtonClick(id, button) {
-  var group;
+  let group;
   if (/dANotifier-(\d+)/.exec(id)) {
     group = /dANotifier-(\d+)/.exec(id)[1];
   }
@@ -132,7 +131,7 @@ function DN_RichOnButtonClick(id, button) {
   if (!group) {
     switch (button) {
       case 0:
-        for (var type in messagesInfo) {
+        for (let type in messagesInfo) {
           if (DN_notificationData[type]) {
             goToMTUrl(messagesInfo[type].UP, true);
           }

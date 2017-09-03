@@ -210,15 +210,15 @@ Prefs.GMT = function(type) {
   return Prefs[groupMessagesInfo[type].pref].get();
 };
 
-var DebugValidator = function(input) {
+function DebugValidator(input) {
   if (!input) {
     return wrapWarnMessage("Warning: very advanced options for testing only!");
   } else {
     return wrapWarnMessage("You've been warned! The debug section is all the way down.");
   }
-};
+}
 
-var PrefMessageEnabler = function(hc) {
+function PrefMessageEnabler(hc) {
   return function(checkmark) {
     switch (checkmark.field) {
       case "count": return !(hc.feed || false);
@@ -229,7 +229,7 @@ var PrefMessageEnabler = function(hc) {
       default:      return true;
     }
   };
-};
+}
 
 /* global HTMLControl */
 Prefs.initHTML = function() {
@@ -274,10 +274,9 @@ Prefs.initHTML = function() {
     parent: document.getElementById("prefs-array")
   });
 
-  var parity = true;
-  var i;
+  let parity = true;
 
-  for (i in aggregateClasses) {
+  for (let i in aggregateClasses) {
     if (aggregateClasses[i].special == "group") { continue; }
 
     HTMLControl.addCheckArraySpan({
@@ -286,7 +285,7 @@ Prefs.initHTML = function() {
       parent: document.getElementById("prefs-array")
     });
 
-    for (var j in aggregateClasses[i].types) {
+    for (let j in aggregateClasses[i].types) {
       if (messagesInfo[aggregateClasses[i].types[j]].pref) {
         parity = !parity;
         HTMLControl.addCheckArrayRow({
@@ -306,7 +305,7 @@ Prefs.initHTML = function() {
     parent: document.getElementById("prefs-group-array")
   });
 
-  for (i in groupMessagesInfo) {
+  for (let i in groupMessagesInfo) {
     if (groupMessagesInfo[i].pref) {
       parity = !parity;
       HTMLControl.addCheckArrayRow({
