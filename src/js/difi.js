@@ -720,7 +720,9 @@ DiFi.updateBadge = function() {
 };
 
 DiFi.showDesktopNotification = function() {
-  let data = {};
+  let data = {
+    username: DiFi.folders[DiFi.inboxID].name
+  };
   let dispatch = false;
 
   for (let type in messagesInfo) {

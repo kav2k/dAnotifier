@@ -1,4 +1,4 @@
-/* global DiFi, Prefs, messagesInfo, groupMessagesInfo, goToMTUrl, onMessage */
+/* global Prefs, messagesInfo, groupMessagesInfo, goToMTUrl, onMessage */
 
 chrome.notifications.onClicked.addListener(DN_RichOnClick);
 chrome.notifications.onButtonClicked.addListener(DN_RichOnButtonClick);
@@ -14,10 +14,11 @@ function DN_notify(data) {
 
 /* exported DN_clear */
 function DN_clear() {
-  chrome.notifications.clear("dANotifier");
-  for (let id in DiFi.folders) {
-    chrome.notifications.clear("dANotifier-" + id);
-  }
+  chrome.notifications.getAll((notifications) => {
+    for (let id in notifications) {
+      chrome.notifications.clear(id);
+    }
+  });
 }
 
 var DN_notificationData;
@@ -49,14 +50,14 @@ function DN_RichNotify() {
     if (typeof browser !== "undefined") { // Assume Firefox
       chrome.notifications.create("dANotifier", {
         type: "basic",
-        title: "New notifications for " + DiFi.folders[DiFi.inboxID].name,
+        title: "New notifications for " + DN_notificationData.username,
         message: entries.join("\n"),
         iconUrl: chrome.runtime.getURL("img/dan_logo2_128_padded.png")
       });
     } else {
       chrome.notifications.create("dANotifier", {
         type: "basic",
-        title: "New notifications for " + DiFi.folders[DiFi.inboxID].name,
+        title: "New notifications for " + DN_notificationData.username,
         message: entries.join("\n"),
         priority: 1,
         iconUrl: chrome.runtime.getURL("img/dan_logo2_128_padded.png"),
