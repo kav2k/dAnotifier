@@ -1,6 +1,6 @@
 $(document).ready(function() {
   chrome.runtime.getBackgroundPage(function(win) {
-    var username = win.DiFi_folderInfo[win.DiFi_inboxID].name.slice(1);
+    var username = win.DiFi.folderInfo[win.DiFi.inboxID].name.slice(1);
     $("a").filter(
       function() { return this.textContent == username; }
     ).toggleClass("glow");

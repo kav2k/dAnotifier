@@ -1,4 +1,4 @@
-/* global handleOnClick, Prefs, initPrefsHTML */
+/* global handleOnClick, Prefs */
 document.addEventListener("DOMContentLoaded", function() {
   handleOnClick("save-button", save);
   handleOnClick("revert-button", revert);
@@ -21,7 +21,7 @@ function save(fake) {
 
 function init() {
   Prefs.init();
-  initPrefsHTML();
+  Prefs.initHTML();
   if (Prefs.debug.get()) {
     document.getElementById("debug-section").style.display = "block";
   }
@@ -63,16 +63,16 @@ function markClean() {
 
 function debug_setDiFi_ts() {
   var ts_textbox = document.getElementById("DiFi_ts");
-  chrome.extension.getBackgroundPage().DiFi_timestamp = parseInt(ts_textbox.value);
-  chrome.extension.getBackgroundPage().DiFi_alertTimestamp = parseInt(ts_textbox.value);
+  chrome.extension.getBackgroundPage().DiFi.timestamp = parseInt(ts_textbox.value);
+  chrome.extension.getBackgroundPage().DiFi.alertTimestamp = parseInt(ts_textbox.value);
 }
 
 function debug_setDiFi_ts_month() {
   var ts = Math.round(new Date().getTime() / 1000.0) - 2592000;
-  chrome.extension.getBackgroundPage().DiFi_timestamp = ts;
-  chrome.extension.getBackgroundPage().DiFi_alertTimestamp = ts;
+  chrome.extension.getBackgroundPage().DiFi.timestamp = ts;
+  chrome.extension.getBackgroundPage().DiFi.alertTimestamp = ts;
 }
 
 function debug_capture() {
-  chrome.extension.getBackgroundPage().DiFi_mustCapture = true;
+  chrome.extension.getBackgroundPage().DiFi.mustCapture = true;
 }

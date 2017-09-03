@@ -14,8 +14,8 @@
  */
 
 /* global getTimestamp, prepText, Prefs, COLOR_INACTIVE, popupData, DN_clear */
-/* global DiFi_lastTotalCount, DiFi_lastTotalNewCount, DiFi_lastTotalNewCountApprox, DiFi_skipUpdate:true */
-/* exported handleError, DiFi_skipUpdate */
+/* global DiFi */
+/* exported handleError */
 
 function handleError(error) {
   var title = "Last updated: " + getTimestamp() + "\n" + errorText(error) + ((error.raw) ? ("\n" + error.raw) : "");
@@ -32,10 +32,10 @@ function handleError(error) {
   }
 
   if (badge == "?") { // 0.5: Last seen count
-    if (DiFi_lastTotalCount && Prefs.badgeMode == "all") {
-      chrome.browserAction.setBadgeText({text: prepText(DiFi_lastTotalCount + badge)});
-    } else if (DiFi_lastTotalNewCount && Prefs.badgeMode == "newOnly") {
-      chrome.browserAction.setBadgeText({text: prepText(DiFi_lastTotalNewCount + (DiFi_lastTotalNewCountApprox) ? "+" : "") + badge});
+    if (DiFi.lastTotalCount && Prefs.badgeMode == "all") {
+      chrome.browserAction.setBadgeText({text: prepText(DiFi.lastTotalCount + badge)});
+    } else if (DiFi.lastTotalNewCount && Prefs.badgeMode == "newOnly") {
+      chrome.browserAction.setBadgeText({text: prepText(DiFi.lastTotalNewCount + (DiFi.lastTotalNewCountApprox) ? "+" : "") + badge});
     }
   } else {
     chrome.browserAction.setBadgeText({text: prepText(badge)});
@@ -48,7 +48,7 @@ function handleError(error) {
     DN_clear();
   }
 
-  DiFi_skipUpdate = false;
+  DiFi.skipUpdate = false;
   popupData.refreshing = false;
   chrome.runtime.sendMessage({action: "updatePopup", data: popupData});
 }

@@ -232,8 +232,7 @@ var PrefMessageEnabler = function(hc) {
 };
 
 /* global HTMLControl */
-/* exported initPrefsHTML */
-function initPrefsHTML() {
+Prefs.initHTML = function() {
   if (Prefs.HTMLready) { return; }
 
   HTMLControl.addInputFieldRow({
@@ -384,10 +383,9 @@ function initPrefsHTML() {
 
   Prefs.foreach("initHTMLControl");
   Prefs.HTMLready = true;
-}
+};
 
-/* exported initPrefsHTML_relnotes */
-function initPrefsHTML_relnotes() {
+Prefs.initHTML_relnotes = function() {
   if (Prefs.HTMLready) { return; }
 
   HTMLControl.addCheckmarkImmediateRow({
@@ -400,4 +398,4 @@ function initPrefsHTML_relnotes() {
   Prefs.hideRelnotes.initHTMLControl();
 
   Prefs.HTMLready = true;
-}
+};

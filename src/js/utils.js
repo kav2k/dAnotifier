@@ -341,6 +341,7 @@ function goToMTUrl(type, distinct, background) {
 
 /* exported handleOnClick */
 function handleOnClick(id, func) {
+  // Does not pass event argument
   document.getElementById(id).addEventListener("click", () => { func(); });
 }
 

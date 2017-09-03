@@ -1,11 +1,7 @@
 /* global goToUrl, goToMTUrl, getLoginUrl, getMessagesUrl, prepText */
-/* global DiFi_seenInbox, DiFi_clearPopupNew, DiFi_getLastNewCount, DiFi_doEverything */
+/* global DiFi */
 /* global DN_clear */
 /* global Prefs */
-
-/* HALL OF GLOBAL SHAME */
-/* global DiFi_timestamp:true, DiFi_lastTotalCount:true, DiFi_alertTimestamp:true, DiFi_lastTotalNewCount:true, DiFi_lastTotalNewCountApprox:true, DiFi_maxItems:true */
-/* exported DiFi_timestamp, DiFi_alertTimestamp, DiFi_lastTotalNewCount, DiFi_maxItems */
 
 // Global variable to hold current interval id
 var runningInterval;
@@ -32,7 +28,7 @@ function OnClickHandler() {
 function onMessage(request, sender, callback) {
   switch (request.action) {
     case "seenInbox":
-      DiFi_seenInbox();
+      DiFi.seenInbox();
       break;
     case "showMC":
       goToMTUrl(request.type, request.alt, request.alt);
@@ -44,7 +40,7 @@ function onMessage(request, sender, callback) {
       scheduleRequest();
       break;
     case "clearPopupNew":
-      DiFi_clearPopupNew();
+      DiFi.clearPopupNew();
       DN_clear();
       scheduleRequest();
       break;
@@ -55,7 +51,7 @@ function onMessage(request, sender, callback) {
       callback(Prefs.MCHighlight.get());
       break;
     case "getLastNewCount":
-      callback(DiFi_getLastNewCount(request));
+      callback(DiFi.getLastNewCount(request));
       break;
   }
 }
@@ -95,22 +91,22 @@ function init() {
   chrome.browserAction.setIcon({path: "img/dan_logo2_19_grey.png"});
 
   if (Prefs.rememberState.get()) {
-    DiFi_lastTotalCount = parseInt(localStorage.lastState_lastTotalCount) || 0;
-    DiFi_timestamp = parseInt(localStorage.lastState_timestamp) || 0;
-    DiFi_alertTimestamp = parseInt(localStorage.lastState_alertTimestamp) || 0;
-    DiFi_lastTotalNewCount = parseInt(localStorage.lastState_lastTotalNewCount) || 0;
-    DiFi_lastTotalNewCountApprox = (localStorage.lastState_lastTotalNewCountApprox == "true");
+    DiFi.lastTotalCount = parseInt(localStorage.lastState_lastTotalCount) || 0;
+    DiFi.timestamp = parseInt(localStorage.lastState_timestamp) || 0;
+    DiFi.alertTimestamp = parseInt(localStorage.lastState_alertTimestamp) || 0;
+    DiFi.lastTotalNewCount = parseInt(localStorage.lastState_lastTotalNewCount) || 0;
+    DiFi.lastTotalNewCountApprox = (localStorage.lastState_lastTotalNewCountApprox == "true");
 
-    if (DiFi_lastTotalCount > 0 && Prefs.badgeMode.get() == "all") {
+    if (DiFi.lastTotalCount > 0 && Prefs.badgeMode.get() == "all") {
       chrome.browserAction.setBadgeBackgroundColor(COLOR_INACTIVE);
-      chrome.browserAction.setBadgeText({text: prepText("" + DiFi_lastTotalCount)});
-    } else if (DiFi_lastTotalNewCount > 0 && Prefs.badgeMode.get() == "newOnly") {
+      chrome.browserAction.setBadgeText({text: prepText("" + DiFi.lastTotalCount)});
+    } else if (DiFi.lastTotalNewCount > 0 && Prefs.badgeMode.get() == "newOnly") {
       chrome.browserAction.setBadgeBackgroundColor(COLOR_INACTIVE);
-      chrome.browserAction.setBadgeText({text: prepText(DiFi_lastTotalNewCount + ((DiFi_lastTotalNewCountApprox) ? "+" : ""))});
+      chrome.browserAction.setBadgeText({text: prepText(DiFi.lastTotalNewCount + ((DiFi.lastTotalNewCountApprox) ? "+" : ""))});
     }
   }
 
-  DiFi_maxItems = Prefs.maxItems.get();
+  DiFi.maxItems = Prefs.maxItems.get();
 
   console.log("Setting refresh interval as " + Prefs.refreshInterval.get());
   scheduleRequest();
@@ -129,5 +125,5 @@ function scheduleRequest() {
 }
 
 function runRequest() { // (wrap-around for now)
-  DiFi_doEverything();
+  DiFi.doEverything();
 }

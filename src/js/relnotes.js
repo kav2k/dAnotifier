@@ -1,9 +1,9 @@
-/* global Prefs, initPrefsHTML_relnotes */
+/* global Prefs */
 /* exported save */
 
 document.addEventListener("DOMContentLoaded", function() {
   Prefs.init();
-  initPrefsHTML_relnotes();
+  Prefs.initHTML_relnotes();
 });
 
 function save() {

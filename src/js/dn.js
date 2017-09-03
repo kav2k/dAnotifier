@@ -1,4 +1,4 @@
-/* global DiFi_folders, DiFi_inboxID, Prefs, messagesInfo, groupMessagesInfo, goToMTUrl, onMessage */
+/* global DiFi, Prefs, messagesInfo, groupMessagesInfo, goToMTUrl, onMessage */
 
 chrome.notifications.onClicked.addListener(DN_RichOnClick);
 chrome.notifications.onButtonClicked.addListener(DN_RichOnButtonClick);
@@ -15,7 +15,7 @@ function DN_notify(data) {
 /* exported DN_clear */
 function DN_clear() {
   chrome.notifications.clear("dANotifier");
-  for (var id in DiFi_folders) {
+  for (var id in DiFi.folders) {
     chrome.notifications.clear("dANotifier-" + id);
   }
 }
@@ -50,14 +50,14 @@ function DN_RichNotify() {
     if (typeof browser !== "undefined") { // Assume Firefox
       chrome.notifications.create("dANotifier", {
         type: "basic",
-        title: "New notifications for " + DiFi_folders[DiFi_inboxID].name,
+        title: "New notifications for " + DiFi.folders[DiFi.inboxID].name,
         message: entries.join("\n"),
         iconUrl: chrome.runtime.getURL("img/dan_logo2_128_padded.png")
       });
     } else {
       chrome.notifications.create("dANotifier", {
         type: "basic",
-        title: "New notifications for " + DiFi_folders[DiFi_inboxID].name,
+        title: "New notifications for " + DiFi.folders[DiFi.inboxID].name,
         message: entries.join("\n"),
         priority: 1,
         iconUrl: chrome.runtime.getURL("img/dan_logo2_128_padded.png"),
@@ -89,7 +89,7 @@ function DN_RichNotify() {
       } else {
         chrome.notifications.create("dANotifier-" + id, {
           type: "basic",
-          title: "New notifications for #" + DiFi_folders[id].name,
+          title: "New notifications for #" + DiFi.folders[id].name,
           message: entries.join("\n"),
           priority: 1,
           iconUrl: chrome.runtime.getURL("img/dan_logo2_128_padded.png"),
@@ -103,10 +103,10 @@ function DN_RichNotify() {
 
 function FFCreateNotificationWorkaround(id, entries) {
   return function() {
-    console.log(id, DiFi_folders[id].name, entries);
+    console.log(id, DiFi.folders[id].name, entries);
     chrome.notifications.create("dANotifier-" + id, {
       type: "basic",
-      title: "New notifications for #" + DiFi_folders[id].name,
+      title: "New notifications for #" + DiFi.folders[id].name,
       message: entries.join("\n"),
       iconUrl: chrome.runtime.getURL("img/dan_logo2_128_padded.png")
     });

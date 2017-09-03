@@ -375,9 +375,10 @@ function P_openOptions() {
 }
 
 function P_debugTimestamp() {
+  // 30 days back
   var ts = Math.round(new Date().getTime() / 1000.0) - 2592000;
-  chrome.extension.getBackgroundPage().DiFi_timestamp = ts;
-  chrome.extension.getBackgroundPage().DiFi_alertTimestamp = ts;
+  chrome.extension.getBackgroundPage().DiFi.timestamp = ts;
+  chrome.extension.getBackgroundPage().DiFi.alertTimestamp = ts;
   P_forceUpdate();
 }
 
