@@ -1,5 +1,5 @@
 /* global goToUrl, goToMTUrl, getLoginUrl, getMessagesUrl, prepText */
-/* global DiFi */
+/* global DiFi, popupData */
 /* global DN_clear */
 /* global Prefs */
 
@@ -25,6 +25,8 @@ function OnClickHandler() {
   }
 }
 
+// Exported: can be called from same page
+/* exported onMessage */
 function onMessage(request, sender, callback) {
   switch (request.action) {
     case "seenInbox":
@@ -52,6 +54,22 @@ function onMessage(request, sender, callback) {
       break;
     case "getLastNewCount":
       callback(DiFi.getLastNewCount(request));
+      break;
+    case "timeMachine":
+      DiFi.timeMachine(request.ts);
+      scheduleRequest();
+      break;
+    case "init":
+      init();
+      break;
+    case "mustCapture":
+      DiFi.mustCapture = true;
+      break;
+    case "getPopupData":
+      callback(popupData);
+      break;
+    case "getUsername":
+      callback(DiFi.getUsername());
       break;
   }
 }

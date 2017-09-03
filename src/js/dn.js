@@ -1,4 +1,4 @@
-/* global Prefs, messagesInfo, groupMessagesInfo, goToMTUrl, onMessage */
+/* global messagesInfo, groupMessagesInfo, goToMTUrl, onMessage */
 
 chrome.notifications.onClicked.addListener(DN_RichOnClick);
 chrome.notifications.onButtonClicked.addListener(DN_RichOnButtonClick);
@@ -7,9 +7,7 @@ chrome.notifications.onButtonClicked.addListener(DN_RichOnButtonClick);
 function DN_notify(data) {
   DN_notificationData = data;
 
-  DN_createNewNotification();
-
-  return;
+  DN_RichNotify();
 }
 
 /* exported DN_clear */
@@ -22,19 +20,6 @@ function DN_clear() {
 }
 
 var DN_notificationData;
-
-function DN_createNewNotification() {
-  switch (Prefs.toastMode.get()) {
-    case "rich":
-      DN_RichNotify();
-      break;
-    //case "basic":
-      // break;
-    default:
-      console.error("Notification type " + Prefs.toastMode.get() + " is unsupported!");
-      break;
-  }
-}
 
 function DN_RichNotify() {
   let entries = [];

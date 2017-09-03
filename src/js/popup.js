@@ -11,7 +11,9 @@ $(document).ready(function() {
   });
 
   Prefs.init();
-  P_fill(chrome.extension.getBackgroundPage().popupData);
+  chrome.runtime.sendMessage({action: "getPopupData"}, function(popupData) {
+    P_fill(popupData);
+  });
 });
 
 function P_fill(data) {
@@ -370,11 +372,7 @@ function P_openOptions() {
 }
 
 function P_debugTimestamp() {
-  // 30 days back
-  const ts = Math.round(new Date().getTime() / 1000.0) - 2592000;
-  chrome.extension.getBackgroundPage().DiFi.timestamp = ts;
-  chrome.extension.getBackgroundPage().DiFi.alertTimestamp = ts;
-  P_forceUpdate();
+  chrome.runtime.sendMessage({action: "timeMachine"});
 }
 
 function P_forceUpdate() {

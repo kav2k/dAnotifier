@@ -1,4 +1,3 @@
-/* global markDirty, save */
 /* exported HTMLControl */
 var HTMLControl = {};
 
@@ -14,7 +13,7 @@ HTMLControl.checkmarkToggle = function() {
   this.value = !(this.value);
 
   this.update();
-  markDirty();
+  this.markDirty();
 };
 
 HTMLControl.EnumToggle = function() {
@@ -30,7 +29,7 @@ HTMLControl.EnumToggle = function() {
   }
 
   this.update();
-  markDirty();
+  this.markDirty();
 };
 
 HTMLControl.checkmarkImmediateToggle = function() {
@@ -39,7 +38,7 @@ HTMLControl.checkmarkImmediateToggle = function() {
   this.value = !(this.value);
 
   this.update();
-  save();
+  this.save();
 };
 
 HTMLControl.checkmarkUpdate = function() {
@@ -136,7 +135,7 @@ HTMLControl.addInputFieldRow = function(args) {
 
     this.HTMLControl.set(this.get());
 
-    this.HTMLControl.oninput = markDirty;
+    this.HTMLControl.oninput = this.markDirty;
   };
 };
 

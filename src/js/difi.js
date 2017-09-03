@@ -1,7 +1,9 @@
 /* global Prefs, handleError, loggedOut:true, DN_notify, COLOR_DEBUG, COLOR_ACTIVE, COLOR_INACTIVE */
-/* global getMessagesUrl, traceRegexp, getTimestamp, getExtTimestamp, prepText, playSound */
+/* global getMessagesUrl, getTimestamp, getExtTimestamp, prepText, playSound */
 /* global messagesInfo, groupMessagesInfo, aggregateClasses */
 /* exported loggedOut */
+
+const traceRegexp = /chrome-extension:\/\/\w*\//g;
 
 var DiFi = {
   inboxID: "",
@@ -705,7 +707,7 @@ DiFi.updateBadge = function() {
 
   chrome.browserAction.setBadgeText({text: prepText(badgeText)});
 
-  if (DiFi.mustAlert) { playSound(); }
+  if (DiFi.mustAlert && Prefs.playSound.get()) { playSound(); }
   if (DiFi.mustPopup && Prefs.showToast.get()) { DiFi.showDesktopNotification(); }
 
   DiFi.skipUpdate = false;
@@ -854,4 +856,16 @@ DiFi.folderInfoRequest = function() {
   xhr.setRequestHeader("Pragma", "no-cache");
 
   xhr.send(null);
+};
+
+DiFi.timeMachine = function(ts) {
+  const month = 2592000;
+  ts = ts || epochTS() - month;
+
+  DiFi.timestamp = ts;
+  DiFi.alertTimestamp = ts;
+};
+
+DiFi.getUsername = function() {
+  return DiFi.folderInfo[DiFi.inboxID].name;
 };

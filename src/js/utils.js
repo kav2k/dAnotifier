@@ -1,6 +1,3 @@
-/* global Prefs */
-const traceRegexp = /chrome-extension:\/\/\w*\//g;
-
 function pad(n) {
   return (n < 10) ? "0" + n : n;
 }
@@ -22,13 +19,8 @@ function getExtTimestamp(ts) {
 
 /* exported playSound */
 function playSound() {
-  try {
-    if (!Prefs.playSound.get()) { return; }
-    document.getElementById("notify_sound").currentTime = 0;
-    document.getElementById("notify_sound").play();
-  } catch (e) {
-    console.log(e.stack.replace(traceRegexp, ""));
-  }
+  document.getElementById("notify_sound").currentTime = 0;
+  document.getElementById("notify_sound").play();
 }
 
 /* exported messagesInfo */
@@ -230,29 +222,7 @@ const aggregateClasses = [
 function prepText(text) {
   text = text.replace("<br>","\n");
 
-  if (Prefs.newlineMagic.get()) { text = newlineMagic(text); }
-
   return text;
-}
-
-// Breaks up long multiline text with \r characters
-// Sadly, this is required for WinXP's tooltips
-function newlineMagic(text) {
-  const lines = text.split("\n");
-  let result = lines.shift();
-  let len = 0;
-
-  for (let line of lines) {
-    if (len + line.length > 210) {
-      result += "\r\n" + line;
-      len = 0;
-    } else {
-      result += "\n" + line;
-      len += line.length + 1;
-    }
-  }
-
-  return result;
 }
 
 // *** URL helper functions

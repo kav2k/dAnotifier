@@ -1,9 +1,9 @@
 $(document).ready(function() {
-  chrome.runtime.getBackgroundPage(function(win) {
-    const username = win.DiFi.folderInfo[win.DiFi.inboxID].name.slice(1);
+  chrome.runtime.sendMessage({action: "getUsername"}, function(username) {
+    const name = username.slice(1);
     $("a").filter(
-      function() { return this.textContent == username; }
-    ).toggleClass("glow");
+      function() { return this.textContent == name; }
+    ).addClass("glow");
   });
 
   $("#boring").click(switchBoring);

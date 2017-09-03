@@ -1,5 +1,4 @@
 /* global messagesInfo, groupMessagesInfo, aggregateClasses */
-/* global wrapWarnMessage */
 /* exported Prefs */
 
 // A function to construct a new Preference object
@@ -319,13 +318,6 @@ Prefs.init = function() {
   });
 
   Prefs.add({
-    key: "newlineMagic",
-    name: "Use dirty XP tooltip trick",
-    def: true,
-    validators: [BoolValidator]
-  });
-
-  Prefs.add({
     key: "UIMode",
     name: "UI mode",
     def: "popup",
@@ -353,17 +345,6 @@ Prefs.init = function() {
     name: "Consider Promoted content new",
     def: true,
     validators: [BoolValidator]
-  });
-
-  Prefs.add({
-    key: "toastMode",
-    name: "Tooltip mode",
-    def: "rich",
-    fields: {
-      basic: "Basic: text-only notifications (integrate with OS X Notifiaction Center)",
-      rich: "Brief: \"new-style\" rich notifications (integrate with Chrome Notifications)"
-    },
-    validators: [EnumValidator(["basic", "rich"])]
   });
 
   Prefs.add({
@@ -424,8 +405,10 @@ function PrefMessageEnabler(hc) {
 }
 
 /* global HTMLControl */
-Prefs.initHTML = function() {
+Prefs.initHTML = function(markDirty) {
   if (Prefs.HTMLready) { return; }
+
+  HTMLControl.markDirty = markDirty;
 
   HTMLControl.addInputFieldRow({
     pref: Prefs.refreshInterval,
@@ -566,18 +549,14 @@ Prefs.initHTML = function() {
     parent: document.getElementById("prefs-debug")
   });
 
-  HTMLControl.addCheckmarkRow({
-    pref: Prefs.newlineMagic,
-    images: HTMLControl.checkmarkImages,
-    parent: document.getElementById("prefs-debug")
-  });
-
   Prefs.foreach("initHTMLControl");
   Prefs.HTMLready = true;
 };
 
-Prefs.initHTML_relnotes = function() {
+Prefs.initHTML_relnotes = function(save) {
   if (Prefs.HTMLready) { return; }
+
+  HTMLControl.save = save;
 
   HTMLControl.addCheckmarkImmediateRow({
     pref: Prefs.hideRelnotes,
