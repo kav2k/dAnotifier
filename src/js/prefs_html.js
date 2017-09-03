@@ -13,7 +13,7 @@ HTMLControl.checkmarkToggle = function() {
   this.value = !(this.value);
 
   this.update();
-  this.markDirty();
+  HTMLControl.markDirty();
 };
 
 HTMLControl.EnumToggle = function() {
@@ -29,7 +29,7 @@ HTMLControl.EnumToggle = function() {
   }
 
   this.update();
-  this.markDirty();
+  HTMLControl.markDirty();
 };
 
 HTMLControl.checkmarkImmediateToggle = function() {
@@ -38,7 +38,7 @@ HTMLControl.checkmarkImmediateToggle = function() {
   this.value = !(this.value);
 
   this.update();
-  this.save();
+  HTMLControl.save();
 };
 
 HTMLControl.checkmarkUpdate = function() {
@@ -135,7 +135,7 @@ HTMLControl.addInputFieldRow = function(args) {
 
     this.HTMLControl.set(this.get());
 
-    this.HTMLControl.oninput = this.markDirty;
+    this.HTMLControl.oninput = HTMLControl.markDirty;
   };
 };
 
