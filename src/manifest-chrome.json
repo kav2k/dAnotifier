@@ -2,7 +2,6 @@
   "background": {
     "scripts" : [
       "js/utils.js",
-      "js/prefs_lib.js",
       "js/prefs.js",
       "js/dn.js",
       "js/errors.js",
@@ -49,6 +48,6 @@
     "js/colorize.js",
     "js/lib/mutation-summary.js"
   ],
-  "version": "0.8.0",
+  "version": "0.8.0.1",
   "manifest_version": 2
 }
