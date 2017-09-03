@@ -59,14 +59,14 @@ function appendCounts() {
     }
 
     if (/%3A/.test(window.location.hash)) { return; } // We're in a stack
-    for (let j in messagesInfo) {
-      if (hd.textContent.indexOf(messagesInfo[j].P) >= 0 || hd.textContent.indexOf(messagesInfo[j].S) >= 0) {
-        if (j == "WA" && hd.textContent.indexOf("Message") >= 0) { continue; }
-        if (j == "D" && hd.textContent.indexOf("Group") >= 0) { continue; }
+    for (let type in messagesInfo) {
+      if (hd.textContent.indexOf(messagesInfo[type].P) >= 0 || hd.textContent.indexOf(messagesInfo[type].S) >= 0) {
+        if (type == "WA" && hd.textContent.indexOf("Message") >= 0) { continue; }
+        if (type == "D"  && hd.textContent.indexOf("Group") >= 0) { continue; }
         chrome.runtime.sendMessage(
           {
             action: "getLastNewCount",
-            type: j,
+            type: type,
             folder: ((/#view=(\d+)/.test(window.location.hash)) ? /#view=(\d+)/.exec(window.location.hash)[1] : undefined)
           },
           responseHandler

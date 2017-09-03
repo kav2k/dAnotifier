@@ -242,13 +242,13 @@ function newlineMagic(text) {
   let result = lines.shift();
   let len = 0;
 
-  for (let i in lines) {
-    if (len + lines[i].length > 210) {
-      result += "\r\n" + lines[i];
+  for (let line of lines) {
+    if (len + line.length > 210) {
+      result += "\r\n" + line;
       len = 0;
     } else {
-      result += "\n" + lines[i];
-      len += lines[i].length + 1;
+      result += "\n" + line;
+      len += line.length + 1;
     }
   }
 
@@ -305,11 +305,10 @@ function goToUrl(getUrl, distinct, background) {
   chrome.tabs.query(
     {currentWindow: true},
     function(tabs) {
-      const rtabs = tabs.reverse();
-      for (let i in rtabs) {
-        if (rtabs[i].url && isUrl(rtabs[i].url, getUrl, distinct)) {
+      for (let tab of tabs.reverse()) {
+        if (tab.url && isUrl(tab.url, getUrl, distinct)) {
           chrome.tabs.update(
-            rtabs[i].id,
+            tab.id,
             {url: getUrl, active: bringUp},
             focusTab
           );

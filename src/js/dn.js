@@ -67,15 +67,16 @@ function DN_RichNotify() {
   }
 
   let timeout = 0;
-  for (let name in DN_notificationData.groups) {
-    const id = DN_notificationData.groups[name].id;
+  for (let group of DN_notificationData.groups) {
+    const id = group.id;
+
     let has_new = false;
     let entries = [];
 
     for (let type in groupMessagesInfo) {
-      if (DN_notificationData.groups[name][type]) {
+      if (group[type]) {
         has_new = true;
-        entries.push(DN_TextEntry(type, DN_notificationData.groups[name], id));
+        entries.push(DN_TextEntry(type, group, id));
       }
     }
 
@@ -84,11 +85,11 @@ function DN_RichNotify() {
 
       if (typeof browser !== "undefined") { // Assume Firefox
         timeout += 100;
-        setTimeout(FFCreateNotificationWorkaround(id, entries), timeout);
+        setTimeout(FFCreateNotificationWorkaround(id, name, entries), timeout);
       } else {
         chrome.notifications.create("dANotifier-" + id, {
           type: "basic",
-          title: "New notifications for #" + DiFi.folders[id].name,
+          title: "New notifications for #" + group.name,
           message: entries.join("\n"),
           priority: 1,
           iconUrl: chrome.runtime.getURL("img/dan_logo2_128_padded.png"),
@@ -100,12 +101,11 @@ function DN_RichNotify() {
   }
 }
 
-function FFCreateNotificationWorkaround(id, entries) {
+function FFCreateNotificationWorkaround(id, name, entries) {
   return function() {
-    console.log(id, DiFi.folders[id].name, entries);
     chrome.notifications.create("dANotifier-" + id, {
       type: "basic",
-      title: "New notifications for #" + DiFi.folders[id].name,
+      title: "New notifications for #" + name,
       message: entries.join("\n"),
       iconUrl: chrome.runtime.getURL("img/dan_logo2_128_padded.png")
     });

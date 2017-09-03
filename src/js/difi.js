@@ -162,20 +162,18 @@ DiFi.getFolderInfo = function(giveUp) {
       }
     }
 
-    for (let i in DiFi.folders) {
-      if (!DiFi.folderInfo[i]) {
+    for (let id in DiFi.folders) {
+      if (!DiFi.folderInfo[id]) {
         if (!giveUp) {
           DiFi.folderInfoRequest();
           return;
         } else {
-          throw Error("dAMC: folderInfo can't be retrieved (" + i + ")");
+          throw Error("dAMC: folderInfo can't be retrieved (" + id + ")");
         }
       } else {
-        for (let j in DiFi.folderInfo[i]) {
-          DiFi.folders[i][j] = DiFi.folderInfo[i][j];
-        }
+        Object.assign(DiFi.folders[id], DiFi.folderInfo[id]);
       }
-      DiFi.foldersToCount.push(i);
+      DiFi.foldersToCount.push(id);
     }
 
     if (DiFi.capturing) {
@@ -230,8 +228,8 @@ DiFi.countBegin = function() {
 DiFi.countNext = function() {
   function zeroObject() {
     let obj = {};
-    for (let key of DiFi.types) {
-      obj[key] = 0;
+    for (let type of DiFi.types) {
+      obj[type] = 0;
     }
     return obj;
   }
@@ -266,11 +264,8 @@ DiFi.countEnd = function() {
     DiFi.lastNewCounts = {};
     DiFi.lastNewCounts.ts = getExtTimestamp(DiFi.timestamp);
     DiFi.lastNewCounts.folders = {};
-    for (let i in DiFi.folders) {
-      DiFi.lastNewCounts.folders[i] = {};
-      for (let j in DiFi.folders[i].newCounts) {
-        DiFi.lastNewCounts.folders[i][j] = DiFi.folders[i].newCounts[j];
-      }
+    for (let id in DiFi.folders) {
+      DiFi.lastNewCounts.folders[id] = Object.assign({}, DiFi.folders[id].newCounts);
     }
   }
 
@@ -307,8 +302,8 @@ DiFi.getLastNewCount = function(request) {
 
 DiFi.allMessagesRequest = function(folderID) {
   let queryStr = "?";
-  for (let type in DiFi.types) /*if(Prefs.MT(DiFi.types[type]).count)*/ {
-    queryStr += "c[]=MessageCenter;get_views;" + folderID + DiFi.requestSuffix(DiFi.types[type], 0, DiFi.maxItems);
+  for (let type of DiFi.types) /*if(Prefs.MT(DiFi.types[type]).count)*/ {
+    queryStr += "c[]=MessageCenter;get_views;" + folderID + DiFi.requestSuffix(type, 0, DiFi.maxItems);
   }
   queryStr += "t=json";
   return queryStr;
@@ -316,11 +311,11 @@ DiFi.allMessagesRequest = function(folderID) {
 
 DiFi.groupMessagesRequest = function(folderID) {
   let queryStr = "?";
-  for (let type in DiFi.groupTypes) /*if(Prefs.MT(DiFi.groupTypes[type]).count)*/ {
-    queryStr += "c[]=MessageCenter;get_views;" + folderID + DiFi.requestSuffix(DiFi.groupTypes[type], 0, DiFi.maxItems);
+  for (let type of DiFi.groupTypes) /*if(Prefs.MT(DiFi.groupTypes[type]).count)*/ {
+    queryStr += "c[]=MessageCenter;get_views;" + folderID + DiFi.requestSuffix(type, 0, DiFi.maxItems);
   }
-  for (let type in DiFi.groupFeedTypes) /*if(Prefs.MT(DiFi.groupTypes[type]).count)*/ {
-    queryStr += "c[]=MessageCenter;get_views;" + folderID + DiFi.requestSuffix(DiFi.groupFeedTypes[type], 0, DiFi.maxItems);
+  for (let type of DiFi.groupFeedTypes) /*if(Prefs.MT(DiFi.groupTypes[type]).count)*/ {
+    queryStr += "c[]=MessageCenter;get_views;" + folderID + DiFi.requestSuffix(type, 0, DiFi.maxItems);
   }
   queryStr += "t=json";
   return queryStr;
@@ -330,16 +325,16 @@ DiFi.countMessages = function(id, result) {
   try {
     if (result.DiFi.status != "SUCCESS") { throw Error("DiFi: message request failed"); }
 
-    for (let type in DiFi.types) {
-      if (Prefs.MT(DiFi.types[type]).count) {
-        DiFi.totalCount += parseInt(DiFi.folders[id].counts[DiFi.types[type]] = result.DiFi.response.calls[type].response.content[0].result.matches);
+    for (let typeIdx in DiFi.types) {
+      if (Prefs.MT(DiFi.types[typeIdx]).count) {
+        DiFi.totalCount += parseInt(DiFi.folders[id].counts[DiFi.types[typeIdx]] = result.DiFi.response.calls[typeIdx].response.content[0].result.matches);
       }
     }
 
     if (DiFi.timestamp) { // gotta count new messages
-      for (let type in DiFi.types) {
-        if (Prefs.MT(DiFi.types[type]).count && Prefs.MT(DiFi.types[type]).watch) {
-          DiFi.parseNew(id, DiFi.types[type], result.DiFi.response.calls[type].response.content[0].result);
+      for (let typeIdx in DiFi.types) {
+        if (Prefs.MT(DiFi.types[typeIdx]).count && Prefs.MT(DiFi.types[typeIdx]).watch) {
+          DiFi.parseNew(id, DiFi.types[typeIdx], result.DiFi.response.calls[typeIdx].response.content[0].result);
         }
       }
     }
@@ -391,25 +386,25 @@ DiFi.countGroupMessages = function(id, result) {
   try {
     if (result.DiFi.status != "SUCCESS") { throw Error("DiFi: message request failed"); }
 
-    for (let type in DiFi.groupTypes) {
-      if (Prefs.GMT(DiFi.groupTypes[type]).count) {
+    for (let typeIdx in DiFi.groupTypes) {
+      if (Prefs.GMT(DiFi.groupTypes[typeIdx]).count) {
         DiFi.totalCount += parseInt(
-          DiFi.folders[id].counts[DiFi.groupTypes[type]] = result.DiFi.response.calls[type].response.content[0].result.matches
+          DiFi.folders[id].counts[DiFi.groupTypes[typeIdx]] = result.DiFi.response.calls[typeIdx].response.content[0].result.matches
         );
       }
     }
 
     if (DiFi.timestamp) { // gotta count new messages
-      for (let type in DiFi.groupTypes) {
-        if (Prefs.GMT(DiFi.groupTypes[type]).count && Prefs.GMT(DiFi.groupTypes[type]).watch) {
-          DiFi.parseNew(id, DiFi.groupTypes[type],
-            result.DiFi.response.calls[type].response.content[0].result, true);
+      for (let typeIdx in DiFi.groupTypes) {
+        if (Prefs.GMT(DiFi.groupTypes[typeIdx]).count && Prefs.GMT(DiFi.groupTypes[typeIdx]).watch) {
+          DiFi.parseNew(id, DiFi.groupTypes[typeIdx],
+            result.DiFi.response.calls[typeIdx].response.content[0].result, true);
         }
       }
-      for (let type in DiFi.groupFeedTypes) {
-        if (Prefs.GMT(DiFi.groupFeedTypes[type]).count && Prefs.GMT(DiFi.groupFeedTypes[type]).watch) {
-          DiFi.parseNew(id, DiFi.groupFeedTypes[type],
-            result.DiFi.response.calls[parseInt(type) + DiFi.groupTypes.length].response.content[0].result, true);
+      for (let typeIdx in DiFi.groupFeedTypes) {
+        if (Prefs.GMT(DiFi.groupFeedTypes[typeIdx]).count && Prefs.GMT(DiFi.groupFeedTypes[typeIdx]).watch) {
+          DiFi.parseNew(id, DiFi.groupFeedTypes[typeIdx],
+            result.DiFi.response.calls[typeIdx + DiFi.groupTypes.length].response.content[0].result, true);
         }
       }
     }
@@ -653,11 +648,8 @@ DiFi.updatePopup = function() {
 
   popupData.lastUpdateAt = getTimestamp();
 
-  popupData.folderInfo = {};
-  for (let i in DiFi.folderInfo) { popupData.folderInfo[i] = DiFi.folderInfo[i]; }
-
-  popupData.folders = {};
-  for (let i in DiFi.folders) { popupData.folders[i] = DiFi.folders[i]; }
+  popupData.folderInfo = Object.assign({}, DiFi.folderInfo);
+  popupData.folders = Object.assign({}, DiFi.folders);
 
   popupData.aggregateClasses = aggregateClasses.slice();
 
@@ -745,17 +737,18 @@ DiFi.showDesktopNotification = function() {
     }
   }
 
-  data.groups = {};
+  data.groups = [];
   for (let id in DiFi.folders) {
     if (DiFi.folderInfo[id].type != "group") { continue; }
 
-    const name = DiFi.folderInfo[id].name;
-    data.groups[name] = {};
-    data.groups[name].id = id;
+    let group = {
+      id: id,
+      name: DiFi.folderInfo[id].name
+    };
 
     for (let type in groupMessagesInfo) {
       if (Prefs.GMT(type).popup && (DiFi.folders[id].newCounts[type] > 0)) {
-        data.groups[name][type] = {
+        group[type] = {
           count: (
             DiFi.folders[id].newCounts[type] +
             ((DiFi.folders[id].newCounts[type] == DiFi.maxItems) ? "+" : "")
@@ -766,6 +759,8 @@ DiFi.showDesktopNotification = function() {
         dispatch = true;
       }
     }
+
+    data.groups.push(group);
   }
 
   if (dispatch) { DN_notify(data); }
@@ -830,17 +825,17 @@ DiFi.folderInfoRequest = function() {
       console.log("Username: '" + username + "'");
       DiFi.folderInfo[DiFi.inboxID] = {name: username, type: "inbox"};
 
-      for (let i in DiFi.folders) {
-        if (DiFi.folders[i].type != "inbox") {
+      for (let id in DiFi.folders) {
+        if (DiFi.folders[id].type != "inbox") {
           if (
-            ((new RegExp('mcdata="\\{(.*?' + i + '.*?)\\}"', "g")).exec(xhr.responseText)) &&
-            /is_group&quot;:true/.test(((new RegExp('mcdata="\\{(.*?' + i + '.*?)\\}"', "g")).exec(xhr.responseText))[0])
+            ((new RegExp('mcdata="\\{(.*?' + id + '.*?)\\}"', "g")).exec(xhr.responseText)) &&
+            /is_group&quot;:true/.test(((new RegExp('mcdata="\\{(.*?' + id + '.*?)\\}"', "g")).exec(xhr.responseText))[0])
           ) {
-            console.log("Folder: " + i + ", is a group");
-            DiFi.folderInfo[i] = {name: DiFi.folders[i].name, type: "group"};
+            console.log("Folder: " + id + ", is a group");
+            DiFi.folderInfo[id] = {name: DiFi.folders[id].name, type: "group"};
           } else {
-            console.log("Folder: " + i + ", is not a group");
-            DiFi.folderInfo[i] = {name: DiFi.folders[i].name, type: "folder"};
+            console.log("Folder: " + id + ", is not a group");
+            DiFi.folderInfo[id] = {name: DiFi.folders[id].name, type: "folder"};
           }
         }
       }

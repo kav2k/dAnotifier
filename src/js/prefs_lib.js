@@ -25,11 +25,9 @@ class Preference {
     this.fields = args.fields || {key: {name: args.name, validators: []}};
 
     this.validators = [];
-    if (args.validators) {
-      for (let i in args.validators) {
-        this.validators.push(args.validators[i]);
-      }
-    }
+    args.validators.forEach(
+      (validator) => { this.validators.push(validator); }
+    );
 
     this.init();
   }

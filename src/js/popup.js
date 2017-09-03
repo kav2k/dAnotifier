@@ -174,13 +174,13 @@ function P_createContainer(data) {
 
           let entries = $();
 
-          for (let t in aClass.types) {
+          for (let type of aClass.types) {
             if (
-              data.folders[id].counts[aClass.types[t]] + data.folders[id].newCounts[aClass.types[t]] > 0 &&
-              !(data.skipNew && data.folders[id].counts[aClass.types[t]] === 0)
+              data.folders[id].counts[type] + data.folders[id].newCounts[type] > 0 &&
+              !(data.skipNew && data.folders[id].counts[type] === 0)
             ) {
               entries = entries.add(
-                P_createGroupEntry(aClass.types[t], data.folders[id], id, data.skipNew)
+                P_createGroupEntry(type, data.folders[id], id, data.skipNew)
               );
             }
           }
