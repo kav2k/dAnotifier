@@ -1,4 +1,4 @@
-/* global handleOnClick, Prefs, initPrefs, initPrefsHTML */
+/* global handleOnClick, Prefs, initPrefsHTML */
 document.addEventListener("DOMContentLoaded", function() {
   handleOnClick("save-button", save);
   handleOnClick("revert-button", revert);
@@ -20,7 +20,7 @@ function save(fake) {
 }
 
 function init() {
-  initPrefs();
+  Prefs.init();
   initPrefsHTML();
   if (Prefs.debug.get()) {
     document.getElementById("debug-section").style.display = "block";

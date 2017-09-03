@@ -1,4 +1,4 @@
-/* global initPrefs, Prefs, messagesInfo, groupMessagesInfo */
+/* global Prefs, messagesInfo, groupMessagesInfo */
 /* global errorCritical, errorText, copyTextToClipboard, goToUrl, getLoginUrl */
 
 /** TOP LEVEL CODE **/
@@ -10,7 +10,7 @@ $(document).ready(function() {
     }
   });
 
-  initPrefs();
+  Prefs.init();
   P_fill(chrome.extension.getBackgroundPage().popupData);
 });
 

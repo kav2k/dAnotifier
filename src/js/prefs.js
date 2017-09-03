@@ -1,7 +1,6 @@
 /* global messagesInfo, groupMessagesInfo, aggregateClasses */
 /* global wrapWarnMessage */
 /* global Preference, IntValidator, GTValidatorMinutes, GTValidatorSeconds, BoolValidator, JSONFieldsValidator, EnumValidator */
-/* */
 /* exported Prefs */
 var Prefs = {};
 
@@ -10,8 +9,8 @@ Prefs.add = function(args) {
 };
 
 Prefs.foreach = function(fun) {
-  for (var i in this) {
-    if (Prefs[i].key) { // Is a Preference
+  for (let i in this) {
+    if (Prefs[i] instanceof Preference) { // Is a Preference
       if (typeof fun === "function") {
         fun(Prefs[i]);
       } else if (typeof Prefs[i][fun] === "function") {
@@ -21,8 +20,7 @@ Prefs.foreach = function(fun) {
   }
 };
 
-/* exported initPrefs */
-function initPrefs() {
+Prefs.init = function() {
   if (Prefs.ready) {
     Prefs.foreach("init");
     return;
@@ -63,9 +61,7 @@ function initPrefs() {
     validators: [BoolValidator]
   });
 
-  var i;
-
-  for (i in messagesInfo) {
+  for (let i in messagesInfo) {
     if (messagesInfo[i].pref) {
       Prefs.add({
         key: messagesInfo[i].pref,
@@ -83,7 +79,7 @@ function initPrefs() {
     }
   }
 
-  for (i in groupMessagesInfo) {
+  for (let i in groupMessagesInfo) {
     if (groupMessagesInfo[i].pref) {
       Prefs.add({
         key: groupMessagesInfo[i].pref,
@@ -204,7 +200,7 @@ function initPrefs() {
   });
 
   Prefs.ready = true;
-}
+};
 
 Prefs.MT = function(type) {
   return Prefs[messagesInfo[type].pref].get();

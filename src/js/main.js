@@ -1,7 +1,7 @@
 /* global goToUrl, goToMTUrl, getLoginUrl, getMessagesUrl, prepText */
 /* global DiFi_seenInbox, DiFi_clearPopupNew, DiFi_getLastNewCount, DiFi_doEverything */
 /* global DN_clear */
-/* global Prefs, initPrefs */
+/* global Prefs */
 
 /* HALL OF GLOBAL SHAME */
 /* global DiFi_timestamp:true, DiFi_lastTotalCount:true, DiFi_alertTimestamp:true, DiFi_lastTotalNewCount:true, DiFi_lastTotalNewCountApprox:true, DiFi_maxItems:true */
@@ -75,7 +75,7 @@ function init() {
   audio_element.src = chrome.runtime.getURL("audio/notify.ogg");
   document.body.appendChild(audio_element);
 
-  initPrefs();
+  Prefs.init();
 
   chrome.browserAction.onClicked.removeListener(OnClickHandler);
 

@@ -15,22 +15,26 @@
 //// Note: assumes that the default value passes validation
 
 /* exported Preference */
-function Preference(args) {
-  this.key = args.key;
-  this.name = args.name;
-  this.pack = args.packer || JSON_Packer;
-  this.unpack = args.unpacker || JSON_Unpacker;
-  this.def = args.def;
-  this.fields = args.fields || {key: {name: args.name, validators: []}};
+class Preference {
+  constructor(args) {
+    this.key = args.key;
+    this.name = args.name;
+    this.pack = args.packer || JSON_Packer;
+    this.unpack = args.unpacker || JSON_Unpacker;
+    this.def = args.def;
+    this.fields = args.fields || {key: {name: args.name, validators: []}};
 
-  this.validators = [];
-  if (args.validators) {
-    for (var i in args.validators) {
-      this.validators.push(args.validators[i]);
+    this.validators = [];
+    if (args.validators) {
+      for (var i in args.validators) {
+        this.validators.push(args.validators[i]);
+      }
     }
+
+    this.init();
   }
 
-  this.validate = function(input) { // Check candidate value with all registered validators
+  validate(input) { // Check candidate value with all registered validators
     var messages = "";
     var status = "PASS";
     for (var i in this.validators) {
@@ -44,14 +48,14 @@ function Preference(args) {
       }
     }
     return {status: status, message: messages};
-  };
+  }
 
-  this.reset = function() { // Revert to default
+  reset() { // Revert to default
     this.value = this.def;
     localStorage[this.key] = this.pack(this.value);
-  };
+  }
 
-  this.init = function() { // Load saved value or revert to default
+  init() { // Load saved value or revert to default
     if (localStorage[this.key] === undefined) { // No value saved
       console.log("[Prefs] No value for " + this.name + " in localStorage[" + this.key + "], using default '" + this.def + "'");
       this.reset();
@@ -66,9 +70,9 @@ function Preference(args) {
         this.value = this.unpack(localStorage[this.key]);
       }
     }
-  };
+  }
 
-  this.set = function(input) {
+  set(input) {
     var result = this.validate(input);
 
     if (result.status == "FAIL") {
@@ -79,83 +83,81 @@ function Preference(args) {
       localStorage[this.key] = this.pack(this.value);
     }
     return result;
-  };
+  }
 
-  this.get = function() {
+  get get() {
     this.init();
     return this.value;
-  };
-
-  this.init();
+  }
 }
 
 // Standard packers/unpackers
 
-var JSON_Packer = function(input) { return JSON.stringify(input); };
-var JSON_Unpacker = function(input) { return JSON.parse(input); };
+function JSON_Packer(input) { return JSON.stringify(input); }
+function JSON_Unpacker(input) { return JSON.parse(input); }
 
 // Messages' wrappers
 
-var wrapPassMessage = function() {
+function wrapPassMessage() {
   return {
     status: "PASS",
     message: ""
   };
-};
+}
 
-var wrapWarnMessage = function(text) {
+function wrapWarnMessage(text) {
   return {
     status: "WARN",
     message: '<span class="pref-warn">' + text + "</span>"
   };
-};
+}
 
-var wrapFailMessage = function(text) {
+function wrapFailMessage(text) {
   return {
     status: "FAIL",
     message: '<span class="pref-fail">' + text + "</span>"
   };
-};
+}
 
 //// Standard validators
 
 /* exported NonEmptyValidator */
-var NonEmptyValidator = function(input) {
+function NonEmptyValidator(input) {
   if (input) {
     wrapPassMessage();
   } else {
     return wrapFailMessage("Must be non-empty");
   }
-};
+}
 
 // Type
 
 /* exported IntValidator */
-var IntValidator = function(input) {
+function IntValidator(input) {
   if (isFinite(input) && (input == Math.round(input))) {
     return wrapPassMessage();
   } else {
     return wrapFailMessage("Must be an integer");
   }
-};
+}
 
 /* exported FloatValidator */
-var FloatValidator = function(input) {
+function FloatValidator(input) {
   if (isFinite(input)) {
     return wrapPassMessage();
   } else {
     return wrapFailMessage("Must be a number");
   }
-};
+}
 
 /* exported StringValidator */
-var StringValidator = function() { return wrapPassMessage(); };
+function StringValidator() { return wrapPassMessage(); }
 
 /* exported ArrayValidator */
-var ArrayValidator = function() { return wrapPassMessage(); };
+function ArrayValidator() { return wrapPassMessage(); }
 
 /* exported JSONFieldsValidator */
-var JSONFieldsValidator = function(input, pref) {
+function JSONFieldsValidator(input, pref) {
   var messages = "";
   var status = "PASS";
 
@@ -182,30 +184,30 @@ var JSONFieldsValidator = function(input, pref) {
   } else {
     return wrapPassMessage();
   }
-};
+}
 
 /* exported BoolValidator */
-var BoolValidator = function(input) {
+function BoolValidator(input) {
   if (typeof input === "boolean") {
     return wrapPassMessage();
   } else {
     return wrapFailMessage("Must be a boolean value (user should never see this!)");
   }
-};
+}
 
 // Comparison
 
 /* exported PositiveValidator */
-var PositiveValidator = function(input) {
+function PositiveValidator(input) {
   if (input <= 0) {
     return wrapFailMessage("Must be positive");
   } else {
     return wrapPassMessage();
   }
-};
+}
 
 /* exported GTValidator */
-var GTValidator = function(min) {
+function GTValidator(min) {
   return function(input) {
     if (input < min) {
       return wrapFailMessage("Must be no less than " + min);
@@ -213,10 +215,10 @@ var GTValidator = function(min) {
       return wrapPassMessage();
     }
   };
-};
+}
 
 /* exported LTValidator */
-var LTValidator = function(max) {
+function LTValidator(max) {
   return function(input) {
     if (input > max) {
       return wrapFailMessage("Must be no more than " + max);
@@ -224,10 +226,10 @@ var LTValidator = function(max) {
       return wrapPassMessage();
     }
   };
-};
+}
 
 /* exported BetweenValidator */
-var BetweenValidator = function(min, max) {
+function BetweenValidator(min, max) {
   return function(input) {
     if ((input > max) || (input < min)) {
       return wrapFailMessage("Must be between " + min + " and " + max);
@@ -235,7 +237,7 @@ var BetweenValidator = function(min, max) {
       return wrapPassMessage();
     }
   };
-};
+}
 
 /* exported EnumValidator */
 function EnumValidator(values) {
@@ -249,7 +251,7 @@ function EnumValidator(values) {
 // Differ only in error messages
 
 /* exported GTValidatorSeconds */
-var GTValidatorSeconds = function(min) {
+function GTValidatorSeconds(min) {
   return function(input) {
     if (input < min) {
       return wrapFailMessage("Must be no less than " + min / 1000 + " second(s)");
@@ -257,10 +259,10 @@ var GTValidatorSeconds = function(min) {
       return wrapPassMessage();
     }
   };
-};
+}
 
 /* exported GTValidatorMinutes */
-var GTValidatorMinutes = function(min) {
+function GTValidatorMinutes(min) {
   return function(input) {
     if (input < min) {
       return wrapFailMessage("Must be no less than " + min / 60000 + " minute(s)");
@@ -268,4 +270,4 @@ var GTValidatorMinutes = function(min) {
       return wrapPassMessage();
     }
   };
-};
+}
