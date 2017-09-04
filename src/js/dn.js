@@ -71,7 +71,7 @@ function DN_RichNotify() {
 
       if (typeof browser !== "undefined") { // Assume Firefox
         timeout += 100;
-        setTimeout(FFCreateNotificationWorkaround(id, name, entries), timeout);
+        setTimeout(FFCreateNotificationWorkaround(id, group.name, entries), timeout);
       } else {
         chrome.notifications.create("dANotifier-" + id, {
           type: "basic",
