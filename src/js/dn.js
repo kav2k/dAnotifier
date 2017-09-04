@@ -19,7 +19,7 @@ function DN_clear() {
   });
 }
 
-var DN_notificationData;
+let DN_notificationData;
 
 function DN_RichNotify() {
   let entries = [];

@@ -5,7 +5,7 @@
 
 const traceRegexp = /chrome-extension:\/\/\w*\//g;
 
-var DiFi = {
+let DiFi = {
   inboxID: "",
   folders: {},
   folderInfo: {},
@@ -102,7 +102,7 @@ DiFi.JSONrequest = function(request, id, callback) {
           }
         }
       } else {
-        throw 'No data';
+        throw "No data";
       }
 
       if (DiFi.capturing) { DiFi.capture.folderData[id] = result; }
@@ -638,7 +638,7 @@ DiFi.tooltipAggregate = function() {
 
 // ----------------------------------------------------
 
-var popupData = {state: "init"};
+let popupData = {state: "init"};
 
 DiFi.updatePopup = function() {
   popupData.state = "done";

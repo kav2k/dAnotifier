@@ -24,7 +24,7 @@ function playSound() {
 }
 
 /* exported messagesInfo */
-var messagesInfo = {
+const messagesInfo = {
   // Notices
   N: {
     S: "Hot Topic",
