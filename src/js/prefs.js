@@ -193,7 +193,7 @@ function GTValidatorMinutes(min) {
   };
 }
 
-var Prefs = {};
+let Prefs = {};
 
 Prefs.add = function(args) {
   Prefs[args.key] = new Preference(args);

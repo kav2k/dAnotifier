@@ -1,5 +1,5 @@
 /* exported HTMLControl */
-var HTMLControl = {};
+let HTMLControl = {};
 
 HTMLControl.checkmarkImages = {
   on: "img/checkmark_active.svg",

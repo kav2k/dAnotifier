@@ -4,9 +4,9 @@
 /* global Prefs */
 
 // Global variable to hold current interval id
-var runningInterval;
+let runningInterval;
 // Global variable to hold current login state
-var loggedOut = false;
+let loggedOut = false;
 
 // Badge colors
 /* exported COLOR_ACTIVE, COLOR_DEBUG, COLOR_INACTIVE */
@@ -78,7 +78,7 @@ function onMessage(request, sender, callback) {
 chrome.runtime.onMessage.addListener(onMessage);
 
 // Controls whether we need to show a release notes update
-var relNotesVersion = 28; // FIXME: HAAAAAAAX!
+const relNotesVersion = 28; // FIXME: HAAAAAAAX!
 
 init();
 
