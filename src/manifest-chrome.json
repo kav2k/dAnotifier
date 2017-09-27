@@ -27,7 +27,7 @@
     "page": "options.html",
     "open_in_tab": true
   },
-  "permissions": [ 
+  "permissions": [
     "notifications",
     "tabs",
     "*://*.deviantart.com/",
@@ -35,13 +35,13 @@
   ],
   "optional_permissions": [ "background" ],
   "content_scripts": [ 
-    { 
+    {
       "matches": [
         "*://*.deviantart.com/notifications/", 
         "*://*.deviantart.com/notifications/?random=*"
       ],
       "js": ["js/utils.js", "js/lib/jquery.js", "js/inject.js"],
-      "run_at": "document_start" 
+      "run_at": "document_start"
     }
   ],
   "web_accessible_resources" : [
