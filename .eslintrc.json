@@ -39,5 +39,6 @@
         "quotes": ["warn", "double", {"avoidEscape": true}],
         "no-var": "warn",
         "semi": ["warn", "always"]
-    }
+    },
+    "ignorePatterns": ["build/**/*", "src/js/lib/*"]
 }
