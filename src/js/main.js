@@ -71,6 +71,11 @@ function onMessage(request, sender, callback) {
     case "getUsername":
       callback(DiFi.getUsername());
       break;
+    case "detectEclipse":
+      if (DiFi.eclipse != request.eclipse) {
+        scheduleRequest(true);
+      }
+      break;
   }
 }
 
@@ -132,8 +137,8 @@ function init() {
 
 // *** Scheduler
 // Runs runRequest immediately and schedules refresh every refreshInterval.
-function scheduleRequest() {
-  runRequest(); // run immediately on rescheduling
+function scheduleRequest(eclipseRefresh) {
+  runRequest(eclipseRefresh); // run immediately on rescheduling
 
   // ensure only one instance of interval runs
   if (runningInterval) { window.clearInterval(runningInterval); }
@@ -142,6 +147,6 @@ function scheduleRequest() {
   runningInterval = window.setInterval(runRequest, Prefs.refreshInterval.get());
 }
 
-function runRequest() { // (wrap-around for now)
-  DiFi.doEverything();
+function runRequest(eclipseRefresh) { // (wrap-around for now)
+  DiFi.doEverything(eclipseRefresh);
 }

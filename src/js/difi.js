@@ -783,7 +783,12 @@ DiFi.seenInbox = function() { // Assume user have seen inbox
   chrome.browserAction.setBadgeBackgroundColor(COLOR_INACTIVE);
 };
 
-DiFi.doEverything = function() {
+DiFi.doEverything = function(eclipseRefresh) {
+  if (eclipseRefresh) {
+    DiFi.folderInfo = {};
+    DiFi.folders = {};
+  }
+
   if (DiFi.skipUpdate && DiFi.skipGuard < 5) {
     console.log("Request skipped at " + getTimestamp());
     DiFi.skipGuard++;

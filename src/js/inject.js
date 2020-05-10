@@ -12,7 +12,21 @@ function getView() {
   }
 }
 
+function detectEclipse() {
+  if (document.body.id == "deviantART-v7") {
+    return false;
+  } else {
+    return true;
+  }
+}
+
 $(document).ready(function() {
+  const eclipse = detectEclipse();
+
+  chrome.runtime.sendMessage({action: "detectEclipse", eclipse: eclipse});
+
+  if (eclipse) return;
+
   chrome.runtime.sendMessage({action: "getMCReminder"}, function(response) {
     const target = document.querySelector(".messages-right");
 
