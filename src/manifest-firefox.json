@@ -2,7 +2,7 @@
   "applications": {
     "gecko": {
       "id": "preview@danotifier.deviantart.com",
-      "strict_min_version": "55.0",
+      "strict_min_version": "74.0",
       "update_url": "https://kashev.me/da-notifier/updates.json"
     }
   },
@@ -40,7 +40,6 @@
     "*://*.deviantart.com/",
     "clipboardWrite"
   ],
-  "optional_permissions": [ "background" ],
   "content_scripts": [ 
     {
       "matches": [
@@ -54,6 +53,6 @@
     "js/colorize.js",
     "js/lib/mutation-summary.js"
   ],
-  "version": "0.8.1.0",
+  "version": "0.8.1.1",
   "manifest_version": 2
 }

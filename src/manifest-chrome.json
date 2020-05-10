@@ -20,9 +20,9 @@
     "48": "img/dan_logo2_48.png",
     "16": "img/dan_logo2_16_crisp.png"
   },
-  "name": "dA Message Notifier BETA",
+  "name": "dA Message Notifier",
   "short_name": "dA Notifier",
-  "minimum_chrome_version": "45",
+  "minimum_chrome_version": "80",
   "options_ui": {
     "page": "options.html",
     "open_in_tab": true
@@ -33,7 +33,6 @@
     "*://*.deviantart.com/",
     "clipboardWrite"
   ],
-  "optional_permissions": [ "background" ],
   "content_scripts": [ 
     {
       "matches": [
@@ -47,6 +46,6 @@
     "js/colorize.js",
     "js/lib/mutation-summary.js"
   ],
-  "version": "0.8.1.0",
+  "version": "0.8.1.1",
   "manifest_version": 2
 }
