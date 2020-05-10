@@ -78,7 +78,7 @@ function onMessage(request, sender, callback) {
 chrome.runtime.onMessage.addListener(onMessage);
 
 // Controls whether we need to show a release notes update
-const relNotesVersion = 28; // FIXME: HAAAAAAAX!
+const relNotesVersion = 29; // FIXME: HAAAAAAAX!
 
 init();
 
