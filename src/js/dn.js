@@ -1,4 +1,4 @@
-/* global messagesInfo, groupMessagesInfo, goToMTUrl, onMessage */
+/* global messagesInfo, groupMessagesInfo, goToMTUrl, onMessage, DiFi */
 
 chrome.notifications.onClicked.addListener(DN_RichOnClick);
 chrome.notifications.onButtonClicked.addListener(DN_RichOnButtonClick);
@@ -104,7 +104,7 @@ function DN_RichOnClick(id) {
     group = /dANotifier-(\d+)/.exec(id)[1];
   }
 
-  goToMTUrl((group || "all"), true, false);
+  goToMTUrl((group || "all"), true, false, DiFi.eclipse);
   chrome.notifications.clear(id);
 }
 
@@ -119,7 +119,7 @@ function DN_RichOnButtonClick(id, button) {
       case 0:
         for (let type in messagesInfo) {
           if (DN_notificationData[type]) {
-            goToMTUrl(messagesInfo[type].UP, true);
+            goToMTUrl(messagesInfo[type].UP, true, false, DiFi.eclipse);
           }
         }
         chrome.notifications.clear(id);

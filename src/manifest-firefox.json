@@ -44,8 +44,7 @@
   "content_scripts": [ 
     {
       "matches": [
-        "*://*.deviantart.com/notifications/", 
-        "*://*.deviantart.com/notifications/?random=*"
+        "*://*.deviantart.com/notifications/*"
       ],
       "js": ["js/utils.js", "js/lib/jquery.js", "js/inject.js"],
       "run_at": "document_start"

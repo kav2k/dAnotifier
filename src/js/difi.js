@@ -1,5 +1,5 @@
 /* global Prefs, handleError, loggedOut:true, DN_notify, COLOR_DEBUG, COLOR_ACTIVE, COLOR_INACTIVE */
-/* global getMessagesUrl, getTimestamp, getExtTimestamp, prepText, playSound */
+/* global getMessagesUrl, getNotificationsUrl, getTimestamp, getExtTimestamp, prepText, playSound */
 /* global messagesInfo, groupMessagesInfo, aggregateClasses */
 /* exported loggedOut */
 
@@ -39,7 +39,9 @@ let DiFi = {
 
   capture: {},
   capturing: false,
-  mustCapture: false
+  mustCapture: false,
+
+  eclipse: false
 };
 
 DiFi.baseURL = function() {
@@ -170,7 +172,12 @@ DiFi.getFolderInfo = function(giveUp) {
           DiFi.folderInfoRequest();
           return;
         } else {
-          throw Error("dAMC: folderInfo can't be retrieved (" + id + ")");
+          if (DiFi.eclipse) {
+            // We have to assume everything is a group?
+            Object.assign(DiFi.folders[id], {type: "group"});
+          } else {
+            throw Error("dAMC: folderInfo can't be retrieved (" + id + ")");
+          }
         }
       } else {
         Object.assign(DiFi.folders[id], DiFi.folderInfo[id]);
@@ -659,6 +666,8 @@ DiFi.updatePopup = function() {
 
   popupData.inboxID = DiFi.inboxID;
 
+  popupData.eclipse = DiFi.eclipse;
+
   chrome.runtime.sendMessage({action: "updatePopup", data: popupData});
   DiFi.updateBadge();
 };
@@ -741,11 +750,11 @@ DiFi.showDesktopNotification = function() {
 
   data.groups = [];
   for (let id in DiFi.folders) {
-    if (DiFi.folderInfo[id].type != "group") { continue; }
+    if (DiFi.folders[id].type != "group") { continue; }
 
     let group = {
       id: id,
-      name: DiFi.folderInfo[id].name
+      name: DiFi.folders[id].name
     };
 
     for (let type in groupMessagesInfo) {
@@ -809,32 +818,92 @@ DiFi.folderInfoRequest = function() {
 
     let username;
 
-    try {
-      if (/deviantART.deviant\s*=\s*({.*?})/.test(xhr.responseText)) { // Found deviant's info block
-        DiFi.deviantInfo = JSON.parse((/deviantART.deviant\s*=\s*({.*?})/.exec(xhr.responseText))[1]);
-        if (!DiFi.deviantInfo.username) {
+    if (/https:\/\/st\.deviantart\.net\/minish/.test(xhr.responseText)) {
+      // Old site
+      DiFi.eclipse = false;
+      try {
+        if (/deviantART.deviant\s*=\s*({.*?})/.test(xhr.responseText)) { // Found deviant's info block
+          DiFi.deviantInfo = JSON.parse((/deviantART.deviant\s*=\s*({.*?})/.exec(xhr.responseText))[1]);
+          if (!DiFi.deviantInfo.username) {
+            username = "???";
+            console.error("dAMC: Unable to resolve username; failing gracefully");
+          }
+          username = DiFi.deviantInfo.symbol + DiFi.deviantInfo.username;
+        } else {
           username = "???";
           console.error("dAMC: Unable to resolve username; failing gracefully");
         }
-        username = DiFi.deviantInfo.symbol + DiFi.deviantInfo.username;
-      } else {
-        username = "???";
-        console.error("dAMC: Unable to resolve username; failing gracefully");
+
+        DiFi.folderInfo = {};
+
+        console.log("Username: '" + username + "'");
+        DiFi.folderInfo[DiFi.inboxID] = {name: username, type: "inbox"};
+
+        for (let id in DiFi.folders) {
+          if (DiFi.folders[id].type != "inbox") {
+            if (
+              ((new RegExp('mcdata="\\{(.*?' + id + '.*?)\\}"', "g")).exec(xhr.responseText)) &&
+              /is_group&quot;:true/.test(((new RegExp('mcdata="\\{(.*?' + id + '.*?)\\}"', "g")).exec(xhr.responseText))[0])
+            ) {
+              console.log("Folder: " + id + ", is a group");
+              DiFi.folderInfo[id] = {name: DiFi.folders[id].name, type: "group"};
+            } else {
+              console.log("Folder: " + id + ", is not a group");
+              DiFi.folderInfo[id] = {name: DiFi.folders[id].name, type: "folder"};
+            }
+          }
+        }
+
+        DiFi.getFolderInfo(true);
+      } catch (e) {
+        handleError({type: "PARSE_ERROR", raw: e.stack.replace(traceRegexp, "")});
+        console.log(e.stack);
       }
+    } else {
+      // Eclipse
+      DiFi.eclipse = true;
+      DiFi.folderInfoRequestEclipse();
+    }
+  };
 
-      DiFi.folderInfo = {};
+  xhr.open("GET", getMessagesUrl(), true);
 
-      console.log("Username: '" + username + "'");
+  // Paranoid?
+  xhr.setRequestHeader("Cache-Control", "no-cache");
+  xhr.setRequestHeader("Pragma", "no-cache");
+
+  xhr.send(null);
+};
+
+DiFi.folderInfoRequestEclipse = function() {
+  let xhr = new XMLHttpRequest();
+
+  xhr.timeout = Prefs.timeoutInterval.get();
+  xhr.ontimeout = function() {
+    handleError({type: "TIMEOUT"});
+  };
+
+  xhr.onload = function() {
+    loggedOut = false;
+
+    let username;
+
+    try {
+      const initial_state_match = xhr.responseText.match(/__INITIAL_STATE__ = JSON\.parse\("(.*[^\\])"\)/);
+
+      const initial_state = JSON.parse(initial_state_match[1].replace(/\\"/g, "\"").replace(/\\\\/g, "\\"));
+
+      username = initial_state["@@publicSession"].user.username;
       DiFi.folderInfo[DiFi.inboxID] = {name: username, type: "inbox"};
 
       for (let id in DiFi.folders) {
         if (DiFi.folders[id].type != "inbox") {
+          const group = initial_state.availableFilters.groups.find(group => group.username == DiFi.folders[id].name);
           if (
-            ((new RegExp('mcdata="\\{(.*?' + id + '.*?)\\}"', "g")).exec(xhr.responseText)) &&
-            /is_group&quot;:true/.test(((new RegExp('mcdata="\\{(.*?' + id + '.*?)\\}"', "g")).exec(xhr.responseText))[0])
+            group
           ) {
             console.log("Folder: " + id + ", is a group");
-            DiFi.folderInfo[id] = {name: DiFi.folders[id].name, type: "group"};
+            DiFi.folderInfo[id] = {name: DiFi.folders[id].name, type: "group", userId: group.userId};
           } else {
             console.log("Folder: " + id + ", is not a group");
             DiFi.folderInfo[id] = {name: DiFi.folders[id].name, type: "folder"};
@@ -849,7 +918,7 @@ DiFi.folderInfoRequest = function() {
     }
   };
 
-  xhr.open("GET", getMessagesUrl(), true);
+  xhr.open("GET", getNotificationsUrl(), true);
 
   // Paranoid?
   xhr.setRequestHeader("Cache-Control", "no-cache");

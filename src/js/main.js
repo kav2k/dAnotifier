@@ -33,7 +33,7 @@ function onMessage(request, sender, callback) {
       DiFi.seenInbox();
       break;
     case "showMC":
-      goToMTUrl(request.type, request.alt, request.alt);
+      goToMTUrl(request.type, request.alt, request.alt, DiFi.eclipse);
       break;
     case "openURL":
       goToUrl(request.url);

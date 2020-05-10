@@ -201,14 +201,14 @@ function P_createContainer(data) {
 
       if (!singleton) {
         entries = entries.add(
-          P_createClassHeader(aClass, aClass.UP, data.skipNew)
+          P_createClassHeader(aClass, data.eclipse ? aClass.EP : aClass.UP, data.skipNew)
         );
       }
 
       for (let type of aClass.types) {
         if (data.folders[data.inboxID].counts[type] > 0) {
           entries = entries.add(
-            P_createEntry(type, data.folders[data.inboxID], data.skipNew)
+            P_createEntry(type, data.folders[data.inboxID], data.skipNew, data.eclipse)
           );
         }
       }
@@ -240,10 +240,10 @@ function P_createClassHeader(ac_data, ac, skip_new) {
   return $("<tr>").append(element);
 }
 
-function P_createEntry(type, data, skip_new) {
+function P_createEntry(type, data, skip_new, eclipse) {
   let element = $('<td class="entry">', {id: "entry-" +  type});
-  element.click(function(e) { P_onEntryClick(messagesInfo[type].UP, e); });
-  element.on("auxclick", function(e) { P_onEntryClickAux(messagesInfo[type].UP, e); });
+  element.click(function(e) { P_onEntryClick(eclipse ? messagesInfo[type].EP : messagesInfo[type].UP, e); });
+  element.on("auxclick", function(e) { P_onEntryClickAux(eclipse ? messagesInfo[type].EP : messagesInfo[type].UP, e); });
 
   element.text(
     data.counts[type] + " " +

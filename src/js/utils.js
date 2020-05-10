@@ -1,3 +1,4 @@
+/* global DiFi */
 function pad(n) {
   return (n < 10) ? "0" + n : n;
 }
@@ -31,21 +32,24 @@ const messagesInfo = {
     P: "Hot Topics",
     pref: "followNotices",
     UP: "hottopics",
-    A: "HT"
+    A: "HT",
+    EP: "feedback"
   },
   CA: {
     S: "Contest Announcement",
     P: "Contest Announcements",
     pref: "followContest",
     UP: "contests",
-    A: "CA"
+    A: "CA",
+    EP: "feedback"
   },
   B: {
     S: "Bulletin",
     P: "Bulletins",
     pref: "followBulletins",
     UP: "bulletins",
-    A: "B"
+    A: "B",
+    EP: "feedback"
   },
   // deviantWATCH
   D: {
@@ -53,56 +57,64 @@ const messagesInfo = {
     P: "Deviations",
     pref: "followDeviations",
     UP: "deviations",
-    A: "D"
+    A: "D",
+    EP: "watch/deviations"
   },
   GD: {
     S: "Group Deviation",
     P: "Group Deviations",
     pref: "followGroupDeviations",
     UP: "groupdeviations",
-    A: "GD"
+    A: "GD",
+    EP: "watch/groupdeviations"
   },
   WC: {
     S: "Watched Critique",
     P: "Watched Critiques",
     pref: "followCritiques",
     UP: "critiques",
-    A: "WC"
+    A: "WC",
+    EP: "watch"
   },
   J: {
     S: "Journal",
     P: "Journals",
     pref: "followJournals",
     UP: "journals",
-    A: "J"
+    A: "J",
+    EP: "watch/journals"
   },
   F: {
     S: "Forum",
     P: "Forums",
     pref: "followForums",
     UP: "forums",
-    A: "F"
+    A: "F",
+    EP: "watch/forums"
   },
   P: {
     S: "Poll",
     P: "Polls",
     pref: "followPolls",
     UP: "polls",
-    A: "P"
+    A: "P",
+    EP: "watch/polls"
   },
   SU: {
     S: "Status Update",
     P: "Status Updates",
     pref: "followStatusUpdates",
     UP: "status",
-    A: "SU"
+    A: "SU",
+    EP: "watch/status"
   },
   WA: {
     S: "Miscellaneous",
     P: "Miscellaneous",
     pref: "followActivities",
     UP: "activities",
-    A: "WA"
+    A: "WA",
+    EP: "watch/miscellaneous"
   },
   // Feedback
   CN: {
@@ -110,7 +122,8 @@ const messagesInfo = {
     P: "Critique Notices",
     pref: "followCritNotices",
     UP: "critiquesreceived",
-    A: "CN"
+    A: "CN",
+    EP: "feedback"
   },
   C: {
     S: "Comment",
@@ -118,14 +131,16 @@ const messagesInfo = {
     pref: "followComments",
     UP: "comments",
     feed: true,
-    A: "C"
+    A: "C",
+    EP: "feedback/comments"
   },
   R: {
     S: "Reply",
     P: "Replies",
     pref: "followReplies",
     UP: "replies",
-    A: "R"
+    A: "R",
+    EP: "feedback/replies"
   },
   A: {
     S: "Activity Message",
@@ -133,14 +148,16 @@ const messagesInfo = {
     pref: "followActivity",
     UP: "activity",
     feed: true,
-    A: "A"
+    A: "A",
+    EP: "feedback/activity"
   },
   M: {
     S: "Mention",
     P: "Mentions",
     pref: "followMentions",
     UP: "mentions",
-    A: "M"
+    A: "M",
+    EP: "feedback/mentions"
   },
   // Correspondence
   CO: {
@@ -148,7 +165,8 @@ const messagesInfo = {
     P: "Correspondence Items",
     pref: "followCorrespondence",
     UP: "correspondence",
-    A: "CO"
+    A: "CO",
+    EP: "feedback/correspondence"
   },
   // Notes
   UN: {
@@ -156,7 +174,8 @@ const messagesInfo = {
     P: "Notes",
     pref: "followNotes",
     UP: "notes",
-    A: "N"
+    A: "N",
+    EP: "notes/"
   }
 };
 
@@ -176,21 +195,24 @@ const aggregateClasses = [
     types: ["N", "CA", "B"],
     count: 0,
     newCount: 0,
-    UP: "notices"
+    UP: "notices",
+    EP: "feedback"
   }, {
     S: "Watch Notification",
     P: "Watch Notifications",
     types: ["D", "GD", "WC", "J", "F", "P", "SU", "WA"],
     count: 0,
     newCount: 0,
-    UP: "deviantwatch"
+    UP: "deviantwatch",
+    EP: "watch"
   }, {
     S: "Feedback Notification",
     P: "Feedback Notifications",
     types: ["CN", "C", "R", "A", "M"],
     count: 0,
     newCount: 0,
-    UP: "feedback"
+    UP: "feedback",
+    EP: "feedback"
   }, {
     S: "Correspondence Item",
     P: "Correspondence Items",
@@ -198,7 +220,8 @@ const aggregateClasses = [
     types: ["CO"],
     count: 0,
     newCount: 0,
-    UP: "correspondence"
+    UP: "correspondence",
+    EP: "feedback/correspondence"
   }, {
     S: "Note",
     P: "Notes",
@@ -206,14 +229,16 @@ const aggregateClasses = [
     types: ["UN"],
     count: 0,
     newCount: 0,
-    UP: "notes"
+    UP: "notes",
+    EP: "notes"
   }, {
     S: "Notification",
     P: "Notifications",
     special: "group",
     types: ["CO", "N", "C", "A"],
     groups: {},
-    UP: ""
+    UP: "",
+    EP: ""
   }
 ];
 
@@ -226,9 +251,13 @@ function prepText(text) {
 }
 
 // *** URL helper functions
-/* exported getMessagesUrl, getLoginUrl */
+/* exported getMessagesUrl, getNotificationsUrl, getLoginUrl */
 function getMessagesUrl() {
   return "https://www.deviantart.com/notifications/";
+}
+
+function getNotificationsUrl() {
+  return "https://www.deviantart.com/notifications/feedback/";
 }
 
 function getLoginUrl() {
@@ -298,14 +327,26 @@ function messageClassURL(type) {
     return getMessagesUrl() + "?random=" + Math.ceil(10000 * Math.random());
   } else if (type.length) {
     return getMessagesUrl() + "?random=" + Math.ceil(10000 * Math.random()) + "#view=" + type;
-  } else {
-    return getMessagesUrl() + "?random=" + Math.ceil(10000 * Math.random()) + "#view=" + messagesInfo[type].UP;
+  }
+}
+
+function messageClassURLEclipse(type) {
+  if (type == "all") {
+    return getMessagesUrl() + "?random=" + Math.ceil(10000 * Math.random());
+  } else if (parseInt(type)) { // URL fragment
+    return getMessagesUrl() + "feedback" + "?folder=" + DiFi.folderInfo[type].userId + "&random=" + Math.ceil(10000 * Math.random());
+  } else { // Group ID
+    return getMessagesUrl() + type + "?random=" + Math.ceil(10000 * Math.random());
   }
 }
 
 /* exported goToMTUrl */
-function goToMTUrl(type, distinct, background) {
-  goToUrl(messageClassURL(type), distinct, background);
+function goToMTUrl(type, distinct, background, eclipse) {
+  if (eclipse) {
+    goToUrl(messageClassURLEclipse(type), distinct, background);
+  } else {
+    goToUrl(messageClassURL(type), distinct, background);
+  }
 }
 
 /* exported handleOnClick */
