@@ -65,8 +65,8 @@ function P_createHeader(data) {
       .appendTo(header);
 
     const username = data.folders[data.inboxID].name;
-    header.append(" for " + username.substring(0,1)); // User symbol
-    header.append(P_createProfileLink(username.substring(1))); // User profile
+    header.append(" for " + (data.eclipse ? "" : username.substring(0,1))); // User symbol
+    header.append(P_createProfileLink(data.eclipse ? username : username.substring(1))); // User profile
 
     if (data.totalNewCount > 0) {
 
