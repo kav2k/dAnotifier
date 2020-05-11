@@ -119,7 +119,7 @@ function DN_RichOnButtonClick(id, button) {
       case 0:
         for (let type in messagesInfo) {
           if (DN_notificationData[type]) {
-            goToMTUrl(messagesInfo[type].UP, true, false, DiFi.eclipse);
+            goToMTUrl(DiFi.eclipse ? messagesInfo[type].EP : messagesInfo[type].UP, true, false, DiFi.eclipse);
           }
         }
         chrome.notifications.clear(id);
