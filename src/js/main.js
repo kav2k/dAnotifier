@@ -1,4 +1,4 @@
-/* global goToUrl, goToMTUrl, getLoginUrl, getMessagesUrl, prepText */
+/* global goToUrl, goToMTUrl, getLoginUrl, getMessagesUrl, getNotesUrl, prepText */
 /* global DiFi, popupData */
 /* global DN_clear */
 /* global Prefs */
@@ -34,6 +34,9 @@ function onMessage(request, sender, callback) {
       break;
     case "showMC":
       goToMTUrl(request.type, request.alt, request.alt, DiFi.eclipse);
+      break;
+    case "showNotes":
+      goToUrl(getNotesUrl(), request.alt, request.alt);
       break;
     case "openURL":
       goToUrl(request.url);

@@ -43,14 +43,6 @@ const messagesInfo = {
     A: "CA",
     EP: "feedback"
   },
-  B: {
-    S: "Bulletin",
-    P: "Bulletins",
-    pref: "followBulletins",
-    UP: "bulletins",
-    A: "B",
-    EP: "feedback"
-  },
   // deviantWATCH
   D: {
     S: "Deviation",
@@ -117,14 +109,6 @@ const messagesInfo = {
     EP: "watch/miscellaneous"
   },
   // Feedback
-  CN: {
-    S: "Critique Notice",
-    P: "Critique Notices",
-    pref: "followCritNotices",
-    UP: "critiquesreceived",
-    A: "CN",
-    EP: "feedback"
-  },
   C: {
     S: "Comment",
     P: "Comments",
@@ -167,15 +151,6 @@ const messagesInfo = {
     UP: "correspondence",
     A: "CO",
     EP: "feedback/correspondence"
-  },
-  // Notes
-  UN: {
-    S: "Note",
-    P: "Notes",
-    pref: "followNotes",
-    UP: "notes",
-    A: "N",
-    EP: "notes/"
   }
 };
 
@@ -192,7 +167,7 @@ const aggregateClasses = [
   {
     S: "Notice",
     P: "Notices",
-    types: ["N", "CA", "B"],
+    types: ["N", "CA"],
     count: 0,
     newCount: 0,
     UP: "notices",
@@ -208,7 +183,7 @@ const aggregateClasses = [
   }, {
     S: "Feedback Notification",
     P: "Feedback Notifications",
-    types: ["CN", "C", "R", "A", "M"],
+    types: ["C", "R", "A", "M"],
     count: 0,
     newCount: 0,
     UP: "feedback",
@@ -222,15 +197,6 @@ const aggregateClasses = [
     newCount: 0,
     UP: "correspondence",
     EP: "feedback/correspondence"
-  }, {
-    S: "Note",
-    P: "Notes",
-    special: "singleton",
-    types: ["UN"],
-    count: 0,
-    newCount: 0,
-    UP: "notes",
-    EP: "notes"
   }, {
     S: "Notification",
     P: "Notifications",
@@ -251,7 +217,7 @@ function prepText(text) {
 }
 
 // *** URL helper functions
-/* exported getMessagesUrl, getNotificationsUrl, getLoginUrl */
+/* exported getMessagesUrl, getNotificationsUrl, getLoginUrl, getNotesUrl */
 function getMessagesUrl() {
   return "https://www.deviantart.com/notifications/";
 }
@@ -263,6 +229,11 @@ function getNotificationsUrl() {
 function getLoginUrl() {
   return "https://www.deviantart.com/users/login";
 }
+
+function getNotesUrl() {
+  return "https://www.deviantart.com/notifications/notes/";
+}
+
 
 // Compares url to targetUrl modulo #... or ?... at end
 function isUrl(url, targetUrl, distinct) {

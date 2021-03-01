@@ -141,6 +141,16 @@ table.entry_container tr td:last-child {
   background-color: #D7D7D7;
 }
 
+.notice {
+  background-color: #F1C7C5;
+  padding: 2px 4px 2px 4px;
+  cursor: pointer;
+}
+
+.notice:hover {
+  background-color: #FFF7F7;
+}
+
 .has_new {
   background-color: #fffec6;
 }

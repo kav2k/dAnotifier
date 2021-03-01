@@ -204,18 +204,15 @@ DiFi.requestSuffix = function(type, start, max) {
   switch (type) {
     case "C" : return ",oq:fb_comments:" + start + ":" + max + ":f&";
     case "R" : return ",oq:fb_replies:" + start + ":" + max + ":f&";
-    case "UN": return ",oq:notes_unread:" + start + ":" + max + ":f&";
     case "N" : return ",oq:notices:" + start + ":" + max + ":f&";
     case "CA": return ",oq:contests:" + start + ":" + max + ":f&";
     case "A" : return ",oq:fb_activity:" + start + ":" + max + ":f&";
-    case "CN": return ",oq:fb_critiques:" + start + ":" + max + ":f&";
     case "CO": return ",oq:correspondence:" + start + ":" + max + ":f&";
     case "D" : return ",oq:devwatch:" + start + ":" + max + ":f:tg=deviations&";
     case "GD": return ",oq:devwatch:" + start + ":" + max + ":f:tg=groupdeviations&";
     case "J" : return ",oq:devwatch:" + start + ":" + max + ":f:tg=journals&";
     case "WC": return ",oq:devwatch:" + start + ":" + max + ":f:tg=critiques&";
     case "P" : return ",oq:devwatch:" + start + ":" + max + ":f:tg=polls&";
-    case "B" : return ",oq:bulletins:" + start + ":" + max + ":f&";
     case "F" : return ",oq:devwatch:" + start + ":" + max + ":f:tg=forums&";
     case "SU" : return ",oq:devwatch:" + start + ":" + max + ":f:tg=status&";
     case "WA": return ",oq:devwatch:" + start + ":" + max + ":f:tg=activities&";

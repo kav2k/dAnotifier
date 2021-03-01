@@ -1,5 +1,5 @@
 /* global Prefs, messagesInfo, groupMessagesInfo */
-/* global errorCritical, errorText, copyTextToClipboard, goToUrl, getLoginUrl */
+/* global errorCritical, errorText, copyTextToClipboard, goToUrl, getLoginUrl, getNotesUrl */
 
 /** TOP LEVEL CODE **/
 
@@ -218,6 +218,25 @@ function P_createContainer(data) {
       container.append(ac_container);
     }
   }
+
+  let notes_notice = $('<div class="class_container"><table class="entry_container"><tr><td class="notice">Support for Notes is currently broken</td></tr></table></div>');
+
+  notes_notice.click(function(e) {
+    const alt = (e.metaKey || e.ctrlKey || e.shiftKey || e.button == 1);
+
+    chrome.runtime.sendMessage({action: "showNotes", alt: (alt || false)});
+  
+    return false;
+  });
+  notes_notice.on("auxclick", function(e) {
+    const alt = (e.metaKey || e.ctrlKey || e.shiftKey || e.button == 1);
+
+    chrome.runtime.sendMessage({action: "showNotes", alt: (alt || false)});
+  
+    return false;
+  });
+
+  container.append(notes_notice);
 
   return container;
 }
