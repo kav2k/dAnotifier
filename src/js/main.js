@@ -135,7 +135,17 @@ function init() {
   DiFi.maxItems = Prefs.maxItems.get();
 
   console.log("Setting refresh interval as " + Prefs.refreshInterval.get());
-  scheduleRequest();
+  
+  // SUNSET: Disabling main logic
+  //scheduleRequest();
+  sunset();
+}
+
+function sunset() {
+  chrome.browserAction.setIcon({path: "img/dan_logo2_19_crisp.png"});
+  chrome.browserAction.setBadgeText({text: "END"});
+  chrome.browserAction.setTitle({title: prepText("This extension is now defunct.\nSo long, and thanks for all the fish!")});
+  chrome.browserAction.setPopup({popup: "popup_sunset.html"});
 }
 
 // *** Scheduler

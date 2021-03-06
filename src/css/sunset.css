@@ -1,0 +1,16 @@
+html {
+  background-color: #edd0ce;
+}
+
+body {
+  min-width: 300px;
+}
+
+.eulogy {
+  font-size: large;
+  text-align: center;
+}
+
+.eulogy a {
+  font-size: large;
+}
